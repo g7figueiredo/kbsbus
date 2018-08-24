@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+      
+<h:head>
+	<title></title>
+</h:head>
+	<h:body>
+		<p:growl id="msg" autoUpdate="true" showDetail="true" life="4000" />
+		<f:metadata>  
+	    	<f:event type="preRenderView" listener="#{securityBean.redirect}"/>  
+		</f:metadata>
+	</h:body>
+</html>

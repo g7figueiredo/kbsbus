@@ -1,0 +1,658 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+      
+<h:head>
+    <meta charset="UTF-8" />
+    <title>Kébase | Admin</title>
+    
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    
+    <!-- Bootstrap 3.3.4 -->
+    <link href="../../../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Ionicons -->
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Theme style -->
+    <link href="../../../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <link href="../../../../dist/css/skins/skin-red-light.min.css" rel="stylesheet" type="text/css" />
+
+</h:head>
+
+
+<h:body class="skin-red-light sidebar-mini">
+    <div class="wrapper">
+
+      <!-- Main Header -->
+      <header class="main-header">
+
+        <!-- Logo -->
+       <a href="index2.html" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>K</b>P</span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><b>Kébase</b>ADM</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          
+          
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+            
+            
+			  <!--=======================================================================================================
+              MENSAGENS
+              =========================================================================================================== -->            
+            
+              <!-- Messages: style can be found in dropdown.less-->
+              <li class="dropdown messages-menu">
+                <!-- Menu toggle button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-envelope-o"></i>
+                  <span class="label label-success">0</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">Você tem 0 mensagens</li>
+                  <li>
+                    <!-- inner menu: contains the messages -->
+                    <ul class="menu">
+                      <li><!-- start message -->
+                        <a href="#">
+                          <div class="pull-left">
+                            <!-- User Image -->
+                            <img src="../../../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                          </div>
+                          <!-- Message title and timestamp -->
+                          <h4>
+                            Support Team
+                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                          </h4>
+                          <!-- The message -->
+                          <p>Why not buy a new awesome theme?</p>
+                        </a>
+                      </li><!-- end message -->
+                    </ul><!-- /.menu -->
+                  </li>
+                  <li class="footer"><a href="#">Ver todas</a></li>
+                </ul>
+              </li><!-- /.messages-menu -->
+              
+              <!--=======================================================================================================
+              NOTIFICAÇÕES
+              =========================================================================================================== -->
+
+              <!-- Notifications Menu -->
+              <li class="dropdown notifications-menu">
+                <!-- Menu toggle button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-warning">0</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">Você tem 0 notificações</li>
+                  <li>
+                    <!-- Inner Menu: contains the notifications -->
+                    <ul class="menu">
+                      <li><!-- start notification -->
+                        <a href="#">
+                          <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                        </a>
+                      </li><!-- end notification -->
+                    </ul>
+                  </li>
+                  <li class="footer"><a href="#">Ver todas</a></li>
+                </ul>
+              </li>
+              
+              <!--=======================================================================================================
+              TASKS 
+              =========================================================================================================== -->
+              <!-- Tasks Menu -->
+              <li class="dropdown tasks-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-flag-o"></i>
+                  <span class="label label-danger">0</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">Você tem 0 metas</li>
+                  <li>
+                    <!-- Inner menu: contains the tasks -->
+                    <ul class="menu">
+                      <li><!-- Task item -->
+                        <a href="#">
+                          <!-- Task title and progress text -->
+                          <h3>
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                          </h3>
+                          <!-- The progress bar -->
+                          <div class="progress xs">
+                            <!-- Change the css width attribute to simulate progress -->
+                            <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                              <span class="sr-only">20% Complete</span>
+                            </div>
+                          </div>
+                        </a>
+                      </li><!-- end task item -->
+                    </ul>
+                  </li>
+                  <li class="footer">
+                    <a href="#">Ver todas</a>
+                  </li>
+                </ul>
+              </li>
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <!-- The user image in the navbar-->
+                  <img src="../../../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image" />
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <span class="hidden-xs">#{securityBean.usuario.nome}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- The user image in the menu -->
+                  <li class="user-header">
+                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                    <p>
+                      #{securityBean.usuario.nome} - #{securityBean.usuario.funcao}
+                      <small>Cadastrado em 2017</small>
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body">
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Empresa</a>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                      <a href="#">RH</a>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Ajuda</a>
+                    </div>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="#" class="btn btn-default btn-flat">Meu Perfil</a>
+                    </div>
+                    <div class="pull-right">
+                    	<h:form>
+		                	<h:commandLink value="Sair do Sistema" action="#{securityBean.logout}" styleClass="btn btn-default btn-flat" />
+		                </h:form>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <!-- Control Sidebar Toggle Button -->
+              <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      
+      <!-- 
+      
+      =========================================================================================================================
+      MENU DE NAVEGAÇÃO
+      =========================================================================================================================
+      
+       -->
+       
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+          <!-- Sidebar user panel (optional) -->
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="../../../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+            </div>
+            <div class="pull-left info">
+              <p>#{securityBean.usuario.nome}</p>
+              <!-- Status -->
+              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+          </div>
+
+          <!-- search form (Optional) -->
+          <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Pesquisar..." />
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+          <!-- /.search form -->
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">MENU DE NAVEGAÇÃO</li>
+            
+            <!-- Optionally, you can add icons to the links -->
+            
+            <li class="active"><a href="#"><i class="fa fa-tachometer" /> <span>Home</span></a></li>
+            
+            <li class="treeview active">
+              <a href="#"><i class="fa fa-briefcase" /> <span>Comercial</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+              	<li><a href="cliente.xhtml"><i class="fa fa-user" /> Cliente</a></li>
+              	<li class="active"><a href="listaCliente.xhtml"><i class="fa fa-list-alt" /> Liste de Clientes</a></li>
+                <li><a href="venda.xhtml"><i class="fa fa-usd" /> Venda</a></li>
+              </ul>
+            </li>
+            
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+      
+      
+      <!-- 
+
+      ======================================================================================================================
+      CONTEÚDO DA PÁGINA
+      ======================================================================================================================
+      
+       -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          
+          	<!-- ====================== TITULO DA PÁGINA =================================== -->
+            Lista de Vendas
+            <small>Para filtrar a pesquisa utilize o painel de filtros</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+          </ol>
+        </section>
+
+        
+        <!-- Main content -->
+        <section class="content">
+        
+        <h:form id="form" method="post">
+        
+        <p:messages id="messages" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
+        
+        		<!-- Default box -->
+			          <div class="box box-primary collapsed-box" id="box">
+			            <div class="box-header with-border">
+			              <h3 class="box-title">Painel de Filtros</h3>
+			              <div class="box-tools pull-right">
+			                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+			              </div>
+			            </div>
+			            <div class="box-body">
+						<div class="row">
+							<div class="form-group col-xs-4">
+								<label>Status</label>
+								<h:selectOneMenu styleClass="form-control">
+									<f:selectItem itemLabel="-- TODOS --" itemValue="0" />
+									<f:selectItem itemLabel="PENDENTE DE DISTRIBUIÇÃO" itemValue="1" />
+									<f:selectItem itemLabel="DISTRIBUÍDOS" itemValue="2" />
+								</h:selectOneMenu>
+							</div>
+							
+						</div>
+						
+						<div class="form-group">
+							<p:commandButton value="Filtrar" styleClass="btn btn-success" type="submit" action="#{admBean.buscarLista}"
+									update="table" ignoreAutoUpdate="true"/>
+			            </div>
+			            
+					</div><!-- /.box-body -->
+			            <div class="box-footer">
+			            </div><!-- /.box-footer-->
+			          </div><!-- /.box -->
+			          
+        	<div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Relação de Vendas</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                
+                  <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                  	<div class="row">
+                  		<div class="col-sm-12">
+							<p:contextMenu for="table">
+								<p:menuitem value="Alterar Venda" id="mitem1" icon="fa fa-edit" action="#{eVendaBean.abrirVenda}" />
+								<p:menuitem value="Excluir Venda" id="mitem2" icon="fa fa-close" />
+							</p:contextMenu>
+
+							<p:dataTable id="table" var="item"
+								value="#{vendaBean.listaVenda}"
+								selection="#{eVendaBean.vendaSelecionada}"
+								rowKey="#{item.idVenda}" rows="30" paginator="true"
+								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
+								
+								<p:column headerText="#ID" style="width:70px;text-align:center">
+									<h:outputText value="000#{item.idVenda}" />
+								</p:column>
+								
+								<p:column headerText="Data">
+									<h:outputText value="#{item.dataVenda}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Salão">
+									<h:outputText value="#{item.salao.nomeSalao}" />
+								</p:column>
+								
+								<p:column headerText="Cliente">
+									<h:outputText value="#{item.salao.cliente.nomeCliente}" />
+								</p:column>
+								
+								<p:column headerText="Valor Total">
+									<h:outputText value="#{item.valorTotal}">
+										<f:convertNumber currencySymbol="R$" pattern="#,##0.00"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Vendedor">
+									<h:outputText value="#{item.vendedor.nomeVendedor}" />
+								</p:column>
+										
+								
+							</p:dataTable>
+
+						</div>
+                    </div>
+                 </div>   
+                </div><!-- /.box-body -->
+              </div>
+
+          
+          </h:form>
+          
+          <div class="example-modal">
+            <div class="modal" id="deleteModal">
+              <div class="modal-dialog">
+                <div class="modal-content" >
+                  <h:form id="formModal2">
+
+					<div class="box box-info" style="margin-bottom: 0px;">
+		                <div class="box-header with-border">
+		                  <h3 class="box-title">Você tem certeza disso?</h3>
+		                </div><!-- /.box-header -->
+		                <!-- form start -->
+
+		                  <div class="box-body">
+			                    <div class="form-group">
+			                    	<h3 class="box-title">Confirmar Exclusão do Veículo:</h3>
+			                    </div>
+			                    
+			                    <div class="form-group">
+			                    	<label>Placa:</label>
+			                    	<h:outputLabel styleClass="form-control" value="#{veiculoBean.veiculo.placa}" />
+			                    </div>
+		                  </div><!-- /.box-body -->
+		
+		              </div>
+		              
+	              
+                  <div class="modal-footer">
+                    <h:commandButton value="Fechar"
+                    	onclick="$('#deleteModal').modal('hide');" styleClass="btn btn-default pull-left" />
+                    	
+                    <h:commandButton value="Confirmar Exclusão" action="#{veiculoBean.excluir}"
+                    	onclick="$('#deleteModal').modal('hide');" styleClass="btn btn-success" 
+                    		style="float: left; margin-right: 10px;">
+                    </h:commandButton>
+                  </div>
+                  </h:form>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+          
+          <div class="col-md-2 modal" id="loadModal" data-backdrop="static"
+				style="background: rgba(0, 0, 0, 0); margin-top: 20%; margin-left: 40%;">
+				<div class="box box-success box-solid">
+					<div class="box-header">
+						<h3 class="box-title">Aguarde...</h3>
+					</div>
+					<div class="box-body">Processando...</div>
+					<!-- /.box-body -->
+					<!-- Loading (remove the following to stop the loading)-->
+					<div class="overlay">
+						<i class="fa fa-refresh fa-spin"></i>
+					</div>
+					<!-- end loading -->
+				</div>
+				<!-- /.box -->
+			</div>
+          
+          
+          <div class="example-modal">
+            <div class="modal" id="faturaModal" data-backdrop="static">
+              <div class="modal-dialog">
+                <div class="modal-content" >
+                  <h:form id="formModal">
+
+					<div class="box box-info" style="margin-bottom: 0px;">
+		                <div class="box-header with-border">
+		                  <h3 class="box-title">Contas a Pagar - Gerar Parcelas</h3>
+		                </div><!-- /.box-header -->
+		                <!-- form start -->
+		                
+		                	<p:messages id="modalMSG" showDetail="false" closable="true"><p:autoUpdate/> </p:messages>
+
+		                  <div class="box-body">
+		                  				
+		                  				<div class="form-group col-xs-12">
+			                  				<div class="form-group col-md-4">
+												<label>Nº Fatura</label>
+												<h:inputText id="faturaID" value="0000#{contaPagarBean.contaSelecionada.idDespesa}" styleClass="form-control" disabled="true" />
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>Nº Pedido</label>
+												<h:inputText id="vendaID" value="0000#{contaPagarBean.contaSelecionada.pedidoCompra.idPedido}" styleClass="form-control" disabled="true" />
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>SALDO</label>
+												<h:inputText id="saldo" value="#{contaPagarBean.saldo}" styleClass="form-control" disabled="true" 
+														style="background-color: yellow; font-size: 20px; font-weight: bolder;" >
+														
+													<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>	
+												</h:inputText>
+											</div>
+										</div>	
+										
+										<div class="form-group col-xs-12">
+											<div class="form-group col-md-4">
+												<label>Valor R$</label>
+												<p:inputNumber id="valor" value="#{contaPagarBean.contaSelecionada.valorParcela}" symbol="R$ "  decimalSeparator="," 
+															thousandSeparator="." size="13"/>  
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>Vencimento</label>
+												<p:calendar id="vencimento" value="#{contaPagarBean.contaSelecionada.dataVencimento}" pattern="dd/MM/yyyy"
+													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" size="15"/>
+											</div>
+											
+											<div class="form-group col-md-2">
+												<label>...</label>
+												<h:commandLink value="Atualizar"  styleClass="btn btn-success pull-right">
+													<f:ajax event="action" execute="@form" listener="#{contaPagarBean.atualizarContaPagar}" 
+														render="vencimento tableFatura valor vendaID faturaID saldo"/>
+												</h:commandLink>	
+											</div>
+										
+										</div>
+
+										<div class="form-group col-xs-12">
+												<p:dataTable id="tableFatura" var="fatura"
+													value="#{contaPagarBean.listaContas}" 
+													selection="#{contaPagarBean.contaSelecionada}"  scrollable="true" scrollHeight="100"
+													rowKey="#{fatura.idDespesa}" rows="11" selectionMode="single" >
+													
+													<p:ajax event="rowSelect" update=":formModal:valor :formModal:vencimento :formModal:vendaID :formModal:faturaID :formModal:saldo"
+																listener="#{contaPagarBean.onContaSelect}" />
+													
+													<p:column>
+														<f:facet name="header">Nº Fatura</f:facet>
+														<h:outputText value="0000#{fatura.idDespesa}" />
+													</p:column>
+	
+													<p:column>
+														<f:facet name="header">Nº Venda</f:facet>
+														<h:outputText value="0000#{fatura.pedidoCompra.idPedido}" />
+													</p:column>
+	
+													<p:column>
+														<f:facet name="header">Valor R$</f:facet>
+														<h:outputText value="#{fatura.valorParcela}">
+															<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>
+														</h:outputText>
+													</p:column>
+													
+													<p:column>
+														<f:facet name="header">Vencimento</f:facet>
+														<h:outputText value="#{fatura.dataVencimento}">
+															<f:convertDateTime pattern="dd/MM/yyyy" />
+														</h:outputText>
+													</p:column>
+					
+					
+												</p:dataTable>
+									</div>
+
+							</div><!-- /.box-body -->
+		
+		              </div>
+		              
+	              
+                  <div class="modal-footer">
+                   <h:commandButton value="Fechar" onclick="$('#faturaModal').modal('hide');" styleClass="btn btn-info pull-left" />
+                    			
+                    <h:commandButton value="Gerar Parcelas" action="#{contaPagarBean.salvarContas}" 
+                    			onclick="$('#loadModal').modal('show');" styleClass="btn btn-success pull-right" />
+                  </div>
+
+                  </h:form>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+          
+
+        </section><!-- /.content -->
+        
+        
+      </div><!-- /.content-wrapper -->
+		
+		
+	  <!-- 
+
+      ======================================================================================================================
+      RODAPÉ
+      ======================================================================================================================
+      
+       -->
+      <!-- Main Footer -->
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+          <strong>Versão: </strong>1.0.0
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2017 <a href="#">Clime Up</a>.</strong> Todos os direitos reservados.
+      </footer>
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+          <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- Home tab content -->
+          <div class="tab-pane active" id="control-sidebar-home-tab">
+            <h3 class="control-sidebar-heading">Próximos aniversários</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Nome Sobrenome</h4>
+                    <p>25 anos em 15/01/2017</p>
+                  </div>
+                </a>
+              </li>
+            </ul><!-- /.control-sidebar-menu -->
+
+          </div><!-- /.tab-pane -->
+          <!-- Stats tab content -->
+          <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div><!-- /.tab-pane -->
+          <!-- Settings tab content -->
+          <div class="tab-pane" id="control-sidebar-settings-tab">
+            <form method="post">
+              <h3 class="control-sidebar-heading">General Settings</h3>
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Report panel usage
+                  <input type="checkbox" class="pull-right"/>
+                </label>
+                <p>
+                  Some information about this general settings option
+                </p>
+              </div><!-- /.form-group -->
+            </form>
+          </div><!-- /.tab-pane -->
+        </div>
+      </aside><!-- /.control-sidebar -->
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 2.1.4  -->
+<!--     <script src="../../../../plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script> -->
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="../../../../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="../../../../dist/js/app.min.js" type="text/javascript"></script>
+
+</h:body>
+</html>

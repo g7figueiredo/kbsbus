@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+    version="2.2">
+    
+    <validator>
+		<display-name>CPF Validator</display-name>
+		<validator-id>cpf</validator-id>
+		<validator-class>br.com.kebase.validator.CPFValidator</validator-class>
+	</validator>
+	
+    <validator>
+    	<display-name>CNPJ Validator</display-name>
+    	<validator-id>cnpj</validator-id>
+    	<validator-class>br.com.kebase.validator.CNPJValidator</validator-class>
+    </validator>
+    
+    <converter>
+		<converter-id>cnpjConverter</converter-id>
+		<converter-class>br.com.kebase.converter.CNPJConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>cpfConverter</converter-id>
+		<converter-class>br.com.kebase.converter.CPFConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>celularConverter</converter-id>
+		<converter-class>br.com.kebase.converter.CelularConverter</converter-class>
+	</converter>
+    
+    <navigation-rule>  
+	    <from-view-id>/cliente.xhtml</from-view-id>  
+	    <navigation-case>  
+	        <from-outcome>endereco</from-outcome>  
+	        <to-view-id>/endereco.xhtml</to-view-id>  
+	        <redirect />
+	    </navigation-case>  
+	</navigation-rule>
+	
+</faces-config>

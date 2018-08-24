@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/kebase_dist</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">123456</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+<!--         Comercial -->
+        <mapping class="br.com.kebase.comercial.setor.Setor"/>
+        <mapping class="br.com.kebase.comercial.setor.itemSetor.ItemSetor"/>
+        <mapping class="br.com.kebase.comercial.vendedor.Vendedor"/>
+        <mapping class="br.com.kebase.comercial.vendedor.enderecoVendedor.EnderecoVendedor"/>
+        <mapping class="br.com.kebase.comercial.cliente.Cliente"/>
+        <mapping class="br.com.kebase.comercial.cliente.salao.Salao"/>
+        <mapping class="br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalao"/>
+        <mapping class="br.com.kebase.comercial.venda.Venda"/>
+        <mapping class="br.com.kebase.comercial.venda.itemVenda.ItemVenda"/>
+        
+<!--         Financeiro -->
+		<mapping class="br.com.kebase.financeiro.categoria.Categoria"/>
+        <mapping class="br.com.kebase.financeiro.categoria.subCategoria.SubCategoria"/>
+        <mapping class="br.com.kebase.financeiro.centroCusto.CentroCusto"/>
+		<mapping class="br.com.kebase.financeiro.conta.Conta"/>
+		<mapping class="br.com.kebase.financeiro.conta.extratoConta.ExtratoConta"/>
+		<mapping class="br.com.kebase.financeiro.conta.tipoConta.TipoConta"/>
+		<mapping class="br.com.kebase.financeiro.despesa.Despesa"/>
+		<mapping class="br.com.kebase.financeiro.despesa.beneficiario.Beneficiario"/>
+		<mapping class="br.com.kebase.financeiro.despesa.reciboDespesa.ReciboDespesa"/>
+		<mapping class="br.com.kebase.financeiro.receita.Receita"/>
+		<mapping class="br.com.kebase.financeiro.receita.faturamento.Faturamento"/>
+		<mapping class="br.com.kebase.financeiro.receita.reciboReceita.ReciboReceita"/>
+		
+<!-- 		Estoque -->
+		<mapping class="br.com.kebase.estoque.Estoque"/>
+		<mapping class="br.com.kebase.estoque.fornecedor.Fornecedor"/>
+		<mapping class="br.com.kebase.estoque.pedidoCompra.PedidoCompra"/>
+		<mapping class="br.com.kebase.estoque.pedidoCompra.itemCompra.ItemCompra"/>
+		<mapping class="br.com.kebase.estoque.pedidoCompra.statusPedido.StatusPedido"/>
+		<mapping class="br.com.kebase.estoque.produto.Produto"/>
+		<mapping class="br.com.kebase.estoque.produto.linhaProduto.LinhaProduto"/>
+       
+<!--         Endereços -->
+        <mapping class="br.com.kebase.endereco.Endereco"/>
+        <mapping class="br.com.kebase.endereco.bairro.Bairro"/>
+        <mapping class="br.com.kebase.endereco.cidade.Cidade"/>
+		
+	</session-factory>
+</hibernate-configuration>

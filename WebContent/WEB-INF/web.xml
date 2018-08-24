@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>Kebase</display-name>
+
+	<servlet>
+  	<display-name>FacesServlet</display-name>
+    <servlet-name>FacesServlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  
+  <servlet-mapping>
+    <servlet-name>FacesServlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+    <url-pattern>/faces/</url-pattern>
+    <url-pattern>*.xhtml</url-pattern>
+    <url-pattern>*.jsf</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+  	<welcome-file>index.xhtml</welcome-file>
+  </welcome-file-list>
+  
+  <session-config>
+		<session-timeout>30</session-timeout>
+   </session-config>
+  
+  <!-- Páginas de erro 404 -->
+  <error-page>
+		<error-code>404</error-code>
+		<location>/404.xhtml</location>
+  </error-page>
+  
+  <!-- Páginas de erro 400 -->
+  <error-page>
+		<error-code>400</error-code>
+		<location>/400.xhtml</location>
+  </error-page>
+  
+  <!-- Páginas de erro 500 -->
+  <error-page>
+		<error-code>500</error-code>
+		<location>/500.xhtml</location>
+  </error-page>
+  
+  <!-- Páginas de erro 503 -->
+  <error-page>
+		<error-code>503</error-code>
+		<location>/503.xhtml</location>
+  </error-page>
+  
+  <context-param>
+	<param-name>primefaces.THEME</param-name>
+<!-- 	<param-value>none</param-value> -->
+	<!-- 	<param-value>ui-lightness</param-value> -->
+	<param-value>bootstrap</param-value>
+  </context-param>
+  
+  <context-param>
+  	<param-name>javax.faces.PROJECT_STAGE</param-name>
+  	<param-value>Development</param-value>
+  </context-param>
+  
+  <filter>
+  	<filter-name>conexaoFilter</filter-name>
+  	<filter-class>br.com.kebase.dbUtil.ConexaoHibernateFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+  	<filter-name>conexaoFilter</filter-name>
+  	<url-pattern>*.xhtml</url-pattern>
+  	<url-pattern>*.jsf</url-pattern>
+  </filter-mapping>
+  
+  <!-- Allowed Roles -->
+<!--     <security-role> -->
+<!--         <role-name>ADMIN</role-name> -->
+<!--     </security-role> -->
+    
+<!--     Proteção Admin -->
+<!--     <security-constraint> -->
+<!--         <web-resource-collection> -->
+<!--             <web-resource-name>Administradores</web-resource-name> -->
+<!--             <url-pattern>/pages/admin/*</url-pattern> -->
+<!--         </web-resource-collection> -->
+<!--         <auth-constraint> -->
+<!--             <role-name>ADMIN</role-name> -->
+<!--         </auth-constraint> -->
+<!--     </security-constraint> -->
+    
+<!--     Proteção publica -->
+<!--     <security-constraint> -->
+<!--         <web-resource-collection> -->
+<!--             <web-resource-name>Publico</web-resource-name> -->
+<!--             <url-pattern>/pages/public/*</url-pattern> -->
+<!--             <url-pattern>/images/*</url-pattern> -->
+<!--         </web-resource-collection> -->
+<!--         <auth-constraint> -->
+<!--             <role-name>ADMIN</role-name> -->
+<!--             more roles -->
+<!--         </auth-constraint> -->
+<!--     </security-constraint> -->
+    
+    <!--     Validação via Form -->
+<!--     <login-config> -->
+<!--         <auth-method>FORM</auth-method> -->
+<!--         <form-login-config> -->
+<!--             <form-login-page>/pages/public/login.xhtml</form-login-page> -->
+<!--             <form-error-page>/pages/public/erroLogin.xhtml</form-error-page> -->
+<!--         </form-login-config> -->
+<!--     </login-config> -->
+
+</web-app>
