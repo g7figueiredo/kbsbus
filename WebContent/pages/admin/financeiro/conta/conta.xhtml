@@ -32,6 +32,17 @@
     
   	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  	
+  	<script>
+	    function somenteNumeros(num) {
+	        var er = /[^0-9.]/;
+	        er.lastIndex = 0;
+	        var campo = num;
+	        if (er.test(campo.value)) {
+	          campo.value = "";
+	        }
+	    }
+	 </script>
 
 </h:head>
 
@@ -338,88 +349,128 @@
             
 						<div class="form-group col-xs-12">
 							<div class="form-group col-md-4">
-								<label>Descrição Curta*</label>
-								<h:inputText id="descCurta" value="#{produtoBean.produto.descCurta}" styleClass="form-control" required="true" />
+								<label>Nome da Conta*</label>
+								<h:inputText id="descCurta" value="#{contaBean.conta.nomeConta}" styleClass="form-control" required="true" />
 							</div>
 							
-							<div class="form-group col-md-6">
-								<label>Descrição Completa*</label>
-								<h:inputText id="descLonga" value="#{produtoBean.produto.descLonga}" styleClass="form-control" required="true" />
+							<div class="form-group col-md-2">
+								<label>Saldo Inicial*</label>
+								<p:inputText id="saldoInicial" value="#{contaBean.conta.saldoInicial}" styleClass="form-control" onfocus="maskMoney(this)" required="true">
+									<f:convertNumber pattern="#,##0.00" />
+								</p:inputText>
 							</div>
-
-							<div class="form-group col-md-4">
-								<label>Linha*</label>
-								<div class="input-group">
-					                <h:selectOneMenu id="linha" value="#{produtoBean.produto.linhaProduto}" styleClass="form-control">
-										<f:selectItem itemLabel="-- SELECIONE UMA LINHA --" itemValue="null" />
-										<f:selectItems value="#{produtoBean.listaLinhas}" var="linha" itemLabel="#{linha.descLinha} - #{linha.descMarca}" />
+							
+							<div class="col-xs-2">
+								<label>Data de Abertura*</label>
+								<p:calendar id="datetime" value="#{contaBean.conta.dataAbertura}" pattern="dd/MM/yyyy"
+									mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data de abertura!" 
+											size="15" maxdate="#{contaBean.maxDate}"/>
+							</div>
+						</div>
+						
+						<h:panelGroup id="painelPai">
+							<div class="form-group col-xs-12">
+								<div class="col-md-4">
+									<label>Linha*</label>
+						            <h:selectOneMenu id="tipoConta" value="#{contaBean.tipoContaSelecionada}" styleClass="form-control">
+						              	<p:ajax listener="#{contaBean.atualizaRenderizacao}" update="painelPai"/>
+										<f:selectItem itemLabel="-- SELECIONE --" itemValue="null" />
+										<f:selectItems value="#{contaBean.tiposConta}" var="tipo" itemLabel="#{tipo.descricao}" />
 									</h:selectOneMenu>
-									
-									<div class="input-group-btn">
-					                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Opções
-					                    <span class="fa fa-caret-down"></span></button>
-					                  <ul class="dropdown-menu">
-					                    <li><a href="#" onclick="$('#linhaModal').modal('show');">Incluir Linha</a></li>
-					                  </ul>
-					                </div>
-					            </div>
+								</div>
 							</div>
 							
-							<div class="form-group col-md-3">
-								<label>UN Medida*</label>
-								<h:selectOneMenu id="medida" value="#{produtoBean.produto.unMedida}" styleClass="form-control" required="true">
-									<f:selectItem itemLabel="-- SELECIONE UMA OPÇÃO --" itemValue="null" />
-									<f:selectItem itemLabel="CM - CENTÍMETRO" itemValue="CM" />
-									<f:selectItem itemLabel="CX - CAIXA" itemValue="CX" />
-									<f:selectItem itemLabel="DUZIA - DUZIA" itemValue="DUZIA" />
-									<f:selectItem itemLabel="KG - QUILOGRAMA" itemValue="KG" />
-									<f:selectItem itemLabel="KIT - KIT" itemValue="KIT" />
-									<f:selectItem itemLabel="LITRO - LITRO" itemValue="LITRO" />
-									<f:selectItem itemLabel="M - METRO" itemValue="M" />
-									<f:selectItem itemLabel="ML - MILILITRO" itemValue="ML" />
-									<f:selectItem itemLabel="PCT - PACOTE" itemValue="PCT" />
-									<f:selectItem itemLabel="PC - PEÇA" itemValue="PC" />
-									<f:selectItem itemLabel="UNID - UNIDADE" itemValue="UNID" />
-								</h:selectOneMenu>
-							</div>
+							<h:panelGroup rendered="#{contaBean.rendered}">
 							
-							<div class="form-group col-md-2">
-								<label>Quantidade*</label>
-								<p:inputNumber id="qtd" value="#{produtoBean.produto.valQtd}" required="true" decimalPlaces="0"/>  
-							</div>
-						</div>
-						
-						<div class="form-group col-xs-12">
-							<div class="form-group col-md-2">
-								<label>Valor de Custo*</label>
-								<p:inputText id="valCusto" value="#{produtoBean.produto.valCusto}" styleClass="form-control" onfocus="maskMoney(this)" required="true">
-									<f:convertNumber pattern="#,##0.00" />
-								</p:inputText>
-							</div>
-							
-							<div class="form-group col-md-2">
-								<label>Valor de Venda*</label>
-								<p:inputText id="valVenda" value="#{produtoBean.produto.valVenda}" styleClass="form-control" onfocus="maskMoney(this)" required="true">
-									<f:convertNumber pattern="#,##0.00" />
-								</p:inputText>
-							</div>
-						</div>
-						
-						<div class="form-group col-xs-12">
-            				<div class="form-group col-md-10">
-								<label>Observações</label>
-								<h:inputTextarea id="observacao" value="#{produtoBean.produto.observacoes}" styleClass="form-control" />
-							</div>
-            			</div>
+								<div class="form-group col-md-8">
+									<div class="box box-info">
+							            <div class="box-header with-border">
+							              <h3 class="box-title">Informações Complementares</h3>
+							            </div>
+							            <!-- /.box-header -->
+							            <div class="box-body">
+							            
+							            	<div class="col-md-12">
+							            		<h:panelGroup rendered="#{contaBean.renderedConta}">
+													<div class="col-md-6">
+														<label>Banco*</label>
+														<h:inputText id="banco" value="#{contaBean.conta.banco}" styleClass="form-control" />
+													</div>
+													
+													<div class="col-md-6">
+														<label>Tipo de Pessoa*</label>
+														<h:selectOneMenu id="pessoa" value="#{contaBean.conta.tipoPessoa}" styleClass="form-control">
+															<f:selectItem itemLabel="Pessoa Jurídica" itemValue="PJ" />
+															<f:selectItem itemLabel="Pessoa Física" itemValue="PF" />
+														</h:selectOneMenu>
+													</div>
+												</h:panelGroup>
+												
+												<h:panelGroup rendered="#{contaBean.renderedMeioPamento}">
+													<div class="col-md-6">
+														<label>Descrição*</label>
+														<h:inputText id="descricaoMeio" value="#{contaBean.conta.meioPagamento}" styleClass="form-control" />
+													</div>
+													
+													<div class="col-md-6">
+														<label>Fornecedor/Empresa*</label>
+														<h:inputText id="fornecedor" value="#{contaBean.conta.banco}" styleClass="form-control" />
+													</div>
+													
+												</h:panelGroup>
+												
+												<h:panelGroup rendered="#{contaBean.renderedCartao}">
+													<div class="col-md-6">
+														<label>Banco*</label>
+														<h:inputText id="bancoCartao" value="#{contaBean.conta.banco}" styleClass="form-control" />
+													</div>
+													
+													<div class="col-md-4">
+														<label>Tipo de Pessoa*</label>
+														<h:selectOneMenu id="pessoaCartao" value="#{contaBean.conta.tipoPessoa}" styleClass="form-control">
+															<f:selectItem itemLabel="Pessoa Jurídica" itemValue="PJ" />
+															<f:selectItem itemLabel="Pessoa Física" itemValue="PF" />
+														</h:selectOneMenu>
+													</div>
+													
+													<div class="col-md-6">
+														<label>Bandeira*</label>
+														<h:selectOneMenu id="bandeira" value="#{contaBean.conta.bandeira}" styleClass="form-control">
+															<f:selectItem itemLabel="Master Card" itemValue="Master Card" />
+															<f:selectItem itemLabel="Visa" itemValue="Visa" />
+															<f:selectItem itemLabel="American Express" itemValue="American Express" />
+															<f:selectItem itemLabel="Hipercard" itemValue="Hipercard" />
+															<f:selectItem itemLabel="Elo" itemValue="Elo" />
+															<f:selectItem itemLabel="Dinners Club" itemValue="Dinners Club" />
+															<f:selectItem itemLabel="Mercado Livre" itemValue="Mercado Livre" />
+														</h:selectOneMenu>
+													</div>
+													
+													<div class="col-md-4">
+														<label>4 ultimos digitos*</label><br/>
+														<h:inputText id="dig" value="#{contaBean.conta.digitos}" styleClass="form-control"
+															maxlength="4" onkeyup="somenteNumeros(this);" />
+														
+													</div>
+													
+												</h:panelGroup>
+											</div>
 
+							            </div>
+							            <!-- /.box-body -->
+							         </div>
+							    </div>
+							</h:panelGroup>
+						</h:panelGroup>
+						
 					<div class="form-group col-xs-12">
-              			<div class="form-group col-md-2">
-              				<h:commandButton styleClass="btn btn-lg btn-success" value="Salvar Cadastro" action="#{produtoBean.salvar}" 
+              			<div class="col-md-2">
+              				<p:commandButton icon="fa fa-save" styleClass="btn bg-maroon" value="Salvar Conta" action="#{contaBean.salvarConta}" 
               						onclick="$('#loadModal').modal('show');" />
 	              		</div>
 	              		
-	              		<div class="form-group col-md-2">
-              				<h:commandButton styleClass="btn btn-lg btn-warning" value="Limpar Dados" type="reset" />
+	              		<div class="col-md-2">
+              				<p:commandButton icon="fa fa-remove" styleClass="btn btn-danger" value="Limpar Dados" type="reset" />
 	              		</div>
 	              		
 	              	</div>
@@ -482,7 +533,7 @@
                   <div class="modal-footer">
                     <h:commandButton value="Fechar" type="button" onclick="$('#linhaModal').modal('hide');" styleClass="btn btn-default pull-left" />
                     	
-                    <p:commandButton value="Salvar Cadastro" action="#{produtoBean.salvarCadastroLinha}" styleClass="btn btn-success" update=":form:linha descCurta descMarca"/>
+                    <p:commandButton value="Salvar Cadastro" action="#{produtoBean.salvarCadastroLinha}" styleClass="btn btn-success" update="descCurta descMarca"/>
                     
                   </div>
                   </h:form>

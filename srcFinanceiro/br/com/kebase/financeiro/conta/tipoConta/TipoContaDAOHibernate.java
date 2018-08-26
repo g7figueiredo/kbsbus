@@ -36,7 +36,7 @@ public class TipoContaDAOHibernate implements TipoContaDAO {
 	@Override
 	public TipoConta buscarPorId(int id) {
 		Criteria criteria = this.session.createCriteria(TipoConta.class);
-		criteria.add(Restrictions.eq("idCategoria", id));
+		criteria.add(Restrictions.eq("idTipoConta", id));
 		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		
 		return (TipoConta) criteria.uniqueResult();

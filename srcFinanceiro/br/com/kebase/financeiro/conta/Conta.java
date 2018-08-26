@@ -39,6 +39,21 @@ public class Conta implements Serializable{
 	@Column(name="data_abertura", nullable=false)
 	private Date dataAbertura;
 	
+	@Column(name="banco", nullable=true)
+	private String banco;
+	
+	@Column(name="tipo_pessoa", nullable=true)
+	private String tipoPessoa;
+	
+	@Column(name="bandeira_cc", nullable=true)
+	private String bandeira;
+	
+	@Column(name="digitos_cc", nullable=true)
+	private String digitos;
+	
+	@Column(name="meio_pagamento", nullable=true)
+	private String meioPagamento;
+	
 	@Column(name="status_registro", nullable=true, columnDefinition="default 'A'")
 	private String statusRegistro;
 	
@@ -47,33 +62,46 @@ public class Conta implements Serializable{
 	}
 
 	public Conta(int idConta, TipoConta tipoConta, String nomeConta, double saldoInicial, Date dataAbertura,
+			String banco, String tipoPessoa, String bandeira, String digitos, String meioPagamento,
 			String statusRegistro) {
 		this.idConta = idConta;
 		this.tipoConta = tipoConta;
 		this.nomeConta = nomeConta;
 		this.saldoInicial = saldoInicial;
 		this.dataAbertura = dataAbertura;
+		this.banco = banco;
+		this.tipoPessoa = tipoPessoa;
+		this.bandeira = bandeira;
+		this.digitos = digitos;
+		this.meioPagamento = meioPagamento;
 		this.statusRegistro = statusRegistro;
 	}
 
 	@Override
 	public String toString() {
 		return "Conta [idConta=" + idConta + ", tipoConta=" + tipoConta + ", nomeConta=" + nomeConta + ", saldoInicial="
-				+ saldoInicial + ", dataAbertura=" + dataAbertura + ", statusRegistro=" + statusRegistro + "]";
+				+ saldoInicial + ", dataAbertura=" + dataAbertura + ", banco=" + banco + ", tipoPessoa=" + tipoPessoa
+				+ ", bandeira=" + bandeira + ", digitos=" + digitos + ", meioPagamento=" + meioPagamento
+				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((banco == null) ? 0 : banco.hashCode());
+		result = prime * result + ((bandeira == null) ? 0 : bandeira.hashCode());
 		result = prime * result + ((dataAbertura == null) ? 0 : dataAbertura.hashCode());
+		result = prime * result + ((digitos == null) ? 0 : digitos.hashCode());
 		result = prime * result + idConta;
+		result = prime * result + ((meioPagamento == null) ? 0 : meioPagamento.hashCode());
 		result = prime * result + ((nomeConta == null) ? 0 : nomeConta.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(saldoInicial);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
 		result = prime * result + ((tipoConta == null) ? 0 : tipoConta.hashCode());
+		result = prime * result + ((tipoPessoa == null) ? 0 : tipoPessoa.hashCode());
 		return result;
 	}
 
@@ -86,12 +114,32 @@ public class Conta implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Conta other = (Conta) obj;
+		if (banco == null) {
+			if (other.banco != null)
+				return false;
+		} else if (!banco.equals(other.banco))
+			return false;
+		if (bandeira == null) {
+			if (other.bandeira != null)
+				return false;
+		} else if (!bandeira.equals(other.bandeira))
+			return false;
 		if (dataAbertura == null) {
 			if (other.dataAbertura != null)
 				return false;
 		} else if (!dataAbertura.equals(other.dataAbertura))
 			return false;
+		if (digitos == null) {
+			if (other.digitos != null)
+				return false;
+		} else if (!digitos.equals(other.digitos))
+			return false;
 		if (idConta != other.idConta)
+			return false;
+		if (meioPagamento == null) {
+			if (other.meioPagamento != null)
+				return false;
+		} else if (!meioPagamento.equals(other.meioPagamento))
 			return false;
 		if (nomeConta == null) {
 			if (other.nomeConta != null)
@@ -109,6 +157,11 @@ public class Conta implements Serializable{
 			if (other.tipoConta != null)
 				return false;
 		} else if (!tipoConta.equals(other.tipoConta))
+			return false;
+		if (tipoPessoa == null) {
+			if (other.tipoPessoa != null)
+				return false;
+		} else if (!tipoPessoa.equals(other.tipoPessoa))
 			return false;
 		return true;
 	}
@@ -151,6 +204,46 @@ public class Conta implements Serializable{
 
 	public void setDataAbertura(Date dataAbertura) {
 		this.dataAbertura = dataAbertura;
+	}
+
+	public String getBanco() {
+		return banco;
+	}
+
+	public void setBanco(String banco) {
+		this.banco = banco;
+	}
+
+	public String getTipoPessoa() {
+		return tipoPessoa;
+	}
+
+	public void setTipoPessoa(String tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
+
+	public String getBandeira() {
+		return bandeira;
+	}
+
+	public void setBandeira(String bandeira) {
+		this.bandeira = bandeira;
+	}
+
+	public String getDigitos() {
+		return digitos;
+	}
+
+	public void setDigitos(String digitos) {
+		this.digitos = digitos;
+	}
+
+	public String getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(String meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 
 	public String getStatusRegistro() {
