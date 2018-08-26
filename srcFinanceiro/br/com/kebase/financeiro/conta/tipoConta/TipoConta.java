@@ -47,52 +47,6 @@ public class TipoConta implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
-	@Override
-	public String toString() {
-		return "TipoConta [idTipoConta=" + idTipoConta + ", contas=" + contas + ", descricao=" + descricao
-				+ ", statusRegistro=" + statusRegistro + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contas == null) ? 0 : contas.hashCode());
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
-		result = prime * result + idTipoConta;
-		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TipoConta other = (TipoConta) obj;
-		if (contas == null) {
-			if (other.contas != null)
-				return false;
-		} else if (!contas.equals(other.contas))
-			return false;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
-		if (idTipoConta != other.idTipoConta)
-			return false;
-		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
-				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
-			return false;
-		return true;
-	}
-
 	public int getIdTipoConta() {
 		return idTipoConta;
 	}
@@ -123,6 +77,63 @@ public class TipoConta implements Serializable{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((null == contas) ? 0 : contas.hashCode());
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + idTipoConta;
+		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof TipoConta)) {
+			return false;
+		}
+		TipoConta other = (TipoConta) obj;
+		if (null == contas) {
+			if (other.contas != null) {
+				return false;
+			}
+		} else if (!contas.equals(other.contas)) {
+			return false;
+		}
+		if (descricao == null) {
+			if (other.descricao != null) {
+				return false;
+			}
+		} else if (!descricao.equals(other.descricao)) {
+			return false;
+		}
+		if (idTipoConta != other.idTipoConta) {
+			return false;
+		}
+		if (statusRegistro == null) {
+			if (other.statusRegistro != null) {
+				return false;
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "TipoConta [idTipoConta=" + idTipoConta + ", "
+				+ (descricao != null ? "descricao=" + descricao + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 
 }

@@ -7,18 +7,20 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
+import br.com.kebase.financeiro.conta.extratoConta.ExtratoConta;
+import br.com.kebase.financeiro.conta.extratoConta.ExtratoContaRN;
 import br.com.kebase.financeiro.conta.tipoConta.TipoConta;
 import br.com.kebase.financeiro.conta.tipoConta.TipoContaRN;
 
 @ManagedBean(name="contaBean")
-@RequestScoped
+@ViewScoped
 public class ContaBean implements Serializable{
 
 	private static final long serialVersionUID = -2410981486245391779L;
@@ -31,6 +33,8 @@ public class ContaBean implements Serializable{
 	private TipoConta tipoContaSelecionada = new TipoConta();
 	
 	private Date maxDate = new Date();
+	
+	private boolean saldoPositivo = true;
 	
 	private boolean rendered = false;
 	private boolean renderedConta = false;
@@ -51,11 +55,23 @@ public class ContaBean implements Serializable{
 					ContaRN contaRN = new ContaRN();
 					this.conta.setTipoConta(this.tipoContaSelecionada);
 					this.conta.setStatusRegistro("A");
+					if(this.saldoPositivo == false) {
+						double value = this.conta.getSaldoInicial();
+						this.conta.setSaldoInicial(value * -1);
+					}
 					contaRN.salvar(this.conta);
+					
+					ExtratoContaRN extratoContaRN = new ExtratoContaRN();
+					ExtratoConta extratoConta = new ExtratoConta(this.conta, null, null, new Date(), this.conta.getSaldoInicial(), "C", "Conta criada.","A");
+					if(this.saldoPositivo == false) {
+						extratoConta.setTipoOperacao("D");
+					}
+					extratoContaRN.salvar(extratoConta);
 	
 					PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
 	
-					LOG.info("Conta cadastrada com sucesso.");
+					LOG.info("Conta cadastrada com sucesso. " + this.conta);
+					LOG.info("Operação registrada no extrato. " + extratoConta);
 					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Conta cadastrada com sucesso!", "Ok!"));
 					context.getExternalContext().getFlash().setKeepMessages(true);
 				} else {
@@ -71,6 +87,7 @@ public class ContaBean implements Serializable{
 		
 		return "listaConta?faces-redirect=true";
 	}
+	
 	
 	public void atualizaRenderizacao() {
 		if(null != this.tipoContaSelecionada) {
@@ -162,5 +179,14 @@ public class ContaBean implements Serializable{
 	public boolean isRenderedCartao() {
 		return renderedCartao;
 	}
+
+	public boolean isSaldoPositivo() {
+		return saldoPositivo;
+	}
+
+	public void setSaldoPositivo(boolean saldoPositivo) {
+		this.saldoPositivo = saldoPositivo;
+	}
+
 
 }

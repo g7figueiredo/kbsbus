@@ -348,23 +348,24 @@
             <div class="box-body">
             
 						<div class="form-group col-xs-12">
-							<div class="form-group col-md-4">
+							<div class="col-md-4">
 								<label>Nome da Conta*</label>
 								<h:inputText id="descCurta" value="#{contaBean.conta.nomeConta}" styleClass="form-control" required="true" />
 							</div>
 							
-							<div class="form-group col-md-2">
+							<div class="col-md-2">
 								<label>Saldo Inicial*</label>
-								<p:inputText id="saldoInicial" value="#{contaBean.conta.saldoInicial}" styleClass="form-control" onfocus="maskMoney(this)" required="true">
+								<p:inputText id="saldoInicial" value="#{contaBean.conta.saldoInicial}" styleClass="form-control" onfocus="maskMoney(this)">
 									<f:convertNumber pattern="#,##0.00" />
 								</p:inputText>
 							</div>
 							
-							<div class="col-xs-2">
-								<label>Data de Abertura*</label>
-								<p:calendar id="datetime" value="#{contaBean.conta.dataAbertura}" pattern="dd/MM/yyyy"
-									mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data de abertura!" 
-											size="15" maxdate="#{contaBean.maxDate}"/>
+							<div class="col-md-2">
+								<label></label><br/>
+								<p:selectOneButton value="#{contaBean.saldoPositivo}" id="desc">
+						            <f:selectItem itemLabel="+" itemValue="true" />
+						            <f:selectItem itemLabel="-" itemValue="false" />
+						        </p:selectOneButton>
 							</div>
 						</div>
 						
@@ -377,6 +378,13 @@
 										<f:selectItem itemLabel="-- SELECIONE --" itemValue="null" />
 										<f:selectItems value="#{contaBean.tiposConta}" var="tipo" itemLabel="#{tipo.descricao}" />
 									</h:selectOneMenu>
+								</div>
+								
+								<div class="col-md-2">
+									<label>Data de Abertura*</label>
+									<p:calendar id="datetime" value="#{contaBean.conta.dataAbertura}" pattern="dd/MM/yyyy"
+										mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data de abertura!" 
+												size="15" maxdate="#{contaBean.maxDate}"/>
 								</div>
 							</div>
 							

@@ -77,95 +77,6 @@ public class Conta implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
-	@Override
-	public String toString() {
-		return "Conta [idConta=" + idConta + ", tipoConta=" + tipoConta + ", nomeConta=" + nomeConta + ", saldoInicial="
-				+ saldoInicial + ", dataAbertura=" + dataAbertura + ", banco=" + banco + ", tipoPessoa=" + tipoPessoa
-				+ ", bandeira=" + bandeira + ", digitos=" + digitos + ", meioPagamento=" + meioPagamento
-				+ ", statusRegistro=" + statusRegistro + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((banco == null) ? 0 : banco.hashCode());
-		result = prime * result + ((bandeira == null) ? 0 : bandeira.hashCode());
-		result = prime * result + ((dataAbertura == null) ? 0 : dataAbertura.hashCode());
-		result = prime * result + ((digitos == null) ? 0 : digitos.hashCode());
-		result = prime * result + idConta;
-		result = prime * result + ((meioPagamento == null) ? 0 : meioPagamento.hashCode());
-		result = prime * result + ((nomeConta == null) ? 0 : nomeConta.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(saldoInicial);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
-		result = prime * result + ((tipoConta == null) ? 0 : tipoConta.hashCode());
-		result = prime * result + ((tipoPessoa == null) ? 0 : tipoPessoa.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Conta other = (Conta) obj;
-		if (banco == null) {
-			if (other.banco != null)
-				return false;
-		} else if (!banco.equals(other.banco))
-			return false;
-		if (bandeira == null) {
-			if (other.bandeira != null)
-				return false;
-		} else if (!bandeira.equals(other.bandeira))
-			return false;
-		if (dataAbertura == null) {
-			if (other.dataAbertura != null)
-				return false;
-		} else if (!dataAbertura.equals(other.dataAbertura))
-			return false;
-		if (digitos == null) {
-			if (other.digitos != null)
-				return false;
-		} else if (!digitos.equals(other.digitos))
-			return false;
-		if (idConta != other.idConta)
-			return false;
-		if (meioPagamento == null) {
-			if (other.meioPagamento != null)
-				return false;
-		} else if (!meioPagamento.equals(other.meioPagamento))
-			return false;
-		if (nomeConta == null) {
-			if (other.nomeConta != null)
-				return false;
-		} else if (!nomeConta.equals(other.nomeConta))
-			return false;
-		if (Double.doubleToLongBits(saldoInicial) != Double.doubleToLongBits(other.saldoInicial))
-			return false;
-		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
-				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
-			return false;
-		if (tipoConta == null) {
-			if (other.tipoConta != null)
-				return false;
-		} else if (!tipoConta.equals(other.tipoConta))
-			return false;
-		if (tipoPessoa == null) {
-			if (other.tipoPessoa != null)
-				return false;
-		} else if (!tipoPessoa.equals(other.tipoPessoa))
-			return false;
-		return true;
-	}
-
 	public int getIdConta() {
 		return idConta;
 	}
@@ -252,6 +163,123 @@ public class Conta implements Serializable{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((banco == null) ? 0 : banco.hashCode());
+		result = prime * result + ((bandeira == null) ? 0 : bandeira.hashCode());
+		result = prime * result + ((dataAbertura == null) ? 0 : dataAbertura.hashCode());
+		result = prime * result + ((digitos == null) ? 0 : digitos.hashCode());
+		result = prime * result + idConta;
+		result = prime * result + ((meioPagamento == null) ? 0 : meioPagamento.hashCode());
+		result = prime * result + ((nomeConta == null) ? 0 : nomeConta.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(saldoInicial);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
+		result = prime * result + ((null == tipoConta) ? 0 : tipoConta.hashCode());
+		result = prime * result + ((tipoPessoa == null) ? 0 : tipoPessoa.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Conta)) {
+			return false;
+		}
+		Conta other = (Conta) obj;
+		if (banco == null) {
+			if (other.banco != null) {
+				return false;
+			}
+		} else if (!banco.equals(other.banco)) {
+			return false;
+		}
+		if (bandeira == null) {
+			if (other.bandeira != null) {
+				return false;
+			}
+		} else if (!bandeira.equals(other.bandeira)) {
+			return false;
+		}
+		if (dataAbertura == null) {
+			if (other.dataAbertura != null) {
+				return false;
+			}
+		} else if (!dataAbertura.equals(other.dataAbertura)) {
+			return false;
+		}
+		if (digitos == null) {
+			if (other.digitos != null) {
+				return false;
+			}
+		} else if (!digitos.equals(other.digitos)) {
+			return false;
+		}
+		if (idConta != other.idConta) {
+			return false;
+		}
+		if (meioPagamento == null) {
+			if (other.meioPagamento != null) {
+				return false;
+			}
+		} else if (!meioPagamento.equals(other.meioPagamento)) {
+			return false;
+		}
+		if (nomeConta == null) {
+			if (other.nomeConta != null) {
+				return false;
+			}
+		} else if (!nomeConta.equals(other.nomeConta)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(saldoInicial) != Double.doubleToLongBits(other.saldoInicial)) {
+			return false;
+		}
+		if (statusRegistro == null) {
+			if (other.statusRegistro != null) {
+				return false;
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
+			return false;
+		}
+		if (null == tipoConta) {
+			if (other.tipoConta != null) {
+				return false;
+			}
+		} else if (!tipoConta.equals(other.tipoConta)) {
+			return false;
+		}
+		if (tipoPessoa == null) {
+			if (other.tipoPessoa != null) {
+				return false;
+			}
+		} else if (!tipoPessoa.equals(other.tipoPessoa)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Conta [idConta=" + idConta + ", " + (tipoConta != null ? "tipoConta=" + tipoConta + ", " : "")
+				+ (nomeConta != null ? "nomeConta=" + nomeConta + ", " : "") + "saldoInicial=" + saldoInicial + ", "
+				+ (dataAbertura != null ? "dataAbertura=" + dataAbertura + ", " : "")
+				+ (banco != null ? "banco=" + banco + ", " : "")
+				+ (tipoPessoa != null ? "tipoPessoa=" + tipoPessoa + ", " : "")
+				+ (bandeira != null ? "bandeira=" + bandeira + ", " : "")
+				+ (digitos != null ? "digitos=" + digitos + ", " : "")
+				+ (meioPagamento != null ? "meioPagamento=" + meioPagamento + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 	
 }

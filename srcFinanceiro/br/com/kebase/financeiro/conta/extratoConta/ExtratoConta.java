@@ -48,6 +48,9 @@ public class ExtratoConta implements Serializable{
 	@Column(name="tipo_operacao", nullable=false)
 	private String tipoOperacao;
 	
+	@Column(name="descricao_op", nullable=false)
+	private String descricaoOperacao;
+	
 	@Column(name="status_registro", nullable=false, columnDefinition="default 'A'")
 	private String statusRegistro;
 	
@@ -56,7 +59,7 @@ public class ExtratoConta implements Serializable{
 	}
 
 	public ExtratoConta(long idOperacao, Conta conta, ReciboReceita reciboReceita, ReciboDespesa reciboDespesa,
-			Date dataHora, double valorOperacao, String tipoOperacao, String statusRegistro) {
+			Date dataHora, double valorOperacao, String tipoOperacao, String descricaoOperacao, String statusRegistro) {
 		this.idOperacao = idOperacao;
 		this.conta = conta;
 		this.reciboReceita = reciboReceita;
@@ -64,14 +67,20 @@ public class ExtratoConta implements Serializable{
 		this.dataHora = dataHora;
 		this.valorOperacao = valorOperacao;
 		this.tipoOperacao = tipoOperacao;
+		this.descricaoOperacao = descricaoOperacao;
 		this.statusRegistro = statusRegistro;
 	}
 
-	@Override
-	public String toString() {
-		return "ExtratoConta [idOperacao=" + idOperacao + ", conta=" + conta + ", reciboReceita=" + reciboReceita
-				+ ", reciboDespesa=" + reciboDespesa + ", dataHora=" + dataHora + ", valorOperacao=" + valorOperacao
-				+ ", tipoOperacao=" + tipoOperacao + ", statusRegistro=" + statusRegistro + "]";
+	public ExtratoConta(Conta conta, ReciboReceita reciboReceita, ReciboDespesa reciboDespesa, Date dataHora,
+			double valorOperacao, String tipoOperacao, String descricaoOperacao, String statusRegistro) {
+		this.conta = conta;
+		this.reciboReceita = reciboReceita;
+		this.reciboDespesa = reciboDespesa;
+		this.dataHora = dataHora;
+		this.valorOperacao = valorOperacao;
+		this.tipoOperacao = tipoOperacao;
+		this.descricaoOperacao = descricaoOperacao;
+		this.statusRegistro = statusRegistro;
 	}
 
 	@Override
@@ -80,6 +89,7 @@ public class ExtratoConta implements Serializable{
 		int result = 1;
 		result = prime * result + ((conta == null) ? 0 : conta.hashCode());
 		result = prime * result + ((dataHora == null) ? 0 : dataHora.hashCode());
+		result = prime * result + ((descricaoOperacao == null) ? 0 : descricaoOperacao.hashCode());
 		result = prime * result + (int) (idOperacao ^ (idOperacao >>> 32));
 		result = prime * result + ((reciboDespesa == null) ? 0 : reciboDespesa.hashCode());
 		result = prime * result + ((reciboReceita == null) ? 0 : reciboReceita.hashCode());
@@ -109,6 +119,11 @@ public class ExtratoConta implements Serializable{
 			if (other.dataHora != null)
 				return false;
 		} else if (!dataHora.equals(other.dataHora))
+			return false;
+		if (descricaoOperacao == null) {
+			if (other.descricaoOperacao != null)
+				return false;
+		} else if (!descricaoOperacao.equals(other.descricaoOperacao))
 			return false;
 		if (idOperacao != other.idOperacao)
 			return false;
@@ -193,6 +208,14 @@ public class ExtratoConta implements Serializable{
 		this.tipoOperacao = tipoOperacao;
 	}
 
+	public String getDescricaoOperacao() {
+		return descricaoOperacao;
+	}
+
+	public void setDescricaoOperacao(String descricaoOperacao) {
+		this.descricaoOperacao = descricaoOperacao;
+	}
+
 	public String getStatusRegistro() {
 		return statusRegistro;
 	}
@@ -200,5 +223,18 @@ public class ExtratoConta implements Serializable{
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
 	}
+
+	@Override
+	public String toString() {
+		return "ExtratoConta [idOperacao=" + idOperacao + ", " + (conta != null ? "conta=" + conta + ", " : "")
+				+ (reciboReceita != null ? "reciboReceita=" + reciboReceita + ", " : "")
+				+ (reciboDespesa != null ? "reciboDespesa=" + reciboDespesa + ", " : "")
+				+ (dataHora != null ? "dataHora=" + dataHora + ", " : "") + "valorOperacao=" + valorOperacao + ", "
+				+ (tipoOperacao != null ? "tipoOperacao=" + tipoOperacao + ", " : "")
+				+ (descricaoOperacao != null ? "descricaoOperacao=" + descricaoOperacao + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
+	}
+	
+	
 	
 }
