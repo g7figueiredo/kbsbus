@@ -62,7 +62,9 @@ public class ContaBean implements Serializable{
 					contaRN.salvar(this.conta);
 					
 					ExtratoContaRN extratoContaRN = new ExtratoContaRN();
-					ExtratoConta extratoConta = new ExtratoConta(this.conta, null, null, new Date(), this.conta.getSaldoInicial(), "C", "Conta criada.","A");
+					ExtratoConta extratoConta = new ExtratoConta(this.conta, null, null, new Date(), this.conta.getSaldoInicial(),
+								this.conta.getSaldoInicial(), "C", "Conta criada.","A");
+					
 					if(this.saldoPositivo == false) {
 						extratoConta.setTipoOperacao("D");
 					}

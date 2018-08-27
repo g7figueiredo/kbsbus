@@ -296,7 +296,7 @@
           <h1>
           
           	<!-- ====================== TITULO DA PÁGINA =================================== -->
-            Contas a Receber
+            Extrato de Contas
             <small>Para filtrar a pesquisa utilize o painel de filtros</small>
           </h1>
           <ol class="breadcrumb">
@@ -318,26 +318,45 @@
 			            <div class="box-header with-border">
 			              <h3 class="box-title">Painel de Filtros</h3>
 			              <div class="box-tools pull-right">
-			                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+			                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Abrir"><i class="fa fa-plus"></i></button>
 			              </div>
 			            </div>
+			            
 			            <div class="box-body">
 						<div class="row">
-							<div class="form-group col-xs-4">
-								<label>Status</label>
-								<h:selectOneMenu styleClass="form-control">
-									<f:selectItem itemLabel="-- TODOS --" itemValue="0" />
-									<f:selectItem itemLabel="PENDENTE DE DISTRIBUIÇÃO" itemValue="1" />
-									<f:selectItem itemLabel="DISTRIBUÍDOS" itemValue="2" />
-								</h:selectOneMenu>
+							<div class="form-group col-md-12">
+								<div class="col-md-4">
+									<label>Conta</label>
+									<h:selectOneMenu styleClass="form-control" value="#{extratoBean.contaSelecionada}">
+										<f:selectItem itemLabel="-- TODOS --" itemValue="null" />
+										<f:selectItems value="#{extratoBean.listaContas}" var="conta" itemLabel="#{conta.nomeConta} - #{conta.banco}" itemValue="#{conta}"/>
+									</h:selectOneMenu>
+								</div>
+								
+								<div class="col-md-2">
+									<label>Data inicial</label>
+									<p:calendar value="#{extratoBean.dataInicialFiltro}" pattern="dd/MM/yyyy" mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" size="15"
+													maxdate="#{extratoBean.maxDate}">
+										<p:ajax event="dateSelect" update="dt2" />
+									</p:calendar>
+								</div>
+								
+								<div class="col-md-2">
+									<label>Data final</label>
+									<p:calendar id="dt2" value="#{extratoBean.dataFinalFiltro}" mindate="#{extratoBean.dataInicialFiltro}" pattern="dd/MM/yyyy" mask="99/99/9999" 
+											locale="pt_BR" timeZone="GMT-3" size="15" maxdate="#{extratoBean.maxDate}"/>
+								</div>
 							</div>
 							
 						</div>
-						
-						<div class="form-group">
-							<p:commandButton value="Filtrar" styleClass="btn btn-success" type="submit" action="#{admBean.buscarLista}"
-									update="table" ignoreAutoUpdate="true"/>
-			            </div>
+
+						<div class="box-body">
+					     		<p:commandButton icon="fa fa-filter" styleClass="btn bg-olive"  value="Filtrar" action="#{extratoBean.aplicarFiltro}" update="table" 
+					     			onclick="$('#box').boxWidget('toggle')"/>
+					     						
+					     		<p:commandButton icon="fa fa-remove" styleClass="btn bg-navy"  value="Limpar Filtros" 
+					     						onclick="$('#receitaModal').modal('show');" />
+					    </div>
 			            
 					</div><!-- /.box-body -->
 			            <div class="box-footer">
@@ -346,7 +365,7 @@
 			          
 			          
 			<div class="box-body">
-		     		<p:commandButton icon="fa fa-dollar" styleClass="btn btn-success"  value="Receber" action="#{receitaBean.verificaSelecao}" 
+		     		<p:commandButton icon="fa fa-plus" styleClass="btn bg-maroon"  value="Nova Operacao" 
 		     						onclick="$('#receitaModal').modal('show');" />
 		     		
 		     		<p:commandButton icon="fa fa-undo" styleClass="btn bg-orange"  value="Devolver Pagamento" action="#{receitaBean.devolverPagamento}"
@@ -364,17 +383,17 @@
 			          
         	<div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Lista de Receitas</h3>
+                  <h3 class="box-title">Extrato</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
                   <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                   	<div class="row">
                   		<div class="col-sm-12">
-							<p:dataTable id="table" var="receita"
-								value="#{receitaBean.listaReceita}"
-								selection="#{receitaBean.receita}"
-								rowKey="#{receita.idReceita}" rows="30" paginator="true"
+							<p:dataTable id="table" var="op"
+								value="#{extratoBean.extrato}"
+								selection="#{extratoBean.operacao}"
+								rowKey="#{op.idOperacao}" rows="50" paginator="true"
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
 								
@@ -384,37 +403,39 @@
         						<p:column style="width:40px;">
 						            <p:rowToggler />
 						        </p:column>
-								
-								<p:column headerText="#ID" style="width:70px;text-align:center">
-									<h:outputText value="000#{receita.idReceita}" />
-								</p:column>
-								
-								<p:column headerText="Status" style="width:80px;text-align:center">
-									<h:graphicImage library="imagens" name="#{receita.statusReceita}.png" />
-								</p:column>
-								
-								<p:column headerText="Valor" style="text-align:center">
-									<h:outputText value="#{receita.valorReceita}">
-										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
-									</h:outputText>
-								</p:column>
-								
-								<p:column headerText="Vencimento" style="text-align:center">
-									<h:outputText value="#{receita.dataVencimento}">
+						        
+						        <p:column headerText="Data" style="text-align:center">
+									<h:outputText value="#{op.dataHora}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Descrição" width="40%">
-									<h:outputText value="#{receita.descricaoReceita}" />
+								<p:column headerText="Op" style="width: 40px;">
+									<h:outputText value="#{op.tipoOperacao}" />
 								</p:column>
 								
-								<p:column headerText="Categoria">
-									<h:outputText value="#{receita.subCategoria.descricaoSubCategoria}" />
+								<p:column headerText="Valor" style="text-align:center">
+									<h:outputText value="#{op.valorOperacao}">
+										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
+									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Centro de Custo">
-									<h:outputText value="#{receita.centroCusto.descricaoCentroCusto}" />
+								<p:column headerText="Descrição" style="text-align:center">
+									<h:outputText value="#{op.descricaoOperacao}" />
+								</p:column>
+								
+								<p:column headerText="Conta">
+									<h:outputText value="#{op.conta.nomeConta}" />
+								</p:column>
+								
+								<p:column headerText="Banco">
+									<h:outputText value="#{op.conta.banco}" />
+								</p:column>
+								
+								<p:column headerText="Saldo" style="text-align:center; background: #00c0ef8a;">
+									<h:outputText value="#{op.valorSaldo}" style="font-weight: bold; font-size: 18px;">
+										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
+									</h:outputText>
 								</p:column>
 								
 								<p:rowExpansion>

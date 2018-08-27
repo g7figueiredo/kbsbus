@@ -36,7 +36,7 @@ public class ContaDAOHibernate implements ContaDAO {
 	@Override
 	public Conta buscarPorId(int id) {
 		Criteria criteria = this.session.createCriteria(Conta.class);
-		criteria.add(Restrictions.eq("idCategoria", id));
+		criteria.add(Restrictions.eq("idConta", id));
 		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		
 		return (Conta) criteria.uniqueResult();

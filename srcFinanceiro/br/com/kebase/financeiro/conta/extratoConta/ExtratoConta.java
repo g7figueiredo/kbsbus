@@ -45,6 +45,9 @@ public class ExtratoConta implements Serializable{
 	@Column(name="val_operacao", nullable=false)
 	private double valorOperacao;
 	
+	@Column(name="val_saldo", nullable=false)
+	private double valorSaldo;
+	
 	@Column(name="tipo_operacao", nullable=false)
 	private String tipoOperacao;
 	
@@ -57,31 +60,37 @@ public class ExtratoConta implements Serializable{
 	public ExtratoConta() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public ExtratoConta(Conta conta, ReciboReceita reciboReceita, ReciboDespesa reciboDespesa, Date dataHora,
+			double valorOperacao, double valorSaldo, String tipoOperacao, String descricaoOperacao,
+			String statusRegistro) {
+		this.conta = conta;
+		this.reciboReceita = reciboReceita;
+		this.reciboDespesa = reciboDespesa;
+		this.dataHora = dataHora;
+		this.valorOperacao = valorOperacao;
+		this.valorSaldo = valorSaldo;
+		this.tipoOperacao = tipoOperacao;
+		this.descricaoOperacao = descricaoOperacao;
+		this.statusRegistro = statusRegistro;
+	}
 
 	public ExtratoConta(long idOperacao, Conta conta, ReciboReceita reciboReceita, ReciboDespesa reciboDespesa,
-			Date dataHora, double valorOperacao, String tipoOperacao, String descricaoOperacao, String statusRegistro) {
+			Date dataHora, double valorOperacao, double valorSaldo, String tipoOperacao, String descricaoOperacao,
+			String statusRegistro) {
 		this.idOperacao = idOperacao;
 		this.conta = conta;
 		this.reciboReceita = reciboReceita;
 		this.reciboDespesa = reciboDespesa;
 		this.dataHora = dataHora;
 		this.valorOperacao = valorOperacao;
+		this.valorSaldo = valorSaldo;
 		this.tipoOperacao = tipoOperacao;
 		this.descricaoOperacao = descricaoOperacao;
 		this.statusRegistro = statusRegistro;
 	}
 
-	public ExtratoConta(Conta conta, ReciboReceita reciboReceita, ReciboDespesa reciboDespesa, Date dataHora,
-			double valorOperacao, String tipoOperacao, String descricaoOperacao, String statusRegistro) {
-		this.conta = conta;
-		this.reciboReceita = reciboReceita;
-		this.reciboDespesa = reciboDespesa;
-		this.dataHora = dataHora;
-		this.valorOperacao = valorOperacao;
-		this.tipoOperacao = tipoOperacao;
-		this.descricaoOperacao = descricaoOperacao;
-		this.statusRegistro = statusRegistro;
-	}
+
 
 	@Override
 	public int hashCode() {
@@ -98,58 +107,94 @@ public class ExtratoConta implements Serializable{
 		long temp;
 		temp = Double.doubleToLongBits(valorOperacao);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(valorSaldo);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof ExtratoConta)) {
 			return false;
+		}
 		ExtratoConta other = (ExtratoConta) obj;
 		if (conta == null) {
-			if (other.conta != null)
+			if (other.conta != null) {
 				return false;
-		} else if (!conta.equals(other.conta))
+			}
+		} else if (!conta.equals(other.conta)) {
 			return false;
+		}
 		if (dataHora == null) {
-			if (other.dataHora != null)
+			if (other.dataHora != null) {
 				return false;
-		} else if (!dataHora.equals(other.dataHora))
+			}
+		} else if (!dataHora.equals(other.dataHora)) {
 			return false;
+		}
 		if (descricaoOperacao == null) {
-			if (other.descricaoOperacao != null)
+			if (other.descricaoOperacao != null) {
 				return false;
-		} else if (!descricaoOperacao.equals(other.descricaoOperacao))
+			}
+		} else if (!descricaoOperacao.equals(other.descricaoOperacao)) {
 			return false;
-		if (idOperacao != other.idOperacao)
+		}
+		if (idOperacao != other.idOperacao) {
 			return false;
+		}
 		if (reciboDespesa == null) {
-			if (other.reciboDespesa != null)
+			if (other.reciboDespesa != null) {
 				return false;
-		} else if (!reciboDespesa.equals(other.reciboDespesa))
+			}
+		} else if (!reciboDespesa.equals(other.reciboDespesa)) {
 			return false;
+		}
 		if (reciboReceita == null) {
-			if (other.reciboReceita != null)
+			if (other.reciboReceita != null) {
 				return false;
-		} else if (!reciboReceita.equals(other.reciboReceita))
+			}
+		} else if (!reciboReceita.equals(other.reciboReceita)) {
 			return false;
+		}
 		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
+			if (other.statusRegistro != null) {
 				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
 			return false;
+		}
 		if (tipoOperacao == null) {
-			if (other.tipoOperacao != null)
+			if (other.tipoOperacao != null) {
 				return false;
-		} else if (!tipoOperacao.equals(other.tipoOperacao))
+			}
+		} else if (!tipoOperacao.equals(other.tipoOperacao)) {
 			return false;
-		if (Double.doubleToLongBits(valorOperacao) != Double.doubleToLongBits(other.valorOperacao))
+		}
+		if (Double.doubleToLongBits(valorOperacao) != Double.doubleToLongBits(other.valorOperacao)) {
 			return false;
+		}
+		if (Double.doubleToLongBits(valorSaldo) != Double.doubleToLongBits(other.valorSaldo)) {
+			return false;
+		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ExtratoConta [idOperacao=" + idOperacao + ", " + (conta != null ? "conta=" + conta + ", " : "")
+				+ (reciboReceita != null ? "reciboReceita=" + reciboReceita + ", " : "")
+				+ (reciboDespesa != null ? "reciboDespesa=" + reciboDespesa + ", " : "")
+				+ (dataHora != null ? "dataHora=" + dataHora + ", " : "") + "valorOperacao=" + valorOperacao
+				+ ", valorSaldo=" + valorSaldo + ", "
+				+ (tipoOperacao != null ? "tipoOperacao=" + tipoOperacao + ", " : "")
+				+ (descricaoOperacao != null ? "descricaoOperacao=" + descricaoOperacao + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 
 	public long getIdOperacao() {
@@ -200,6 +245,14 @@ public class ExtratoConta implements Serializable{
 		this.valorOperacao = valorOperacao;
 	}
 
+	public double getValorSaldo() {
+		return valorSaldo;
+	}
+
+	public void setValorSaldo(double valorSaldo) {
+		this.valorSaldo = valorSaldo;
+	}
+
 	public String getTipoOperacao() {
 		return tipoOperacao;
 	}
@@ -223,18 +276,5 @@ public class ExtratoConta implements Serializable{
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
 	}
-
-	@Override
-	public String toString() {
-		return "ExtratoConta [idOperacao=" + idOperacao + ", " + (conta != null ? "conta=" + conta + ", " : "")
-				+ (reciboReceita != null ? "reciboReceita=" + reciboReceita + ", " : "")
-				+ (reciboDespesa != null ? "reciboDespesa=" + reciboDespesa + ", " : "")
-				+ (dataHora != null ? "dataHora=" + dataHora + ", " : "") + "valorOperacao=" + valorOperacao + ", "
-				+ (tipoOperacao != null ? "tipoOperacao=" + tipoOperacao + ", " : "")
-				+ (descricaoOperacao != null ? "descricaoOperacao=" + descricaoOperacao + ", " : "")
-				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
-	}
-	
-	
 	
 }

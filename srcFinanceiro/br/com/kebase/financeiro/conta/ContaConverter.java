@@ -5,19 +5,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
+import br.com.kebase.util.Util;
+
 @FacesConverter(forClass=Conta.class)
 public class ContaConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String codString) {
 		if(codString != null && codString.trim().length() > 0){
-			int codigo = Integer.valueOf(codString);
-			ContaRN contaRN = new ContaRN();
-			
-			try {
-				return contaRN.buscarPorId(codigo);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(Util.containsOnlyNumbers(codString)) {
+				int codigo = Integer.valueOf(codString);
+				ContaRN contaRN = new ContaRN();
+				
+				try {
+					return contaRN.buscarPorId(codigo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
