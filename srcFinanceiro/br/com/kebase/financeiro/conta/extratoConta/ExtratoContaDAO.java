@@ -21,4 +21,6 @@ public interface ExtratoContaDAO {
 	
 	public List<ExtratoConta> buscarPorData(Date iniDate, Date endDate); 
 	
+	public ExtratoConta buscarUltimaTransacaoPorConta(Conta conta);
+	
 }

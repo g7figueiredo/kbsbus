@@ -41,5 +41,9 @@ public class ExtratoContaRN {
 	public List<ExtratoConta> buscarPorData(Date iniDate, Date endDate){
 		return this.extratoContaDAO.buscarPorData(iniDate, endDate);
 	}
+	
+	public ExtratoConta buscarUltimaTransacaoPorConta(Conta conta){
+		return this.extratoContaDAO.buscarUltimaTransacaoPorConta(conta);
+	}
 
 }

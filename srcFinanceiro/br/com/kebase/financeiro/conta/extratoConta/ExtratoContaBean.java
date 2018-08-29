@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.event.AjaxBehaviorEvent;
 
 import br.com.kebase.financeiro.conta.Conta;
 import br.com.kebase.financeiro.conta.ContaRN;
@@ -19,9 +18,8 @@ public class ExtratoContaBean implements Serializable{
 
 	private static final long serialVersionUID = -7613236948390542769L;
 	
-	private ExtratoConta operacao;
+	private ExtratoConta operacao = new ExtratoConta();
 	private List<ExtratoConta> extrato = new ArrayList<ExtratoConta>();
-	
 	
 	//filtros
 	private Conta contaSelecionada = new Conta();
@@ -33,6 +31,21 @@ public class ExtratoContaBean implements Serializable{
 	
 	public ExtratoContaBean() {
 		
+	}
+	
+	public void atualizarSaldo() {
+		ExtratoConta transacao = new ExtratoContaRN().buscarUltimaTransacaoPorConta(this.contaSelecionada);
+		if(null == transacao) {
+			transacao = new ExtratoConta(this.contaSelecionada, null, null, new Date(), 0, 0, null, "", "");
+		}
+		
+		double valor = this.operacao.getValorOperacao();
+		if(this.operacao.getTipoOperacao().equals("D")) {
+			valor = valor * -1;
+		}
+		double saldo = transacao.getValorSaldo() + valor;
+		
+		this.operacao.setValorSaldo(saldo);
 	}
 	
 	public String aplicarFiltro() {

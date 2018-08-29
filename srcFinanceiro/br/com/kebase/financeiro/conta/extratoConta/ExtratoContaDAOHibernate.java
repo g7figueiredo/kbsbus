@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.kebase.financeiro.conta.Conta;
@@ -82,6 +83,16 @@ public class ExtratoContaDAOHibernate implements ExtratoContaDAO {
 		@SuppressWarnings("unchecked")
 		List<ExtratoConta> results = criteria.list();
 		return results;
+	}
+
+	@Override
+	public ExtratoConta buscarUltimaTransacaoPorConta(Conta conta) {
+		Criteria criteria = this.session.createCriteria(ExtratoConta.class);
+		criteria.add(Restrictions.eq("conta.idConta", conta.getIdConta()));
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.addOrder(Order.desc("idOperacao"));
+		
+		return (ExtratoConta) criteria.uniqueResult();
 	}
 
 }
