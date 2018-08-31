@@ -5,21 +5,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 import br.com.kebase.financeiro.conta.Conta;
 import br.com.kebase.financeiro.conta.ContaRN;
 import br.com.kebase.util.CalcularData;
 
 @ManagedBean(name="extratoBean")
-@RequestScoped
+@ViewScoped
 public class ExtratoContaBean implements Serializable{
 
 	private static final long serialVersionUID = -7613236948390542769L;
+	private static final Logger LOG = Logger.getLogger(ExtratoContaBean.class);
 	
 	private ExtratoConta operacao = new ExtratoConta();
 	private List<ExtratoConta> extrato = new ArrayList<ExtratoConta>();
+	
+	private ExtratoConta transacaoSelecionada;
 	
 	//filtros
 	private Conta contaSelecionada = new Conta();
@@ -28,24 +37,96 @@ public class ExtratoContaBean implements Serializable{
 	private Date dataFinalFiltro = new Date();
 	private Date maxDate = new Date();
 	
-	
 	public ExtratoContaBean() {
-		
+		this.operacao.setDataHora(new Date());
 	}
 	
-	public void atualizarSaldo() {
-		ExtratoConta transacao = new ExtratoContaRN().buscarUltimaTransacaoPorConta(this.contaSelecionada);
-		if(null == transacao) {
-			transacao = new ExtratoConta(this.contaSelecionada, null, null, new Date(), 0, 0, null, "", "");
+	public void onTransacaoSelect(SelectEvent event) {
+		this.operacao = (ExtratoConta) event.getObject();
+		this.contaSelecionada = this.operacao.getConta();
+	}
+	
+	public void onTransacaoUnselect(SelectEvent event) {
+		this.operacao = new ExtratoConta();
+		this.contaSelecionada = new Conta();
+	}
+	
+	public void verificaSelecao() {
+		if(null == this.operacao || this.operacao.getIdOperacao() == 0) {
+			PrimeFaces.current().executeScript("$('#transacaoModal').modal('hide');");
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione uma transação!", ""));
+			context.getExternalContext().getFlash().setKeepMessages(true);
+		}
+	}
+	
+	public String salvarTransacao() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		ExtratoContaRN extratoContaRN = new ExtratoContaRN();
+		verificaOperacao();
+		if(null != this.operacao && this.operacao.getIdOperacao() == 0) {
+			if(null != this.contaSelecionada && this.contaSelecionada.getIdConta() > 0) {
+				this.operacao.setStatusRegistro("A");
+				this.operacao.setConta(this.contaSelecionada);
+				
+				extratoContaRN.salvar(this.operacao);
+				atualizarSaldoConta(this.operacao.getConta());
+				
+				PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
+				
+				LOG.info("Transação registrada com sucesso. " + this.operacao);
+				context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Transação registrada com sucesso!", "Ok!"));
+				context.getExternalContext().getFlash().setKeepMessages(true);
+			}else {
+				context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione uma conta!", "Ops!"));
+				context.getExternalContext().getFlash().setKeepMessages(true);
+			}
+		}else if (this.operacao.getIdOperacao() > 0) {
+			this.operacao.setConta(this.contaSelecionada);
+			extratoContaRN.editar(this.operacao);
+			atualizarSaldoConta(this.operacao.getConta());
+			
+			PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
+			LOG.info("Transação editada com sucesso. " + this.operacao);
+			context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Transação editada com sucesso!", "Ok!"));
+			context.getExternalContext().getFlash().setKeepMessages(true);
 		}
 		
+		return "extrato?faces-redirect=true";
+	}
+	
+	public Double saldoSumario(ExtratoConta ex){
+	    Double total = new Double(ex.getValorOperacao());
+
+	    for (ExtratoConta transacao : this.extrato) {
+	       if(transacao.getDataHora() == ex.getDataHora()){
+	           total += transacao.getValorOperacao();
+	       }
+	    }
+	    
+	    return total;
+	}
+	
+	private void atualizarSaldoConta(Conta conta) {
+		List<ExtratoConta> extratoConta = new ExtratoContaRN().buscarTodosPorConta(conta);
+		double saldo = 0;
+		if(!extratoConta.isEmpty()) {
+			for(ExtratoConta transacao : extratoConta) {
+				saldo += transacao.getValorOperacao();
+				transacao.setValorSaldo(saldo);
+			}
+		}
+	}
+	
+	public void verificaOperacao() {
 		double valor = this.operacao.getValorOperacao();
-		if(this.operacao.getTipoOperacao().equals("D")) {
+		if(this.operacao.getValorOperacao() > 0 && this.operacao.getTipoOperacao().equals("D")) {
+			valor = valor * -1;
+		}else if(this.operacao.getValorOperacao() < 0 && this.operacao.getTipoOperacao().equals("C")) {
 			valor = valor * -1;
 		}
-		double saldo = transacao.getValorSaldo() + valor;
 		
-		this.operacao.setValorSaldo(saldo);
+		this.operacao.setValorOperacao(valor);
 	}
 	
 	public String aplicarFiltro() {
@@ -57,7 +138,7 @@ public class ExtratoContaBean implements Serializable{
 			this.extrato = extratoContaRN.buscarPorData(dataInicialFiltro, dataFinalFiltro);
 		}
 		
-		return "extrato";
+		return "";
 	}
 
 	public ExtratoConta getOperacao() {
@@ -104,6 +185,14 @@ public class ExtratoContaBean implements Serializable{
 
 	public Date getMaxDate() {
 		return maxDate;
+	}
+
+	public ExtratoConta getTransacaoSelecionada() {
+		return transacaoSelecionada;
+	}
+
+	public void setTransacaoSelecionada(ExtratoConta transacaoSelecionada) {
+		this.transacaoSelecionada = transacaoSelecionada;
 	}
 
 }

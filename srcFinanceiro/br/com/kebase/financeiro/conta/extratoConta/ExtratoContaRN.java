@@ -45,5 +45,9 @@ public class ExtratoContaRN {
 	public ExtratoConta buscarUltimaTransacaoPorConta(Conta conta){
 		return this.extratoContaDAO.buscarUltimaTransacaoPorConta(conta);
 	}
+	
+	public List<ExtratoConta> buscarTodosPorConta(Conta conta){
+		return this.extratoContaDAO.buscarTodosPorConta(conta);
+	}
 
 }

@@ -23,4 +23,6 @@ public interface ExtratoContaDAO {
 	
 	public ExtratoConta buscarUltimaTransacaoPorConta(Conta conta);
 	
+	public List<ExtratoConta> buscarTodosPorConta(Conta conta);
+	
 }

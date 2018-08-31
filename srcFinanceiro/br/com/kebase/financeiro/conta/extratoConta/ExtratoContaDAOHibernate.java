@@ -30,7 +30,7 @@ public class ExtratoContaDAOHibernate implements ExtratoContaDAO {
 	
 	@Override
 	public void editar(ExtratoConta extratoConta) {
-		this.session.saveOrUpdate(extratoConta);
+		this.session.update(extratoConta);
 	}
 	
 	@Override
@@ -92,7 +92,26 @@ public class ExtratoContaDAOHibernate implements ExtratoContaDAO {
 		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		criteria.addOrder(Order.desc("idOperacao"));
 		
-		return (ExtratoConta) criteria.uniqueResult();
+		@SuppressWarnings("rawtypes")
+		List returns = criteria.list();
+		
+		if(!returns.isEmpty()) {
+			return (ExtratoConta) criteria.list().get(0);
+		}else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<ExtratoConta> buscarTodosPorConta(Conta conta) {
+		Criteria criteria = this.session.createCriteria(ExtratoConta.class);
+		criteria.add(Restrictions.eq("conta.idConta", conta.getIdConta()));
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.addOrder(Order.asc("idOperacao"));
+		
+		@SuppressWarnings("unchecked")
+		List<ExtratoConta> results = criteria.list();
+		return results;
 	}
 
 }

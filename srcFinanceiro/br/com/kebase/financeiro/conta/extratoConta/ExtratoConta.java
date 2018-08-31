@@ -276,5 +276,4 @@ public class ExtratoConta implements Serializable{
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
 	}
-	
 }

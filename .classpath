@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="srcFinanceiro"/>
 	<classpathentry kind="src" path="srcComercial"/>
 	<classpathentry kind="src" path="srcEstoque"/>
+	<classpathentry kind="src" path="JUnitTestCase"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_171">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
@@ -16,5 +17,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

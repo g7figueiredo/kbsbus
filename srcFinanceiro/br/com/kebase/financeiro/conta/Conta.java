@@ -61,6 +61,10 @@ public class Conta implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	public Conta(int idConta) {
+		this.idConta = idConta;
+	}
+
 	public Conta(int idConta, TipoConta tipoConta, String nomeConta, double saldoInicial, Date dataAbertura,
 			String banco, String tipoPessoa, String bandeira, String digitos, String meioPagamento,
 			String statusRegistro) {
