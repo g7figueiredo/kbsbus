@@ -24,12 +24,16 @@ public class BeneficiarioRN {
 		this.beneficiarioDAO.excluir(beneficiario);
 	}
 	
-	public Beneficiario buscarPorId(int idBeneficiario){
+	public Beneficiario buscarPorId(long idBeneficiario){
 		return this.beneficiarioDAO.buscarPorId(idBeneficiario);
 	}
 	
 	public List<Beneficiario> buscarTodos(){
 		return this.beneficiarioDAO.buscarTodos();
+	}
+	
+	public List<Beneficiario> buscarPorNome(String nome){
+		return this.beneficiarioDAO.buscarPorNome(nome);
 	}
 
 }

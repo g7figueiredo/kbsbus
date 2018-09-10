@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,20 +36,23 @@ public class Beneficiario implements Serializable{
 	@JoinColumn(name="id_beneficiario")
 	private List<Despesa> despesas;
 	
-	@OneToOne
+	@OneToOne(mappedBy="beneficiario", cascade=CascadeType.ALL)
 	@JoinColumn(name="id_beneficiario")
 	private Salao salao;
 	
-	@OneToOne
+	@OneToOne(mappedBy="beneficiario", cascade=CascadeType.ALL)
 	@JoinColumn(name="id_beneficiario")
 	private Vendedor vendedor;
 	
-	@OneToOne
+	@OneToOne(mappedBy="beneficiario", cascade=CascadeType.ALL)
 	@JoinColumn(name="id_beneficiario")
 	private Fornecedor fornecedor;
 	
 	@Column(name="data_inclusao", nullable=false)
 	private Date dataInclusao;
+	
+	@Column(name="tipo_beneficiario", nullable=false)
+	private String tipoBeneficiario;
 	
 	@Column(name="status_registro", nullable=true, columnDefinition="default 'A'")
 	private String statusRegistro;
@@ -57,27 +61,32 @@ public class Beneficiario implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	public Beneficiario(Date dataInclusao, String statusRegistro) {
+		this.dataInclusao = dataInclusao;
+		this.statusRegistro = statusRegistro;
+	}
+
 	public Beneficiario(long idBeneficiario, List<Despesa> despesas, Salao salao, Vendedor vendedor,
-			Fornecedor fornecedor, Date dataInclusao, String statusRegistro) {
+			Fornecedor fornecedor, Date dataInclusao, String tipoBeneficiario, String statusRegistro) {
 		this.idBeneficiario = idBeneficiario;
 		this.despesas = despesas;
 		this.salao = salao;
 		this.vendedor = vendedor;
 		this.fornecedor = fornecedor;
 		this.dataInclusao = dataInclusao;
+		this.tipoBeneficiario = tipoBeneficiario;
 		this.statusRegistro = statusRegistro;
 	}
 
-	public Beneficiario(Date dataInclusao, String statusRegistro) {
+	public Beneficiario(List<Despesa> despesas, Salao salao, Vendedor vendedor, Fornecedor fornecedor,
+			Date dataInclusao, String tipoBeneficiario, String statusRegistro) {
+		this.despesas = despesas;
+		this.salao = salao;
+		this.vendedor = vendedor;
+		this.fornecedor = fornecedor;
 		this.dataInclusao = dataInclusao;
+		this.tipoBeneficiario = tipoBeneficiario;
 		this.statusRegistro = statusRegistro;
-	}
-
-	@Override
-	public String toString() {
-		return "Beneficiario [idBeneficiario=" + idBeneficiario + ", despesas=" + despesas + ", salao=" + salao
-				+ ", vendedor=" + vendedor + ", fornecedor=" + fornecedor + ", dataInclusao=" + dataInclusao
-				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	@Override
@@ -90,51 +99,75 @@ public class Beneficiario implements Serializable{
 		result = prime * result + (int) (idBeneficiario ^ (idBeneficiario >>> 32));
 		result = prime * result + ((salao == null) ? 0 : salao.hashCode());
 		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
+		result = prime * result + ((tipoBeneficiario == null) ? 0 : tipoBeneficiario.hashCode());
 		result = prime * result + ((vendedor == null) ? 0 : vendedor.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Beneficiario)) {
 			return false;
+		}
 		Beneficiario other = (Beneficiario) obj;
 		if (dataInclusao == null) {
-			if (other.dataInclusao != null)
+			if (other.dataInclusao != null) {
 				return false;
-		} else if (!dataInclusao.equals(other.dataInclusao))
+			}
+		} else if (!dataInclusao.equals(other.dataInclusao)) {
 			return false;
+		}
 		if (despesas == null) {
-			if (other.despesas != null)
+			if (other.despesas != null) {
 				return false;
-		} else if (!despesas.equals(other.despesas))
+			}
+		} else if (!despesas.equals(other.despesas)) {
 			return false;
+		}
 		if (fornecedor == null) {
-			if (other.fornecedor != null)
+			if (other.fornecedor != null) {
 				return false;
-		} else if (!fornecedor.equals(other.fornecedor))
+			}
+		} else if (!fornecedor.equals(other.fornecedor)) {
 			return false;
-		if (idBeneficiario != other.idBeneficiario)
+		}
+		if (idBeneficiario != other.idBeneficiario) {
 			return false;
+		}
 		if (salao == null) {
-			if (other.salao != null)
+			if (other.salao != null) {
 				return false;
-		} else if (!salao.equals(other.salao))
+			}
+		} else if (!salao.equals(other.salao)) {
 			return false;
+		}
 		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
+			if (other.statusRegistro != null) {
 				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
 			return false;
+		}
+		if (tipoBeneficiario == null) {
+			if (other.tipoBeneficiario != null) {
+				return false;
+			}
+		} else if (!tipoBeneficiario.equals(other.tipoBeneficiario)) {
+			return false;
+		}
 		if (vendedor == null) {
-			if (other.vendedor != null)
+			if (other.vendedor != null) {
 				return false;
-		} else if (!vendedor.equals(other.vendedor))
+			}
+		} else if (!vendedor.equals(other.vendedor)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -186,6 +219,14 @@ public class Beneficiario implements Serializable{
 		this.dataInclusao = dataInclusao;
 	}
 
+	public String getTipoBeneficiario() {
+		return tipoBeneficiario;
+	}
+
+	public void setTipoBeneficiario(String tipoBeneficiario) {
+		this.tipoBeneficiario = tipoBeneficiario;
+	}
+
 	public String getStatusRegistro() {
 		return statusRegistro;
 	}
@@ -193,7 +234,17 @@ public class Beneficiario implements Serializable{
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Beneficiario [idBeneficiario=" + idBeneficiario + ", " + (salao != null ? "salao=" + salao + ", " : "")
+				+ (vendedor != null ? "vendedor=" + vendedor + ", " : "")
+				+ (fornecedor != null ? "fornecedor=" + fornecedor + ", " : "")
+				+ (dataInclusao != null ? "dataInclusao=" + dataInclusao + ", " : "")
+				+ (tipoBeneficiario != null ? "tipoBeneficiario=" + tipoBeneficiario + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
+	}
+
 	
 	
 }

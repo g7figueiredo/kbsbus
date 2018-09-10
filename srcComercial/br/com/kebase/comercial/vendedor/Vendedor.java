@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ public class Vendedor implements Serializable{
 	@Column(name="id_vendedor", nullable=false)
 	private Long idVendedor;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_beneficiario", nullable=false)
 	private Beneficiario beneficiario;
 	
@@ -83,15 +85,6 @@ public class Vendedor implements Serializable{
 	
 	public Vendedor(Long idVendedor) {
 		this.idVendedor = idVendedor;
-	}
-
-	@Override
-	public String toString() {
-		return "Vendedor [idVendedor=" + idVendedor + ", beneficiario=" + beneficiario + ", nomeVendedor="
-				+ nomeVendedor + ", numCpf=" + numCpf + ", numRg=" + numRg + ", dataNascimento=" + dataNascimento
-				+ ", dataCadastro=" + dataCadastro + ", imgVendedor=" + Arrays.toString(imgVendedor)
-				+ ", numTelResidencial=" + numTelResidencial + ", numCel1=" + numCel1 + ", endEmail=" + endEmail
-				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	@Override
@@ -276,6 +269,20 @@ public class Vendedor implements Serializable{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
+	}
+
+	@Override
+	public String toString() {
+		return "Vendedor [" + (idVendedor != null ? "idVendedor=" + idVendedor + ", " : "")
+				+ (nomeVendedor != null ? "nomeVendedor=" + nomeVendedor + ", " : "")
+				+ (numCpf != null ? "numCpf=" + numCpf + ", " : "") + (numRg != null ? "numRg=" + numRg + ", " : "")
+				+ (dataNascimento != null ? "dataNascimento=" + dataNascimento + ", " : "")
+				+ (dataCadastro != null ? "dataCadastro=" + dataCadastro + ", " : "")
+				+ (imgVendedor != null ? "imgVendedor=" + Arrays.toString(imgVendedor) + ", " : "")
+				+ (numTelResidencial != null ? "numTelResidencial=" + numTelResidencial + ", " : "")
+				+ (numCel1 != null ? "numCel1=" + numCel1 + ", " : "")
+				+ (endEmail != null ? "endEmail=" + endEmail + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 	
 }

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.kebase.estoque.pedidoCompra.PedidoCompra;
 import br.com.kebase.financeiro.categoria.subCategoria.SubCategoria;
 import br.com.kebase.financeiro.centroCusto.CentroCusto;
 import br.com.kebase.financeiro.despesa.beneficiario.Beneficiario;
@@ -36,9 +39,13 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 	@JoinColumn(name="id_sub_categoria", nullable=false)
 	private SubCategoria subCategoria;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="id_beneficiario", nullable=true)
 	private Beneficiario beneficiario;
+	
+	@ManyToOne
+	@JoinColumn(name="id_pedido", nullable=true)
+	private PedidoCompra pedidoCompra;
 	
 	@Column(name="desc_despesa", nullable=false)
 	private String descricaoDespesa;
@@ -77,12 +84,13 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 	}
 
 	public Despesa(long idDespesa, CentroCusto centroCusto, SubCategoria subCategoria, Beneficiario beneficiario,
-			String descricaoDespesa, double valorDespesa, Date dataVencimento, Date dataCompetencia, byte[] arqCobranca,
-			String statusDespesa, String statusRegistro) {
+			PedidoCompra pedidoCompra, String descricaoDespesa, double valorDespesa, Date dataVencimento,
+			Date dataCompetencia, byte[] arqCobranca, String statusDespesa, String statusRegistro) {
 		this.idDespesa = idDespesa;
 		this.centroCusto = centroCusto;
 		this.subCategoria = subCategoria;
 		this.beneficiario = beneficiario;
+		this.pedidoCompra = pedidoCompra;
 		this.descricaoDespesa = descricaoDespesa;
 		this.valorDespesa = valorDespesa;
 		this.dataVencimento = dataVencimento;
@@ -94,6 +102,22 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 
 	public Despesa(long idDespesa) {
 		this.idDespesa = idDespesa;
+	}
+	
+	public Despesa(CentroCusto centroCusto, SubCategoria subCategoria, Beneficiario beneficiario,
+			PedidoCompra pedidoCompra, String descricaoDespesa, double valorDespesa, Date dataVencimento,
+			Date dataCompetencia, byte[] arqCobranca, String statusDespesa, String statusRegistro) {
+		this.centroCusto = centroCusto;
+		this.subCategoria = subCategoria;
+		this.beneficiario = beneficiario;
+		this.pedidoCompra = pedidoCompra;
+		this.descricaoDespesa = descricaoDespesa;
+		this.valorDespesa = valorDespesa;
+		this.dataVencimento = dataVencimento;
+		this.dataCompetencia = dataCompetencia;
+		this.arqCobranca = arqCobranca;
+		this.statusDespesa = statusDespesa;
+		this.statusRegistro = statusRegistro;
 	}
 
 	@Override
@@ -107,6 +131,7 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 		result = prime * result + ((dataVencimento == null) ? 0 : dataVencimento.hashCode());
 		result = prime * result + ((descricaoDespesa == null) ? 0 : descricaoDespesa.hashCode());
 		result = prime * result + (int) (idDespesa ^ (idDespesa >>> 32));
+		result = prime * result + ((pedidoCompra == null) ? 0 : pedidoCompra.hashCode());
 		result = prime * result + ((statusDespesa == null) ? 0 : statusDespesa.hashCode());
 		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
 		result = prime * result + ((subCategoria == null) ? 0 : subCategoria.hashCode());
@@ -118,69 +143,89 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Despesa)) {
 			return false;
+		}
 		Despesa other = (Despesa) obj;
-		if (!Arrays.equals(arqCobranca, other.arqCobranca))
+		if (!Arrays.equals(arqCobranca, other.arqCobranca)) {
 			return false;
+		}
 		if (beneficiario == null) {
-			if (other.beneficiario != null)
+			if (other.beneficiario != null) {
 				return false;
-		} else if (!beneficiario.equals(other.beneficiario))
+			}
+		} else if (!beneficiario.equals(other.beneficiario)) {
 			return false;
+		}
 		if (centroCusto == null) {
-			if (other.centroCusto != null)
+			if (other.centroCusto != null) {
 				return false;
-		} else if (!centroCusto.equals(other.centroCusto))
+			}
+		} else if (!centroCusto.equals(other.centroCusto)) {
 			return false;
+		}
 		if (dataCompetencia == null) {
-			if (other.dataCompetencia != null)
+			if (other.dataCompetencia != null) {
 				return false;
-		} else if (!dataCompetencia.equals(other.dataCompetencia))
+			}
+		} else if (!dataCompetencia.equals(other.dataCompetencia)) {
 			return false;
+		}
 		if (dataVencimento == null) {
-			if (other.dataVencimento != null)
+			if (other.dataVencimento != null) {
 				return false;
-		} else if (!dataVencimento.equals(other.dataVencimento))
+			}
+		} else if (!dataVencimento.equals(other.dataVencimento)) {
 			return false;
+		}
 		if (descricaoDespesa == null) {
-			if (other.descricaoDespesa != null)
+			if (other.descricaoDespesa != null) {
 				return false;
-		} else if (!descricaoDespesa.equals(other.descricaoDespesa))
+			}
+		} else if (!descricaoDespesa.equals(other.descricaoDespesa)) {
 			return false;
-		if (idDespesa != other.idDespesa)
+		}
+		if (idDespesa != other.idDespesa) {
 			return false;
+		}
+		if (pedidoCompra == null) {
+			if (other.pedidoCompra != null) {
+				return false;
+			}
+		} else if (!pedidoCompra.equals(other.pedidoCompra)) {
+			return false;
+		}
 		if (statusDespesa == null) {
-			if (other.statusDespesa != null)
+			if (other.statusDespesa != null) {
 				return false;
-		} else if (!statusDespesa.equals(other.statusDespesa))
+			}
+		} else if (!statusDespesa.equals(other.statusDespesa)) {
 			return false;
+		}
 		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
+			if (other.statusRegistro != null) {
 				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
 			return false;
+		}
 		if (subCategoria == null) {
-			if (other.subCategoria != null)
+			if (other.subCategoria != null) {
 				return false;
-		} else if (!subCategoria.equals(other.subCategoria))
+			}
+		} else if (!subCategoria.equals(other.subCategoria)) {
 			return false;
-		if (Double.doubleToLongBits(valorDespesa) != Double.doubleToLongBits(other.valorDespesa))
+		}
+		if (Double.doubleToLongBits(valorDespesa) != Double.doubleToLongBits(other.valorDespesa)) {
 			return false;
+		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Despesa [idDespesa=" + idDespesa + ", centroCusto=" + centroCusto + ", subCategoria=" + subCategoria
-				+ ", beneficiario=" + beneficiario + ", descricaoDespesa=" + descricaoDespesa + ", valorDespesa="
-				+ valorDespesa + ", dataVencimento=" + dataVencimento + ", dataCompetencia=" + dataCompetencia
-				+ ", arqCobranca=" + Arrays.toString(arqCobranca) + ", statusDespesa=" + statusDespesa
-				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	public long getIdDespesa() {
@@ -213,6 +258,14 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 
 	public void setBeneficiario(Beneficiario beneficiario) {
 		this.beneficiario = beneficiario;
+	}
+
+	public PedidoCompra getPedidoCompra() {
+		return pedidoCompra;
+	}
+
+	public void setPedidoCompra(PedidoCompra pedidoCompra) {
+		this.pedidoCompra = pedidoCompra;
 	}
 
 	public String getDescricaoDespesa() {
@@ -269,6 +322,17 @@ public class Despesa implements Serializable, Comparable<Despesa>{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
+	}
+
+	@Override
+	public String toString() {
+		return "Despesa [idDespesa=" + idDespesa + ", "
+				+ (descricaoDespesa != null ? "descricaoDespesa=" + descricaoDespesa + ", " : "") + "valorDespesa="
+				+ valorDespesa + ", " + (dataVencimento != null ? "dataVencimento=" + dataVencimento + ", " : "")
+				+ (dataCompetencia != null ? "dataCompetencia=" + dataCompetencia + ", " : "")
+				+ (arqCobranca != null ? "arqCobranca=" + Arrays.toString(arqCobranca) + ", " : "")
+				+ (statusDespesa != null ? "statusDespesa=" + statusDespesa + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 	
 }

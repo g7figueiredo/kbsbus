@@ -44,7 +44,7 @@
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>K</b>P</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>Kébase</b>ADM</span>
+          <span class="logo-lg"><b>Kébase</b>Business</span>
         </a>
 
         <!-- Header Navbar -->
@@ -257,18 +257,21 @@
             
             <!-- Optionally, you can add icons to the links -->
             
-            <li><a href="home.xhtml"><i class="fa fa-tachometer"></i> <span>Home</span></a></li>
+            <li><a href="../home.xhtml"><i class="fa fa-tachometer"></i> <span>Home</span></a></li>
             
-			<li class="treeview active">
-              <a href="#"><i class="fa fa-list" /> <span>Estoque</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <li class="treeview active">
+              <a href="#"><i class="glyphicon glyphicon-arrow-up" /> <span>Receitas</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="estoque.xhtml"><i class="fa fa-list-ol" /> Estoque</a></li>
-                <li><a href="adicionarLote.xhtml"><i class="fa fa-arrow-right" />Adicionar Lote</a></li>
-                <li><a href="pedidoCompra.xhtml"><i class="fa fa-file-text-o" />Pedido de Compra</a></li>
-                <li class="active"><a href="listaPedido.xhtml"><i class="fa fa-list-alt" />Lista de Pedidos</a></li>
-                <li><a href="transacoes.xhtml"><i class="fa fa-exchange" />Histórico de Transações</a></li>
-                <li><a href="produto.xhtml"><i class="fa fa-cube" />Cadastro de Produto</a></li>
-                <li><a href="listaProduto.xhtml"><i class="fa fa-cubes" />Lista de Produtos</a></li>
+              	<li class="active"><a href="faturamento/faturamento.xhtml"><i class="fa fa-dollar" />Faturamento</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="#"><i class="glyphicon glyphicon-arrow-down" /> <span>Despesas</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+              	<li><a href="despesa/despesa.xhtml"><i class="fa fa-list-alt" />Novo Pagamento</a></li>
+              	<li><a href="despesa/listaDespesa.xhtml"><i class="fa fa-list" />Lista de Contas</a></li>
+                <li><a href="relatorios/fluxoCaixa.xhtml"><i class="fa fa-exchange" />Fluxo de Caixa</a></li>
               </ul>
             </li>
             
@@ -293,7 +296,7 @@
           <h1>
           
           	<!-- ====================== TITULO DA PÁGINA =================================== -->
-            Lista de Pedidos
+            Contas a Pagar
             <small>Para filtrar a pesquisa utilize o painel de filtros</small>
           </h1>
           <ol class="breadcrumb">
@@ -308,7 +311,7 @@
         
         <h:form id="form" method="post">
         
-        <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+        <p:messages id="messages" showDetail="false" closable="true" ><p:autoUpdate /> </p:messages>
         
         		<!-- Default box -->
 			          <div class="box box-primary collapsed-box" id="box">
@@ -341,56 +344,100 @@
 			            </div><!-- /.box-footer-->
 			          </div><!-- /.box -->
 			          
+			          
+			<div class="box-body">
+		     		<p:commandButton icon="fa fa-dollar" styleClass="btn btn-success"  value="Efetivar" action="#{despesaBean.verificaSelecao}" 
+		     						onclick="$('#receitaModal').modal('show');" />
+		     		
+		     		<p:commandButton icon="fa fa-undo" styleClass="btn bg-orange"  value="Devolver Pagamento" action="#{receitaBean.devolverPagamento}"
+		     						onclick="if (!confirm('Deseja realmente devolver o pagamento?')) return false;" />
+		     						
+		     		<p:commandButton icon="fa fa-plus" styleClass="btn bg-maroon"  value="Criar" action="#{despesaBean.navegarDespesa}" />
+		     		
+		     		<p:commandButton icon="fa fa-edit" styleClass="btn bg-navy"  value="Editar" action="#{despesaBean.verificaSelecao}" />
+		     		
+		     		<p:commandButton icon="fa fa-remove" styleClass="btn btn-danger"  value="Excluir" action="#{receitaBean.excluirReceita}" 
+		     						onclick="if (!confirm('Deseja realmente excluír a receita?')) return false;" />
+		     		
+		     		<p:commandButton icon="fa fa-file-pdf-o" styleClass="btn bg-purple"  value="Exportar PDF" onclick="$('#receitaModal').modal('show');" />
+		    </div>
+			          
         	<div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Relação de Pedidos</h3>
+                  <h3 class="box-title">Lista de Despesas</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
                   <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                   	<div class="row">
                   		<div class="col-sm-12">
-							<p:contextMenu for="table">
-								<p:menuitem value="Exportar PDF" icon="fa fa-file-pdf-o" />
-								<p:menuitem value="Adicionar Lote" id="mitem2" icon="fa fa-list-ol" action="#{pedidoBean.adicionarLote}" />
-								<p:separator />
-								<p:menuitem value="Emitir Contas à Pagar" id="mitem3" icon="fa fa-file-text-o" action="#{pedidoBean.emitirContasPagar}" >
-									<f:ajax event="click" render="faturaModal" />
-								</p:menuitem>
-							</p:contextMenu>
-
-							<p:dataTable id="table" var="item"
-								value="#{pedidoBean.listaPedido}"
-								selection="#{pedidoBean.pedido}"
-								rowKey="#{item.idPedido}" rows="30" paginator="true"
+							<p:dataTable id="table" var="despesa"
+								value="#{despesaBean.listaContas}"
+								selection="#{despesaBean.contaSelecionada}"
+								rowKey="#{despesa.idDespesa}" rows="30" paginator="true"
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
 								
+								<p:ajax event="rowSelect" listener="#{despesaBean.onDespesaSelect}" update=":formModal" process="table"/>
+        						<p:ajax event="rowUnselect" listener="#{despesaBean.onDespesaUnselect}" update=":formModal" process="table"/>
+        						
+        						<p:column style="width:40px;">
+						            <p:rowToggler />
+						        </p:column>
+								
 								<p:column headerText="#ID" style="width:70px;text-align:center">
-									<h:outputText value="000#{item.idPedido}" />
-								</p:column>
-										
-								<p:column headerText="Data">
-									<h:outputText value="#{item.dataPedido}">
-										<f:convertDateTime pattern="dd/MM/yyyy" />
-									</h:outputText>
+									<h:outputText value="000#{despesa.idDespesa}" />
 								</p:column>
 								
-								<p:column headerText="Valor Total">
-									<h:outputText value="#{item.valorTotal}">
+								<p:column headerText="Status" style="width:80px;text-align:center">
+									<h:graphicImage library="imagens" name="#{despesa.statusDespesa}.png" />
+								</p:column>
+								
+								<p:column headerText="Valor" style="text-align:center">
+									<h:outputText value="#{despesa.valorDespesa}">
 										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
 									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Observações" width="40%">
-									<h:outputText value="#{item.observacoes}" />
-								</p:column>
-								
-								<p:column headerText="Previsão Entrega">
-									<h:outputText value="#{item.dataEntrega}">
+								<p:column headerText="Vencimento" style="text-align:center">
+									<h:outputText value="#{despesa.dataVencimento}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</h:outputText>
 								</p:column>
+								
+								<p:column headerText="Descrição" width="40%">
+									<h:outputText value="#{despesa.descricaoDespesa}" />
+								</p:column>
+								
+								<p:column headerText="Categoria">
+									<h:outputText value="#{despesa.subCategoria.descricaoSubCategoria}" />
+								</p:column>
+								
+								<p:column headerText="Centro de Custo">
+									<h:outputText value="#{despesa.centroCusto.descricaoCentroCusto}" />
+								</p:column>
+								
+								<p:rowExpansion>
+									<p:panelGrid columns="4" style="max-width: 70%;">
+									    <f:facet name="header">
+									    	<h:outputText value="Detalhes >"  style="font-weight: bold;" />
+									    </f:facet>
+									    
+									    <h:outputText value="Competencia:" style="font-weight: bold;"/>
+									    <h:outputText value="#{despesa.dataCompetencia}">
+									    	<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									 
+									    <h:outputText value="Pago em:"  style="font-weight: bold;" />
+									    <h:outputText value="#{receita.reciboReceita.dataRecebimento}">
+									    	<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+										
+										<h:outputText value="Beneficiario:" style="font-weight: bold;" />
+									    <h:outputText value="#{despesa.beneficiario.vendedor.nomeVendedor} #{despesa.beneficiario.salao.nomeSalao}" />
+									    
+									</p:panelGrid>
+						        </p:rowExpansion>
 								
 							</p:dataTable>
 
@@ -402,47 +449,6 @@
 
           
           </h:form>
-          
-          <div class="example-modal">
-            <div class="modal" id="deleteModal">
-              <div class="modal-dialog">
-                <div class="modal-content" >
-                  <h:form id="formModal2">
-
-					<div class="box box-info" style="margin-bottom: 0px;">
-		                <div class="box-header with-border">
-		                  <h3 class="box-title">Você tem certeza disso?</h3>
-		                </div><!-- /.box-header -->
-		                <!-- form start -->
-
-		                  <div class="box-body">
-			                    <div class="form-group">
-			                    	<h3 class="box-title">Confirmar Exclusão do Veículo:</h3>
-			                    </div>
-			                    
-			                    <div class="form-group">
-			                    	<label>Placa:</label>
-			                    	<h:outputLabel styleClass="form-control" value="#{veiculoBean.veiculo.placa}" />
-			                    </div>
-		                  </div><!-- /.box-body -->
-		
-		              </div>
-		              
-	              
-                  <div class="modal-footer">
-                    <h:commandButton value="Fechar"
-                    	onclick="$('#deleteModal').modal('hide');" styleClass="btn btn-default pull-left" />
-                    	
-                    <h:commandButton value="Confirmar Exclusão" action="#{veiculoBean.excluir}"
-                    	onclick="$('#deleteModal').modal('hide');" styleClass="btn btn-success" 
-                    		style="float: left; margin-right: 10px;">
-                    </h:commandButton>
-                  </div>
-                  </h:form>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-          </div>
           
           <div class="col-md-2 modal" id="loadModal" data-backdrop="static"
 				style="background: rgba(0, 0, 0, 0); margin-top: 20%; margin-left: 40%;">
@@ -459,40 +465,39 @@
 					<!-- end loading -->
 				</div>
 				<!-- /.box -->
-			</div>
-          
-          
-          <div class="example-modal">
-            <div class="modal" id="faturaModal" data-backdrop="static">
+		 </div>
+		 
+		 <div class="example-modal">
+            <div class="modal" id="receitaModal" data-backdrop="static">
               <div class="modal-dialog">
-                <div class="modal-content" >
+                <div class="modal-content" style="width: 700px;">
                   <h:form id="formModal">
 
 					<div class="box box-info" style="margin-bottom: 0px;">
 		                <div class="box-header with-border">
-		                  <h3 class="box-title">Contas a Pagar - Gerar Parcelas</h3>
+		                  <h3 class="box-title">Recebimento Receita</h3>
 		                </div><!-- /.box-header -->
 		                <!-- form start -->
 		                
-		                	<p:messages id="modalMSG" showDetail="false" autoUpdate="true" closable="true" />
+		                	<p:messages id="modalMSG" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
 
 		                  <div class="box-body">
 		                  				
 		                  				<div class="form-group col-xs-12">
 			                  				<div class="form-group col-md-4">
 												<label>Nº Fatura</label>
-												<h:inputText id="faturaID" value="0000#{contaPagarBean.contaSelecionada.idDespesa}" styleClass="form-control" disabled="true" />
+												<h:inputText id="receitaID" value="0000#{receitaBean.receita.idReceita}" styleClass="form-control" disabled="true" />
 											</div>
 											
 											<div class="form-group col-md-4">
-												<label>Nº Pedido</label>
-												<h:inputText id="vendaID" value="0000#{contaPagarBean.contaSelecionada.pedidoCompra.idPedido}" styleClass="form-control" disabled="true" />
+												<label>Nº Venda</label>
+												<h:inputText id="vendaID" value="0000#{receitaBean.receita.fatura.venda.idVenda}" styleClass="form-control" disabled="true" />
 											</div>
 											
 											<div class="form-group col-md-4">
-												<label>SALDO</label>
-												<h:inputText id="saldo" value="#{contaPagarBean.saldo}" styleClass="form-control" disabled="true" 
-														style="background-color: yellow; font-size: 20px; font-weight: bolder;" >
+												<label>Valor Devido</label>
+												<h:inputText id="saldo" value="#{receitaBean.receita.valorReceita}" styleClass="form-control" disabled="true" 
+														style="background-color: #00c0ef; font-size: 20px; font-weight: bolder;" >
 														
 													<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>	
 												</h:inputText>
@@ -500,75 +505,77 @@
 										</div>	
 										
 										<div class="form-group col-xs-12">
-											<div class="form-group col-md-4">
-												<label>Valor R$</label>
-												<p:inputNumber id="valor" value="#{contaPagarBean.contaSelecionada.valorParcela}" symbol="R$ "  decimalSeparator="," 
-															thousandSeparator="." size="13"/>  
+											<div class="form-group col-md-8">
+												<label>Cliente</label>
+												<h:inputText id="cliente" value="#{receitaBean.receita.fatura.venda.salao.cliente.nomeCliente}" styleClass="form-control" disabled="true" />
 											</div>
 											
 											<div class="form-group col-md-4">
 												<label>Vencimento</label>
-												<p:calendar id="vencimento" value="#{contaPagarBean.contaSelecionada.dataVencimento}" pattern="dd/MM/yyyy"
-													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" size="15"/>
+												<h:inputText id="vencimento" value="#{receitaBean.receita.dataVencimento}" styleClass="form-control" disabled="true" 
+														style="background-color: #00c0ef; font-size: 20px; font-weight: bolder;" >
+														
+													<f:convertDateTime pattern="dd/MM/yyyy"/>	
+												</h:inputText>
 											</div>
 											
-											<div class="form-group col-md-2">
-												<label>...</label>
-												<h:commandLink value="Atualizar"  styleClass="btn btn-success pull-right">
-													<f:ajax event="action" execute="@form" listener="#{contaPagarBean.atualizarContaPagar}" 
-														render="vencimento tableFatura valor vendaID faturaID saldo"/>
-												</h:commandLink>	
-											</div>
-										
 										</div>
-
+										
 										<div class="form-group col-xs-12">
-												<p:dataTable id="tableFatura" var="fatura"
-													value="#{contaPagarBean.listaContas}" 
-													selection="#{contaPagarBean.contaSelecionada}"  scrollable="true" scrollHeight="100"
-													rowKey="#{fatura.idDespesa}" rows="11" selectionMode="single" >
-													
-													<p:ajax event="rowSelect" update=":formModal:valor :formModal:vencimento :formModal:vendaID :formModal:faturaID :formModal:saldo"
-																listener="#{contaPagarBean.onContaSelect}" />
-													
-													<p:column>
-														<f:facet name="header">Nº Fatura</f:facet>
-														<h:outputText value="0000#{fatura.idDespesa}" />
-													</p:column>
-	
-													<p:column>
-														<f:facet name="header">Nº Venda</f:facet>
-														<h:outputText value="0000#{fatura.pedidoCompra.idPedido}" />
-													</p:column>
-	
-													<p:column>
-														<f:facet name="header">Valor R$</f:facet>
-														<h:outputText value="#{fatura.valorParcela}">
-															<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>
-														</h:outputText>
-													</p:column>
-													
-													<p:column>
-														<f:facet name="header">Vencimento</f:facet>
-														<h:outputText value="#{fatura.dataVencimento}">
-															<f:convertDateTime pattern="dd/MM/yyyy" />
-														</h:outputText>
-													</p:column>
-					
-					
-												</p:dataTable>
-									</div>
-
+			                  				<div class="form-group col-md-4">
+												<label>Categoria</label>
+												<h:inputText id="categoria" value="#{receitaBean.receita.subCategoria.descricaoSubCategoria}" styleClass="form-control" disabled="true" />
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>Centro de Custo</label>
+												<h:inputText id="centroCusto" value="#{receitaBean.receita.centroCusto.descricaoCentroCusto}" styleClass="form-control" disabled="true" />
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>Competencia</label>
+												<h:inputText id="competencia" value="#{receitaBean.receita.dataCompetencia}" styleClass="form-control" disabled="true">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:inputText>
+											</div>
+										</div>	
+										
+										<p:separator />
+										
+										<div class="form-group col-xs-12">
+			                  				<div class="form-group col-md-2">
+												<h:selectBooleanCheckbox styleClass="icheckbox_flat-green" value="#{receitaBean.recebido}" />
+												<label>Recebido</label>
+											</div>
+											
+											<div class="form-group col-md-3">
+												<label>Valor Recebido</label>
+												<p:inputNumber id="desconto" value="#{receitaBean.reciboReceita.valorRecebido}" symbol="R$ " 
+																	decimalSeparator="," thousandSeparator="." size="10">
+													<f:ajax event="valueChange" execute="@this" listener="#{receitaBean.verificarValorRecebido}" render="formModal" />																
+												</p:inputNumber>
+											</div>
+											
+											<div class="form-group col-md-4">
+												<label>Data de Recebimento</label>
+												<p:calendar id="datetime" value="#{receitaBean.reciboReceita.dataRecebimento}" pattern="dd/MM/yyyy"
+													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data!" size="15"/>
+											</div>
+										</div>	
+										
+										<h:outputLabel id="mensagem" value="*#{receitaBean.mensagem}" rendered="#{receitaBean.renderedMensagem}" />
+										
 							</div><!-- /.box-body -->
 		
 		              </div>
 		              
 	              
                   <div class="modal-footer">
-                   <h:commandButton value="Fechar" onclick="$('#faturaModal').modal('hide');" styleClass="btn btn-info pull-left" />
-                    			
-                    <h:commandButton value="Gerar Parcelas" action="#{contaPagarBean.salvarContas}" 
-                    			onclick="$('#loadModal').modal('show');" styleClass="btn btn-success pull-right" />
+                    <p:commandButton value="Salvar Recebimento" action="#{receitaBean.salvarRecebimento}"
+                    				onclick="$('#loadModal').modal('show');" styleClass="btn btn-success pull-right" icon="fa fa-save"/>
+                    				
+                    <p:commandButton value="Cancelar" onclick="$('#receitaModal').modal('hide');" styleClass="btn btn-default pull-right" icon="fa fa-undo"/>
+                    
                   </div>
 
                   </h:form>
@@ -576,6 +583,7 @@
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
           </div>
+          
           
 
         </section><!-- /.content -->

@@ -3,6 +3,7 @@ package br.com.kebase.comercial.cliente.salao;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ public class Salao implements Serializable{
 	@Column(name="id_salao", nullable=false)
 	private Long idSalao;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_beneficiario", nullable=false)
 	private Beneficiario beneficiario;
 	
@@ -109,16 +110,6 @@ public class Salao implements Serializable{
 		this.porte = porte;
 		this.numCnpj = numCnpj;
 		this.statusRegistro = statusRegistro;
-	}
-
-	@Override
-	public String toString() {
-		return "Salao [idSalao=" + idSalao + ", beneficiario=" + beneficiario + ", setor=" + setor + ", cliente="
-				+ cliente + ", nomeSalao=" + nomeSalao + ", numTel1=" + numTel1 + ", numTel2=" + numTel2
-				+ ", numWhatsapp=" + numWhatsapp + ", numCel2=" + numCel2 + ", numCel3=" + numCel3 + ", endEmail="
-				+ endEmail + ", endSite=" + endSite + ", endFacebook=" + endFacebook + ", endInstagram=" + endInstagram
-				+ ", imgFachada=" + Arrays.toString(imgFachada) + ", porte=" + porte + ", numCnpj=" + numCnpj
-				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	@Override
@@ -387,6 +378,24 @@ public class Salao implements Serializable{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
+	}
+
+	@Override
+	public String toString() {
+		return "Salao [" + (idSalao != null ? "idSalao=" + idSalao + ", " : "")
+				+ (nomeSalao != null ? "nomeSalao=" + nomeSalao + ", " : "")
+				+ (numTel1 != null ? "numTel1=" + numTel1 + ", " : "")
+				+ (numTel2 != null ? "numTel2=" + numTel2 + ", " : "")
+				+ (numWhatsapp != null ? "numWhatsapp=" + numWhatsapp + ", " : "")
+				+ (numCel2 != null ? "numCel2=" + numCel2 + ", " : "")
+				+ (numCel3 != null ? "numCel3=" + numCel3 + ", " : "")
+				+ (endEmail != null ? "endEmail=" + endEmail + ", " : "")
+				+ (endSite != null ? "endSite=" + endSite + ", " : "")
+				+ (endFacebook != null ? "endFacebook=" + endFacebook + ", " : "")
+				+ (endInstagram != null ? "endInstagram=" + endInstagram + ", " : "")
+				+ (imgFachada != null ? "imgFachada=" + Arrays.toString(imgFachada) + ", " : "")
+				+ (porte != null ? "porte=" + porte + ", " : "") + (numCnpj != null ? "numCnpj=" + numCnpj + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 	
 }

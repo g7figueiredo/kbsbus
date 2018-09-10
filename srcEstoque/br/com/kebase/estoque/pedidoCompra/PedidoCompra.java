@@ -11,9 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.com.kebase.estoque.fornecedor.Fornecedor;
 import br.com.kebase.estoque.pedidoCompra.itemCompra.ItemCompra;
 import br.com.kebase.estoque.pedidoCompra.statusPedido.StatusPedido;
 
@@ -35,6 +37,10 @@ public class PedidoCompra implements Serializable{
 	@OneToMany(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_pedido")
 	private List<StatusPedido> statusPedido;
+	
+	@ManyToOne
+	@JoinColumn(name="id_fornecedor", nullable=false)
+	private Fornecedor fornecedor;
 	
 	@Column(name="data_pedido", nullable=false)
 	private Date dataPedido;
@@ -64,12 +70,13 @@ public class PedidoCompra implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public PedidoCompra(Long idPedido, List<ItemCompra> itemLista, List<StatusPedido> statusPedido, Date dataPedido,
-			Date dataEntrega, Double valorTotal, int prazoDias, int intervaloCobranca, Double valorDesconto,
-			String observacoes, String statusRegistro) {
+	public PedidoCompra(Long idPedido, List<ItemCompra> itemLista, List<StatusPedido> statusPedido,
+			Fornecedor fornecedor, Date dataPedido, Date dataEntrega, Double valorTotal, int prazoDias,
+			int intervaloCobranca, Double valorDesconto, String observacoes, String statusRegistro) {
 		this.idPedido = idPedido;
 		this.itemLista = itemLista;
 		this.statusPedido = statusPedido;
+		this.fornecedor = fornecedor;
 		this.dataPedido = dataPedido;
 		this.dataEntrega = dataEntrega;
 		this.valorTotal = valorTotal;
@@ -80,12 +87,37 @@ public class PedidoCompra implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
+	public PedidoCompra(List<ItemCompra> itemLista, List<StatusPedido> statusPedido, Fornecedor fornecedor,
+			Date dataPedido, Date dataEntrega, Double valorTotal, int prazoDias, int intervaloCobranca,
+			Double valorDesconto, String observacoes, String statusRegistro) {
+		this.itemLista = itemLista;
+		this.statusPedido = statusPedido;
+		this.fornecedor = fornecedor;
+		this.dataPedido = dataPedido;
+		this.dataEntrega = dataEntrega;
+		this.valorTotal = valorTotal;
+		this.prazoDias = prazoDias;
+		this.intervaloCobranca = intervaloCobranca;
+		this.valorDesconto = valorDesconto;
+		this.observacoes = observacoes;
+		this.statusRegistro = statusRegistro;
+	}
+
+	public PedidoCompra(Long idPedido) {
+		this.idPedido = idPedido;
+	}
+
 	@Override
 	public String toString() {
-		return "PedidoCompra [idPedido=" + idPedido + ", itemLista=" + itemLista + ", statusPedido=" + statusPedido
-				+ ", dataPedido=" + dataPedido + ", dataEntrega=" + dataEntrega + ", valorTotal=" + valorTotal
-				+ ", prazoDias=" + prazoDias + ", intervaloCobranca=" + intervaloCobranca + ", valorDesconto="
-				+ valorDesconto + ", observacoes=" + observacoes + ", statusRegistro=" + statusRegistro + "]";
+		return "PedidoCompra [" + (idPedido != null ? "idPedido=" + idPedido + ", " : "")
+				+ (fornecedor != null ? "fornecedor=" + fornecedor + ", " : "")
+				+ (dataPedido != null ? "dataPedido=" + dataPedido + ", " : "")
+				+ (dataEntrega != null ? "dataEntrega=" + dataEntrega + ", " : "")
+				+ (valorTotal != null ? "valorTotal=" + valorTotal + ", " : "") + "prazoDias=" + prazoDias
+				+ ", intervaloCobranca=" + intervaloCobranca + ", "
+				+ (valorDesconto != null ? "valorDesconto=" + valorDesconto + ", " : "")
+				+ (observacoes != null ? "observacoes=" + observacoes + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
 	}
 
 	@Override
@@ -94,6 +126,7 @@ public class PedidoCompra implements Serializable{
 		int result = 1;
 		result = prime * result + ((dataEntrega == null) ? 0 : dataEntrega.hashCode());
 		result = prime * result + ((dataPedido == null) ? 0 : dataPedido.hashCode());
+		result = prime * result + ((fornecedor == null) ? 0 : fornecedor.hashCode());
 		result = prime * result + ((idPedido == null) ? 0 : idPedido.hashCode());
 		result = prime * result + intervaloCobranca;
 		result = prime * result + ((itemLista == null) ? 0 : itemLista.hashCode());
@@ -108,62 +141,92 @@ public class PedidoCompra implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof PedidoCompra)) {
 			return false;
+		}
 		PedidoCompra other = (PedidoCompra) obj;
 		if (dataEntrega == null) {
-			if (other.dataEntrega != null)
+			if (other.dataEntrega != null) {
 				return false;
-		} else if (!dataEntrega.equals(other.dataEntrega))
+			}
+		} else if (!dataEntrega.equals(other.dataEntrega)) {
 			return false;
+		}
 		if (dataPedido == null) {
-			if (other.dataPedido != null)
+			if (other.dataPedido != null) {
 				return false;
-		} else if (!dataPedido.equals(other.dataPedido))
+			}
+		} else if (!dataPedido.equals(other.dataPedido)) {
 			return false;
+		}
+		if (fornecedor == null) {
+			if (other.fornecedor != null) {
+				return false;
+			}
+		} else if (!fornecedor.equals(other.fornecedor)) {
+			return false;
+		}
 		if (idPedido == null) {
-			if (other.idPedido != null)
+			if (other.idPedido != null) {
 				return false;
-		} else if (!idPedido.equals(other.idPedido))
+			}
+		} else if (!idPedido.equals(other.idPedido)) {
 			return false;
-		if (intervaloCobranca != other.intervaloCobranca)
+		}
+		if (intervaloCobranca != other.intervaloCobranca) {
 			return false;
+		}
 		if (itemLista == null) {
-			if (other.itemLista != null)
+			if (other.itemLista != null) {
 				return false;
-		} else if (!itemLista.equals(other.itemLista))
+			}
+		} else if (!itemLista.equals(other.itemLista)) {
 			return false;
+		}
 		if (observacoes == null) {
-			if (other.observacoes != null)
+			if (other.observacoes != null) {
 				return false;
-		} else if (!observacoes.equals(other.observacoes))
+			}
+		} else if (!observacoes.equals(other.observacoes)) {
 			return false;
-		if (prazoDias != other.prazoDias)
+		}
+		if (prazoDias != other.prazoDias) {
 			return false;
+		}
 		if (statusPedido == null) {
-			if (other.statusPedido != null)
+			if (other.statusPedido != null) {
 				return false;
-		} else if (!statusPedido.equals(other.statusPedido))
+			}
+		} else if (!statusPedido.equals(other.statusPedido)) {
 			return false;
+		}
 		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
+			if (other.statusRegistro != null) {
 				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
 			return false;
+		}
 		if (valorDesconto == null) {
-			if (other.valorDesconto != null)
+			if (other.valorDesconto != null) {
 				return false;
-		} else if (!valorDesconto.equals(other.valorDesconto))
+			}
+		} else if (!valorDesconto.equals(other.valorDesconto)) {
 			return false;
+		}
 		if (valorTotal == null) {
-			if (other.valorTotal != null)
+			if (other.valorTotal != null) {
 				return false;
-		} else if (!valorTotal.equals(other.valorTotal))
+			}
+		} else if (!valorTotal.equals(other.valorTotal)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -189,6 +252,14 @@ public class PedidoCompra implements Serializable{
 
 	public void setStatusPedido(List<StatusPedido> statusPedido) {
 		this.statusPedido = statusPedido;
+	}
+
+	public Fornecedor getFornecedor() {
+		return fornecedor;
+	}
+
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
 	}
 
 	public Date getDataPedido() {
@@ -253,10 +324,6 @@ public class PedidoCompra implements Serializable{
 
 	public void setStatusRegistro(String statusRegistro) {
 		this.statusRegistro = statusRegistro;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 	
 }

@@ -2,8 +2,10 @@ package br.com.kebase.estoque.fornecedor;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +26,7 @@ public class Fornecedor implements Serializable{
 	@Column(name="id_fornecedor", nullable=false)
 	private long idFornecedor;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_beneficiario", nullable=false)
 	private Beneficiario beneficiario;
 	
@@ -48,10 +50,7 @@ public class Fornecedor implements Serializable{
 		this.beneficiario = beneficiario;
 	}
 
-	@Override
-	public String toString() {
-		return "Fornecedor [idFornecedor=" + idFornecedor + ", beneficiario=" + beneficiario + "]";
-	}
+	
 
 	@Override
 	public int hashCode() {
@@ -79,6 +78,11 @@ public class Fornecedor implements Serializable{
 		if (idFornecedor != other.idFornecedor)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Fornecedor [idFornecedor=" + idFornecedor + "]";
 	}
 	
 	
