@@ -6,6 +6,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import br.com.kebase.financeiro.despesa.Despesa;
+
 public class ReciboDespesaDAOHibernate implements ReciboDespesaDAO {
 	
 	private Session session;
@@ -50,6 +52,15 @@ public class ReciboDespesaDAOHibernate implements ReciboDespesaDAO {
 		@SuppressWarnings("unchecked")
 		List<ReciboDespesa> results = criteria.list();
 		return results;
+	}
+
+	@Override
+	public ReciboDespesa buscarPorDespesa(Despesa despesa) {
+		Criteria criteria = this.session.createCriteria(ReciboDespesa.class);
+		criteria.add(Restrictions.eq("despesa.idDespesa", despesa.getIdDespesa()));
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		
+		return (ReciboDespesa) criteria.uniqueResult();
 	}
 
 }

@@ -3,6 +3,7 @@ package br.com.kebase.financeiro.despesa.reciboDespesa;
 import java.util.List;
 
 import br.com.kebase.dbUtil.DAOFactory;
+import br.com.kebase.financeiro.despesa.Despesa;
 
 public class ReciboDespesaRN {
 	
@@ -30,6 +31,10 @@ public class ReciboDespesaRN {
 	
 	public List<ReciboDespesa> buscarTodos(){
 		return this.reciboDespesaDao.buscarTodos();
+	}
+	
+	public ReciboDespesa buscarPorDespesa(Despesa despesa){
+		return this.reciboDespesaDao.buscarPorDespesa(despesa);
 	}
 	
 }

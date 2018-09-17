@@ -89,88 +89,6 @@ public class Beneficiario implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((dataInclusao == null) ? 0 : dataInclusao.hashCode());
-		result = prime * result + ((despesas == null) ? 0 : despesas.hashCode());
-		result = prime * result + ((fornecedor == null) ? 0 : fornecedor.hashCode());
-		result = prime * result + (int) (idBeneficiario ^ (idBeneficiario >>> 32));
-		result = prime * result + ((salao == null) ? 0 : salao.hashCode());
-		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
-		result = prime * result + ((tipoBeneficiario == null) ? 0 : tipoBeneficiario.hashCode());
-		result = prime * result + ((vendedor == null) ? 0 : vendedor.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Beneficiario)) {
-			return false;
-		}
-		Beneficiario other = (Beneficiario) obj;
-		if (dataInclusao == null) {
-			if (other.dataInclusao != null) {
-				return false;
-			}
-		} else if (!dataInclusao.equals(other.dataInclusao)) {
-			return false;
-		}
-		if (despesas == null) {
-			if (other.despesas != null) {
-				return false;
-			}
-		} else if (!despesas.equals(other.despesas)) {
-			return false;
-		}
-		if (fornecedor == null) {
-			if (other.fornecedor != null) {
-				return false;
-			}
-		} else if (!fornecedor.equals(other.fornecedor)) {
-			return false;
-		}
-		if (idBeneficiario != other.idBeneficiario) {
-			return false;
-		}
-		if (salao == null) {
-			if (other.salao != null) {
-				return false;
-			}
-		} else if (!salao.equals(other.salao)) {
-			return false;
-		}
-		if (statusRegistro == null) {
-			if (other.statusRegistro != null) {
-				return false;
-			}
-		} else if (!statusRegistro.equals(other.statusRegistro)) {
-			return false;
-		}
-		if (tipoBeneficiario == null) {
-			if (other.tipoBeneficiario != null) {
-				return false;
-			}
-		} else if (!tipoBeneficiario.equals(other.tipoBeneficiario)) {
-			return false;
-		}
-		if (vendedor == null) {
-			if (other.vendedor != null) {
-				return false;
-			}
-		} else if (!vendedor.equals(other.vendedor)) {
-			return false;
-		}
-		return true;
-	}
-
 	public long getIdBeneficiario() {
 		return idBeneficiario;
 	}
@@ -243,6 +161,92 @@ public class Beneficiario implements Serializable{
 				+ (dataInclusao != null ? "dataInclusao=" + dataInclusao + ", " : "")
 				+ (tipoBeneficiario != null ? "tipoBeneficiario=" + tipoBeneficiario + ", " : "")
 				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dataInclusao == null) ? 0 : dataInclusao.hashCode());
+		result = prime * result + ((despesas == null) ? 0 : despesas.hashCode());
+		result = prime * result + ((fornecedor == null) ? 0 : fornecedor.hashCode());
+		result = prime * result + (int) (idBeneficiario ^ (idBeneficiario >>> 32));
+		result = prime * result + ((salao == null) ? 0 : salao.hashCode());
+		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
+		result = prime * result + ((tipoBeneficiario == null) ? 0 : tipoBeneficiario.hashCode());
+		result = prime * result + ((vendedor == null) ? 0 : vendedor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Beneficiario)) {
+			return false;
+		}
+		Beneficiario other = (Beneficiario) obj;
+		if(other.idBeneficiario == idBeneficiario) {
+			return true;
+		}
+		
+		if (dataInclusao == null) {
+			if (other.dataInclusao != null) {
+				return false;
+			}
+		} else if (!dataInclusao.equals(other.dataInclusao)) {
+			return false;
+		}
+		if (despesas == null) {
+			if (other.despesas != null) {
+				return false;
+			}
+		} else if (!despesas.equals(other.despesas)) {
+			return false;
+		}
+		if (fornecedor == null) {
+			if (other.fornecedor != null) {
+				return false;
+			}
+		} else if (!fornecedor.equals(other.fornecedor)) {
+			return false;
+		}
+		if (idBeneficiario != other.idBeneficiario) {
+			return false;
+		}
+		if (salao == null) {
+			if (other.salao != null) {
+				return false;
+			}
+		} else if (!salao.equals(other.salao)) {
+			return false;
+		}
+		if (statusRegistro == null) {
+			if (other.statusRegistro != null) {
+				return false;
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
+			return false;
+		}
+		if (tipoBeneficiario == null) {
+			if (other.tipoBeneficiario != null) {
+				return false;
+			}
+		} else if (!tipoBeneficiario.equals(other.tipoBeneficiario)) {
+			return false;
+		}
+		if (vendedor == null) {
+			if (other.vendedor != null) {
+				return false;
+			}
+		} else if (!vendedor.equals(other.vendedor)) {
+			return false;
+		}
+		return true;
 	}
 
 	

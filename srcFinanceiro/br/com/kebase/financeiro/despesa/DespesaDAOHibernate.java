@@ -25,7 +25,7 @@ public class DespesaDAOHibernate implements DespesaDAO {
 	
 	@Override
 	public void editar(Despesa despesa) {
-		this.session.saveOrUpdate(despesa);
+		this.session.merge(despesa);
 	}
 	
 	@Override

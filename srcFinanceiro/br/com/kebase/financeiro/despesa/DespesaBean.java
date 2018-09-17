@@ -1,6 +1,10 @@
 package br.com.kebase.financeiro.despesa;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -11,6 +15,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -24,6 +31,8 @@ import br.com.kebase.financeiro.centroCusto.CentroCusto;
 import br.com.kebase.financeiro.centroCusto.CentroCustoRN;
 import br.com.kebase.financeiro.despesa.beneficiario.Beneficiario;
 import br.com.kebase.financeiro.despesa.beneficiario.BeneficiarioRN;
+import br.com.kebase.financeiro.despesa.reciboDespesa.ReciboDespesa;
+import br.com.kebase.financeiro.despesa.reciboDespesa.ReciboDespesaRN;
 import br.com.kebase.util.CalcularData;
 
 @ManagedBean(name="despesaBean")
@@ -37,21 +46,34 @@ public class DespesaBean implements Serializable{
 	private List<Despesa> listaContas = new ArrayList<Despesa>();
 	private Despesa contaSelecionada;
 	
-	private List<Beneficiario> listaBeneficiario = new ArrayList<Beneficiario>();
-	private Beneficiario beneficiarioSelecionado = new Beneficiario();
-	
 	private List<SubCategoria> listaCategoria = new ArrayList<SubCategoria>();
 	private List<CentroCusto> listaCentroCusto = new ArrayList<CentroCusto>();
 	
+	private List<SelectItem> listaBeneficiarios;
+	private List<SelectItem> listaCategorias;
+	
 	private double saldo;
+	private boolean recebido = true;
+	private boolean renderedMensagem = false;
+	private String mensagem = "";
+	private int optionDesconto = 1;
+	
+	private ReciboDespesa reciboDespesa = new ReciboDespesa();
 	
 	private PedidoCompra pedidoSelecionado;
 	
 	public DespesaBean() {
+		this.reciboDespesa.setDataRecebimento(new Date());
 		verificarPedidoSessao();
 	}
 	
 	@PostConstruct
+	public void init() {
+		carregarSelectItensBeneficiario();
+		carregarListaDespesas();
+		verificarFlash();
+	}
+	
 	private void verificarFlash() {
 		Despesa d = (Despesa) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("despesa");
 		if(null != d) {
@@ -70,7 +92,7 @@ public class DespesaBean implements Serializable{
     }
 	
 	public String navegarDespesa() {
-		return "despesa";
+		return "despesa?faces-redirect=true";
 	}
 	
 	private void verificarPedidoSessao() {
@@ -85,8 +107,139 @@ public class DespesaBean implements Serializable{
 		}
 	}
 	
+	public String registrarPagamento() {
+		try {
+			if(null == this.despesa || null == this.reciboDespesa) {
+				mensagem("Erro, atualize a página e tente novamente!", FacesMessage.SEVERITY_WARN);
+				return "";
+			} else if(this.despesa.getStatusDespesa().equals("P")) {
+				mensagem("Esta despesa já foi paga!", FacesMessage.SEVERITY_INFO);
+				return "";
+			} else if(!(this.reciboDespesa.getValorPago() > 0)) {
+				mensagem("O valor pago não pode ser menor que 0,00", FacesMessage.SEVERITY_INFO);
+				return "";
+			}
+			
+			ReciboDespesaRN reciboDespesaRN = new ReciboDespesaRN();
+			this.reciboDespesa.setDespesa(this.despesa);
+			this.reciboDespesa.setFormaRecebimento(1);
+			this.reciboDespesa.setStatusRegistro("A");
+			
+			reciboDespesaRN.salvar(this.reciboDespesa);
+			
+			DespesaRN despesaRN = new DespesaRN();
+			if(this.optionDesconto == 1 && this.renderedMensagem == true) {
+				double valorDespesa = this.despesa.getValorDespesa() - this.reciboDespesa.getValorPago();
+				BigDecimal valorExato = new BigDecimal(valorDespesa).setScale(2, RoundingMode.HALF_DOWN);
+				
+				String descricao = "Extenção de despesa -> "+ this.despesa.getDescricaoDespesa();
+				Despesa novaDespesa = 
+						new Despesa(this.despesa.getCentroCusto(), 
+								this.despesa.getSubCategoria(), 
+								this.despesa.getBeneficiario(), 
+								this.despesa.getPedidoCompra(), 
+								descricao, 
+								valorExato.doubleValue(), 
+								this.despesa.getDataVencimento(), 
+								this.despesa.getDataCompetencia(), 
+								null, 
+								"A", 
+								"A");
+
+				despesaRN.salvar(novaDespesa);
+				this.renderedMensagem = false;
+				LOG.info("Extenção de despesa gerada: " + novaDespesa);
+			}
+			
+			this.despesa.setStatusDespesa("P"); //Pago
+			despesaRN.editar(this.despesa);
+			
+			PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
+			PrimeFaces.current().executeScript("$('#despesaModal').modal('hide');");
+			
+			LOG.info("Pagamento registrado com sucesso! " + this.reciboDespesa);
+			mensagem("Pagamento registrado com sucesso!", FacesMessage.SEVERITY_INFO);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e);
+			mensagem("[CODE: 007-06] Erro ao tentar registrar pagamento, entre em contato com o suporte!", FacesMessage.SEVERITY_ERROR);
+		}
+		
+		return "listaDespesa?faces-redirect=true";
+	}
+	
+	public String devolverPagamento() {
+		try {
+			
+			if(null == this.despesa || this.despesa.getIdDespesa() <= 0) {
+				mensagem("Selecione uma despesa!", FacesMessage.SEVERITY_WARN);
+				return "";
+			} else if(!this.despesa.getStatusDespesa().equals("P")) {
+				mensagem("Ainda não foi registrado pagamento para esta despesa!", FacesMessage.SEVERITY_WARN);
+				return "";
+			}
+				
+				
+			//busca o recibo
+			ReciboDespesa reciboDespesa = new ReciboDespesaRN().buscarPorDespesa(this.despesa);
+					
+			//verifica se existe o recibo
+			if(null != reciboDespesa) {
+				reciboDespesa.setStatusRegistro("I");
+						
+				//verifica se está vencida
+				if(CalcularData.compararDataMenor(this.despesa.getDataVencimento(), new Date())) {
+					this.despesa.setStatusDespesa("V");
+				}else {
+					this.despesa.setStatusDespesa("A");
+				}
+				
+				DespesaRN despesaRN = new DespesaRN();
+				despesaRN.editar(this.despesa);
+						
+						
+				LOG.info("Pagamento devolvido. " + reciboDespesa);
+				mensagem("Pagamento devolvido!", FacesMessage.SEVERITY_INFO);
+				
+				FacesContext.getCurrentInstance().getExternalContext().redirect("listaDespesa.xhtml");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	public String excluirDespesa() {
+		try {
+			if(null == this.despesa || this.despesa.getIdDespesa() <= 0) {
+				mensagem("Selecione uma despesa!", FacesMessage.SEVERITY_WARN);
+				return "";
+			} else if(this.despesa.getStatusDespesa().equals("P")) {
+				mensagem("Para excluir a despesa você precisa devolver o pagamento!", FacesMessage.SEVERITY_WARN);
+				return "";
+			}
+					
+			this.despesa.setStatusDespesa("C");
+			this.despesa.setStatusRegistro("I");
+			
+			new DespesaRN().excluir(this.despesa); 
+					
+			LOG.info("Despesa deletada com sucesso! " + this.despesa);
+			mensagem("Despesa excluída com sucesso!", FacesMessage.SEVERITY_INFO);
+			
+			FacesContext.getCurrentInstance().getExternalContext().redirect("listaDespesa.xhtml");
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e);
+		}
+		
+		return "";
+	}
+	
 	public String salvarContas() {
-		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			if(this.saldo == 0) {
 				if(!this.listaContas.isEmpty()) {
@@ -97,24 +250,18 @@ public class DespesaBean implements Serializable{
 						LOG.info(conta);
 						
 					}
-					
-					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Despesas geradas com sucesso!", "Ok!"));
-					context.getExternalContext().getFlash().setKeepMessages(true);
-					
+					mensagem("Despesas geradas com sucesso!", FacesMessage.SEVERITY_INFO);
 				}else {
-					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhuma despesa a gerar!", "Ok!"));
-					context.getExternalContext().getFlash().setKeepMessages(true);
+					mensagem("Nenhuma despesa a gerar!", FacesMessage.SEVERITY_WARN);
 					PrimeFaces.current().executeScript("$('#faturaModal').modal('hide');");
 				}
 			}else {
-				context.addMessage("modalMSG", new FacesMessage(FacesMessage.SEVERITY_WARN, "Saldo Inconsistente, por favor ajuste as parcelas!", "Atenção!"));
-				context.getExternalContext().getFlash().setKeepMessages(true);
+				mensagem("Saldo Inconsistente, por favor ajuste as parcelas!", FacesMessage.SEVERITY_WARN);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			LOG.error("[ERRO: 007-02] Erro tentar registrar despesa.", e);
-			context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "[ERRO: 007-02] - Tente novamente ou entre em contato com o suporte!", "ERRO!"));
-			context.getExternalContext().getFlash().setKeepMessages(true);
+			mensagem("[ERRO: 007-02] - Tente novamente ou entre em contato com o suporte!", FacesMessage.SEVERITY_ERROR);
 		}finally {
 			PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
 			PrimeFaces.current().executeScript("$('#faturaModal').modal('hide');");
@@ -182,6 +329,24 @@ public class DespesaBean implements Serializable{
 		return listaContas;
 	}
 	
+	public void verificarValorPago() {
+		double valorPago = this.reciboDespesa.getValorPago();
+		double valorDespesa = this.despesa.getValorDespesa();
+		DecimalFormat df = new DecimalFormat("#,##0.00"); 
+		if(valorPago < valorDespesa) {
+			this.renderedMensagem = true;
+			double diferenca = valorDespesa - valorPago;
+			this.mensagem = "O pagamento parcial desta conta vai gerar uma nova parcela de R$ " + df.format(diferenca);
+			
+		}  else if(valorPago > valorDespesa) {
+			this.mensagem = "O valor pago é maior que o valor da despesa, será lançado " + df.format(valorPago-valorDespesa) + " como acréscimo!";
+			
+		}  else {
+			this.renderedMensagem = false;
+			this.mensagem = "";
+		}
+	}
+	
 	public void atualizarContaPagar() {
 		if(this.despesa != null) {
 			int qtdParcelas = 1;//corrigir
@@ -201,13 +366,26 @@ public class DespesaBean implements Serializable{
 		}
 	}
 	
-	public String verificaSelecao() {
-		if(null == this.despesa || this.despesa.getIdDespesa() == 0) {
-			mensagem("Selecione um despesa!", FacesMessage.SEVERITY_ERROR);
-			return "";
-		}else {
-			FacesContext.getCurrentInstance().getExternalContext().getFlash().put("despesa", this.despesa);
-			return "despesa?faces-redirect=true";
+	public void verificaSelecao(ActionEvent event) {
+		String from = event.getComponent().getId();
+		try{
+			if(null == this.despesa || this.despesa.getIdDespesa() == 0) {
+				PrimeFaces.current().executeScript("$('#despesaModal').modal('hide');");
+				mensagem("Selecione um despesa!", FacesMessage.SEVERITY_ERROR);
+			} else if(from.equals("editar")){
+				FacesContext.getCurrentInstance().getExternalContext().getFlash().put("despesa", this.despesa);
+				FacesContext.getCurrentInstance().getExternalContext().redirect("despesa.xhtml"); 
+			} else if(from.equals("efetivar") && this.despesa.getStatusDespesa().equals("P")) {
+				PrimeFaces.current().executeScript("$('#despesaModal').modal('hide');");
+				mensagem("Essa despesa já foi paga!", FacesMessage.SEVERITY_ERROR);
+			} else if(from.equals("devolver")) {
+				devolverPagamento();
+			} else if(from.equals("deletar")) {
+				excluirDespesa();
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
+			LOG.info(e);
 		}
 		
 	}
@@ -227,11 +405,23 @@ public class DespesaBean implements Serializable{
 		
 		return saldo-valorTotal;
 	}
-
-	public List<Despesa> getListaContas() {
+	
+	private void carregarListaDespesas() {
 		DespesaRN despesaRN = new DespesaRN();
 		this.listaContas = despesaRN.buscarTodos();
 		
+		for(Despesa d : this.listaContas) {
+			if(!d.getStatusDespesa().equals("P")) {
+				if(CalcularData.compararDataMenor(d.getDataVencimento(), new Date())) {
+					d.setStatusDespesa("V");
+				}else {
+					d.setStatusDespesa("A");
+				}
+			}
+		}
+	}
+
+	public List<Despesa> getListaContas() {
 		return this.listaContas;
 	}
 
@@ -263,21 +453,6 @@ public class DespesaBean implements Serializable{
 		this.despesa = despesa;
 	}
 
-	public List<Beneficiario> getListaBeneficiario() {
-		BeneficiarioRN beneficiarioRN = new BeneficiarioRN();
-		this.listaBeneficiario = beneficiarioRN.buscarTodos();
-		
-		return listaBeneficiario;
-	}
-
-	public Beneficiario getBeneficiarioSelecionado() {
-		return beneficiarioSelecionado;
-	}
-
-	public void setBeneficiarioSelecionado(Beneficiario beneficiarioSelecionado) {
-		this.beneficiarioSelecionado = beneficiarioSelecionado;
-	}
-	
 	public List<Beneficiario> buscarBeneficiarios(String nome) {
 		BeneficiarioRN beneficiarioRN = new BeneficiarioRN();
         List<Beneficiario> results = beneficiarioRN.buscarPorNome("%"+ nome +"%");
@@ -297,6 +472,86 @@ public class DespesaBean implements Serializable{
 		this.listaCentroCusto = centroCustoRN.buscarTodos();
 		
 		return listaCentroCusto;
+	}
+
+	public List<SelectItem> getListaBeneficiarios() {
+		return this.listaBeneficiarios;
+	}
+	
+	private void carregarSelectItensBeneficiario() {
+		BeneficiarioRN beneficiarioRN = new BeneficiarioRN();
+		List<Beneficiario> lista = beneficiarioRN.buscarTodos();
+		
+		List<Beneficiario> representantes = new ArrayList<Beneficiario>();
+		List<Beneficiario> clientes = new ArrayList<Beneficiario>();
+		
+		//separa os tipos de beneficiarios em listas
+		for(Beneficiario b : lista) {
+			switch (b.getTipoBeneficiario()) {
+				case "Representantes": representantes.add(b); break;
+				case "Clientes": clientes.add(b); break;
+				default: break;
+			}
+		}
+		
+		SelectItemGroup grupoRepresentantes = new SelectItemGroup("Representantes");
+		SelectItemGroup grupoClientes = new SelectItemGroup("Clientes");
+		
+		//cria os selectsItem de representantes
+		SelectItem[] r = new SelectItem[representantes.size()];
+		int flag = 0;
+		for(Beneficiario b : representantes) {
+			r[flag++] = new SelectItem(b, b.getVendedor().getNomeVendedor());
+		}
+		grupoRepresentantes.setSelectItems(r);
+		
+		//cria os selectsItem de Clientes
+		SelectItem[] c = new SelectItem[clientes.size()];
+		flag = 0 ;
+		for(Beneficiario b: clientes) {
+			c[flag++] = new SelectItem(b, b.getSalao().getCliente().getNomeCliente());
+		}
+		grupoClientes.setSelectItems(c);
+		
+		this.listaBeneficiarios = new ArrayList<SelectItem>();
+		this.listaBeneficiarios.add(grupoRepresentantes);
+		this.listaBeneficiarios.add(grupoClientes);
+	}
+	
+	public List<SelectItem> getListaCategorias() {
+		return this.listaCategorias;
+	}
+
+	public boolean isRecebido() {
+		return recebido;
+	}
+
+	public void setRecebido(boolean recebido) {
+		this.recebido = recebido;
+	}
+
+	public ReciboDespesa getReciboDespesa() {
+		return reciboDespesa;
+	}
+
+	public void setReciboDespesa(ReciboDespesa reciboDespesa) {
+		this.reciboDespesa = reciboDespesa;
+	}
+
+	public boolean isRenderedMensagem() {
+		return renderedMensagem;
+	}
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+	public int getOptionDesconto() {
+		return optionDesconto;
+	}
+
+	public void setOptionDesconto(int optionDesconto) {
+		this.optionDesconto = optionDesconto;
 	}
 
 }

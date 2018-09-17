@@ -63,7 +63,6 @@ public class ReceitaBean implements Serializable{
 					ReceitaRN receitaRN = new ReceitaRN();
 					
 					if((this.receita.getValorReceita() - this.reciboReceita.getValorRecebido()) > 0) {
-						System.out.println("entrou");
 						double valorReceita = this.receita.getValorReceita() - this.reciboReceita.getValorRecebido();
 						BigDecimal valorExato = new BigDecimal(valorReceita).setScale(2, RoundingMode.HALF_DOWN);
 						
@@ -197,7 +196,6 @@ public class ReceitaBean implements Serializable{
 						}else {
 							this.receita.setStatusReceita("A");
 						}
-						
 						
 						LOG.info("Pagamento devolvido.");
 						context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Pagamento devolvido!", "Ok!"));
