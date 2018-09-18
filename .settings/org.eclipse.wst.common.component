@@ -6,6 +6,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/srcComercial"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/srcEstoque"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/JUnitTestCase"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/srcRelatorios"/>
         <property name="context-root" value="Kebase"/>
         <property name="java-output-path" value="/Kebase/build/classes"/>
     </wb-module>
