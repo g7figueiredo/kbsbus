@@ -3,6 +3,7 @@ package br.com.kebase.security;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -16,7 +17,7 @@ import br.com.kebase.security.usuario.UsuarioRN;
 @SessionScoped
 public class SecurityBean implements Serializable{
 	
-	private Usuario usuario;
+	private Usuario usuario = new Usuario();
 	
 	private static final long serialVersionUID = -9039927336550987989L;
 
@@ -26,11 +27,34 @@ public class SecurityBean implements Serializable{
 		
 		session.invalidate();
 		
-		return "restart";
+		return "home?faces-redirect=true";
+	}
+	
+//	public String login() {
+//		try {
+//			System.out.println("foi");
+//			
+//			this.getRequest().login(usuario, senha);
+//			return "home?faces-redirect=true";
+//		} catch (ServletException e) {
+//			FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Informações inválidas!");
+//			return null;
+//		}
+//	}
+	
+	private HttpServletRequest getRequest() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return (HttpServletRequest) context.getExternalContext().getRequest();
 	}
 	
 	public SecurityBean() {
-		// TODO Auto-generated constructor stub
+	}
+	
+	@PostConstruct
+	public void init() {
+		String name = getRequest().getUserPrincipal().getName();
+		System.out.println(name);
+		this.usuario = new UsuarioRN().buscarPorCpf(name);
 	}
 	
 	public void redirectUser() throws IOException{
@@ -39,12 +63,10 @@ public class SecurityBean implements Serializable{
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
         if(request.isUserInRole("ADMIN")){
-        	context.getExternalContext().redirect("../admin/home.xhtml");
+        	context.getExternalContext().redirect("home.xhtml");
         }
         
         this.usuario = new UsuarioRN().buscarPorCpf(request.getUserPrincipal().getName());
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		session.setAttribute("USER_SESSION", this.usuario);
 	}
 	
 	public void redirect() throws IOException {
@@ -53,15 +75,11 @@ public class SecurityBean implements Serializable{
 	}
 
 	public Usuario getUsuario() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		this.usuario = (Usuario) session.getAttribute("USER_SESSION");
-		return usuario;
+		return this.usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
-	
-	
+
 }

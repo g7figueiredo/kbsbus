@@ -1,38 +1,21 @@
 package br.com.kebase.testes;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
 public class MeusTestes {
 
-	public static void main(String[] args) throws ParseException  {
+	public static void main(String[] args) throws ParseException, NoSuchAlgorithmException, UnsupportedEncodingException  {
 		
-		Object obj = new Double(1215.14);
-		String str = new String("R$ 1.215,14");
-		
-		System.out.println("asObject: " + getAsObject(str));
-		System.out.println("asString: " + getAsString(obj));
+		String senha = "123456";
+		  
+        MessageDigest algorithm = MessageDigest.getInstance("MD5");
+        byte messageDigest[] = algorithm.digest(senha.getBytes("UTF-8"));
+         
+        System.out.println(messageDigest);
 		
 	}
-	
-	public static Object getAsObject(String val) {
-		val = val.replace(".", "").replace("R", "").replace("$", "").trim();
-		val = val.replace(",", ".");
-		
-		double amount = Double.parseDouble(val);
-
-		return amount;
-	}
-	
-	public static String getAsString(Object obj) {
-		String val = String.valueOf(obj);
-		double amount = Double.parseDouble(val);
-		
-		NumberFormat formatter = new DecimalFormat("#,##0.00");
-		return formatter.format(amount);
-	}
-	
-	
 	
 }

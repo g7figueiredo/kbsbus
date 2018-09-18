@@ -43,7 +43,8 @@
     <p class="login-box-msg">Informe seus dados para iniciar a sessão</p>
 
     <form action="j_security_check" method="post">
-    
+    		
+    	
 	      <div class="form-group has-feedback">
 	        	<input type="text" id="j_username" name="j_username" class="form-control" placeholder="CPF"/>
 				<span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -55,13 +56,10 @@
 	      </div>
 	      
 	      <div class="row">
-	      
 	        <div class="col-xs-4">
 	          	<button type="submit" name="submit" value="Entrar" class="btn btn-primary btn-block btn-flat">Entrar</button>
 	        </div>
-	        
 	      </div>
-      
     </form>
 
     <div class="social-auth-links text-center">
@@ -82,14 +80,5 @@
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="../../plugins/iCheck/icheck.min.js"></script>
-<script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
-    });
-  });
-</script>
 </h:body>
 </h:html>

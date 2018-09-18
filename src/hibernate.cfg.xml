@@ -54,6 +54,8 @@
         <mapping class="br.com.kebase.endereco.Endereco"/>
         <mapping class="br.com.kebase.endereco.bairro.Bairro"/>
         <mapping class="br.com.kebase.endereco.cidade.Cidade"/>
+        
+        <mapping class="br.com.kebase.security.usuario.Usuario"/>
 		
 	</session-factory>
 </hibernate-configuration>

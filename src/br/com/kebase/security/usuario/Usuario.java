@@ -1,6 +1,5 @@
 package br.com.kebase.security.usuario;
 
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;

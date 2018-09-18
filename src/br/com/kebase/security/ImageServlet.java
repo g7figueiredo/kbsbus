@@ -1,6 +1,5 @@
 package br.com.kebase.security;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -12,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.kebase.security.usuario.UsuarioRN;
 
-
-@WebServlet("/images/*")
+@WebServlet(urlPatterns= {"/images/*"}, name="ImageServlet")
 public class ImageServlet extends HttpServlet {
  
 	private static final long serialVersionUID = 4900472078338059014L;

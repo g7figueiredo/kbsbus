@@ -60,7 +60,6 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 		
 		byte[] retorno = ((Usuario) criteria.uniqueResult()).getImagem();
 		
-		
 		return retorno;
 	}
 
