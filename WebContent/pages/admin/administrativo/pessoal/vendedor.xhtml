@@ -32,6 +32,7 @@
 
 </h:head>
 
+
 <h:body class="skin-red sidebar-mini">
     <div class="wrapper">
 
@@ -258,35 +259,29 @@
             
             <li><a href="../home.xhtml"><i class="fa fa-tachometer" /> <span>Home</span></a></li>
             
-            <li class="treeview">
-              <a href="#"><i class="glyphicon glyphicon-arrow-right" /> <span>Contas a Receber</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-              	<li><a href="../faturamento/faturamento.xhtml"><i class="fa fa-money" />Faturamento</a></li>
-              	<li><a href="../receita/listaReceita.xhtml" ><i class="fa fa-list" />Lista Receitas</a></li>
-              </ul>
-            </li>
-            
-            <li class="treeview">
-              <a href="#"><i class="glyphicon glyphicon-arrow-left" /> <span>Contas a Pagar</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-              	<li><a href="../despesa.xhtml"><i class="glyphicon glyphicon-plus" />Novo Pagamento</a></li>
-              	<li><a href="../listaDespesa.xhtml"><i class="fa fa-list" />Lista Despesas</a></li>
-              </ul>
-            </li>
-            
             <li class="treeview active">
-              <a href="#"><i class="glyphicon glyphicon-piggy-bank" /> <span>Gestão de Contas</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-briefcase" /> <span>Representantes</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              	<li><a href="conta.xhtml"><i class="glyphicon glyphicon-plus" />Abrir Nova Conta</a></li>
-              	<li><a href="listaConta.xhtml"><i class="fa fa-list" />Contas abertas</a></li>
-              	<li class="active"><a href="extrato.xhtml"><i class="fa fa-exchange" />Extrato de Conta</a></li>
+              	<li class="active"><a href="vendedor.xhtml"><i class="fa fa-user" /> Novo Representante</a></li>
+              	<li><a href="listaVendedor.xhtml"><i class="fa fa-list-alt" /> Gerenciar Representantes</a></li>
               </ul>
             </li>
             
             <li class="treeview">
-              <a href="#"><i class="fa fa-sliders" /> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-usd" /> <span>Setor/CEPs</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              	<li><a href="../relatorios/fluxoCaixa.xhtml"><i class="fa fa-exchange" />Fluxo de Caixa</a></li>
+              	<li><a href="../geo/setor.xhtml"><i class="fa fa-usd" /> Novo Setor</a></li>
+                <li><a href="../geo/listaSetor.xhtml"><i class="fa fa-indent" /> Gerenciar Setores</a></li>
+                <li><a href="../geo/baseCep.xhtml"><i class="fa fa-indent" /> Gerenciar Endereços</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-thumb-tack" /> <span>Acesso/Usuários</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+              	<li><a href="../acesso/usuario.xhtml"><i class="fa fa-file-text-o" /> Novo Usuário</a></li>
+              	<li><a href="../acesso/listaUsuario.xhtml"><i class="fa fa-space-shuttle" /> Gerenciar Usuários</a></li>
+              	<li><a href="../acesso/perfis.xhtml"><i class="fa fa-space-shuttle" /> Perfis de Acesso</a></li>
               </ul>
             </li>
             
@@ -304,170 +299,192 @@
       
        -->
 
-      <!-- Content Wrapper. Contains page content -->
+     <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-          
-          	<!-- ====================== TITULO DA PÁGINA =================================== -->
-            Extrato de Contas
-            <small>Para filtrar a pesquisa utilize o painel de filtros</small>
+           	Cadastro de Vendedor
+            <small>Os campos com asterisco (*) são de preenchimento obrigatório</small>
           </h1>
           <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
+            <li><a href="home.xhtml"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Vazio</a></li>
+            <li class="active">Vendedor</li>
           </ol>
         </section>
 
-        
         <!-- Main content -->
         <section class="content">
         
         <h:form id="form" method="post">
         
-        <p:messages id="messages" showDetail="false" closable="true" ><p:autoUpdate /> </p:messages>
+        <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+        <p:growl id="msg" showDetail="true" autoUpdate="true" life="4000" />
         
-        		<!-- Default box -->
-			          <div class="box box-primary collapsed-box" id="box">
-			            <div class="box-header with-border">
-			              <h3 class="box-title">Painel de Filtros</h3>
-			              <div class="box-tools pull-right">
-			                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Abrir"><i class="fa fa-plus"></i></button>
-			              </div>
-			            </div>
-			            
-			            <div class="box-body">
-						<div class="row">
-							<div class="form-group col-md-12">
-								<div class="col-md-4">
-									<label>Conta</label>
-									<h:selectOneMenu styleClass="form-control" value="#{extratoBean.contaSelecionada}">
-										<f:selectItem itemLabel="-- TODOS --" itemValue="null" />
-										<f:selectItems value="#{extratoBean.listaContas}" var="conta" itemLabel="#{conta.nomeConta} - #{conta.banco}" itemValue="#{conta}"/>
-									</h:selectOneMenu>
-								</div>
-								
-								<div class="col-md-2">
-									<label>Data inicial</label>
-									<p:calendar value="#{extratoBean.dataInicialFiltro}" pattern="dd/MM/yyyy" mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" size="15"
-													maxdate="#{extratoBean.maxDate}">
-										<p:ajax event="dateSelect" update="dt2" />
-									</p:calendar>
-								</div>
-								
-								<div class="col-md-2">
-									<label>Data final</label>
-									<p:calendar id="dt2" value="#{extratoBean.dataFinalFiltro}" mindate="#{extratoBean.dataInicialFiltro}" pattern="dd/MM/yyyy" mask="99/99/9999" 
-											locale="pt_BR" timeZone="GMT-3" size="15" maxdate="#{extratoBean.maxDate}"/>
-								</div>
+
+          <!-- Default box -->
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Informações Pessoais</h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+            
+            		<div class="form-group col-xs-12">
+            				<div class="form-group col-md-2">
+								<p:graphicImage id="image" value="#{imageBean.stc}" style="max-height: 200px; max-width:150px; border: groove;" cache="false"/>
 							</div>
 							
+            				<div class="form-group col-md-6">
+								<label>Foto*</label>
+								<p:fileUpload fileUploadListener="#{vendedorBean.handleFileUpload}" mode="advanced" auto="true"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" update="image" showButtons="false"/>
+							</div>
+							
+            		</div>
+              		
+	              	<div class="form-group col-xs-12">
+	              		<div class="form-group col-md-6">
+	              			<label>Nome Completo*</label>
+	              			<h:inputText type="text" maxlength="90" styleClass="form-control" value="#{vendedorBean.vendedor.nomeVendedor}" required="true" 
+	              				requiredMessage="Por favor informe o nome completo do vendedor." label="Nome Completo" title="Digite o nome completo do vendedor."/>
+	              		</div>
+	              		
+	              		<div class="form-group col-md-2">
+	              			<label>Data de Cadastro</label>
+							<p:inputMask mask="99/99/9999" id="dtCadastro" value="#{vendedorBean.vendedor.dataCadastro}" styleClass="form-control" disabled="true">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" locale="pt_BR" />
+							</p:inputMask>
+	              		</div>
+	              		
+	              	</div>
+	              	
+	              	<div class="form-group col-xs-12">
+
+		              	<div class="form-group col-md-2">
+							<label>CPF*</label>
+							<p:inputMask mask="999.999.999-99" id="cpf" value="#{vendedorBean.vendedor.numCpf}" styleClass="form-control" required="true">
+								<f:validator validatorId="cpf" />
+							</p:inputMask>
+						</div>  
+						
+						<div class="form-group col-md-2">
+	              			<label>RG*</label>
+	              			<h:inputText type="text" maxlength="15" styleClass="form-control" value="#{vendedorBean.vendedor.numRg}" required="true" 
+	              				requiredMessage="Por favor informe o RG do vendedor." label="RG" title="Digite o RG do vendedor."/>
+	              		</div>
+						
+						<div class="form-group col-md-2">
+							<label>Data de Nascimento</label>
+							<p:inputMask mask="99/99/9999" id="dtNascimento" value="#{vendedorBean.vendedor.dataNascimento}" styleClass="form-control" required="true" >
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" locale="pt_BR" />
+							</p:inputMask>
 						</div>
-
-						<div class="box-body">
-					     		<p:commandButton icon="fa fa-filter" styleClass="btn bg-olive"  value="Filtrar" action="#{extratoBean.aplicarFiltro}" update="table" 
-					     			onclick="$('#box').boxWidget('toggle')"/>
-					     						
-					     		<p:commandButton icon="fa fa-remove" styleClass="btn bg-navy"  value="Limpar Filtros" 
-					     						onclick="$('#receitaModal').modal('show');" />
-					    </div>
-			            
-					</div><!-- /.box-body -->
-			            <div class="box-footer">
-			            </div><!-- /.box-footer-->
-			          </div><!-- /.box -->
-			          
-			          
-			<div class="box-body">
-		     		<p:commandButton icon="fa fa-plus" styleClass="btn bg-maroon"  value="Nova Transação" 
-		     						onclick="$('#transacaoModal').modal('show');" />
-		     		
-		     		<p:commandButton icon="fa fa-edit" styleClass="btn bg-navy"  value="Editar Transação" action="#{extratoBean.verificaSelecao}"
-		     						onclick="$('#transacaoModal').modal('show');" />
-		     		
-		     		<p:commandButton icon="fa fa-remove" styleClass="btn btn-danger"  value="Excluir Transação" action="#{receitaBean.excluirReceita}" 
-		     						onclick="if (!confirm('Deseja realmente excluír a receita?')) return false;" />
-		     		
-		     		<p:commandButton icon="fa fa-file-pdf-o" styleClass="btn bg-purple"  value="Exportar PDF" onclick="$('#receitaModal').modal('show');" />
-		    </div>
-			          
-        	<div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Extrato</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                
-                  <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                  	<div class="row">
-                  		<div class="col-sm-12">
-							<p:dataTable id="table" var="op" sortBy="#{op.dataHora}"
-								value="#{extratoBean.extrato}"
-								selection="#{extratoBean.transacaoSelecionada}"
-								rowKey="#{op.idOperacao}" rows="50" paginator="true"
-								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
+						
+	              	</div>
+	              	
+		            <div class="form-group col-xs-12">
+		            	<div class="form-group">
+							<div class="box box-danger">
+								<div class="box-header with-border">
+									<h3 class="box-title">Informações de Contato
+									<small></small>
+									</h3>
+								</div><!-- /.box-header -->
 								
-								<p:ajax event="rowSelect" listener="#{extratoBean.onTransacaoSelect}" update=":formModal" process="table"/>
-        						<p:ajax event="rowUnselect" listener="#{extratoBean.onTransacaoUnselect}" update=":formModal" process="table"/>
-        						
-						        <p:column headerText="Data" style="text-align:center">
-									<h:outputText value="#{op.dataHora}">
-										<f:convertDateTime pattern="dd/MM/yyyy" />
-									</h:outputText>
-								</p:column>
+								<div class="box-body">
 								
-								<p:column headerText="Op" style="width: 40px;">
-									<h:outputText value="#{op.tipoOperacao}" />
-								</p:column>
-								
-								<p:column headerText="Valor" style="text-align:center">
-									<h:outputText value="#{op.valorOperacao}">
-										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
-									</h:outputText>
-								</p:column>
-								
-								<p:column headerText="Descrição" style="text-align:center">
-									<h:outputText value="#{op.descricaoOperacao}" />
-								</p:column>
-								
-								<p:column headerText="Conta">
-									<h:outputText value="#{op.conta.nomeConta}" />
-								</p:column>
-								
-								<p:column headerText="Banco">
-									<h:outputText value="#{op.conta.banco}" />
-								</p:column>
-								
-								<p:column headerText="Saldo" style="text-align:center;">
-									<h:outputText value="#{op.valorSaldo}" style="font-weight: bold;">
-										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
-									</h:outputText>
-								</p:column>
-								
-								<p:summaryRow>
-						            <p:column colspan="6" style="text-align:right; background: #00c0ef8a;">
-						                <h:outputText value="Total do dia: " />
-						            </p:column>
-						            <p:column style="text-align:center; background: #00c0ef8a;">
-						                <h:outputText value="#{extratoBean.saldoSumario(op)}">
-						                    <f:convertNumber type="currency" currencySymbol="R$" />
-						                </h:outputText>
-						            </p:column>
-						        </p:summaryRow>
-								
-							</p:dataTable>
-
+									<div class="form-group col-xs-12">
+										<div class="form-group col-md-2">
+											<label>Celular*</label>
+											<p:inputMask mask="(99) 9 9999-9999" id="cel" value="#{vendedorBean.vendedor.numCel1}" styleClass="form-control" required="true" />
+										</div>
+										
+										<div class="form-group col-md-2">
+											<label>Telefone Residencial</label>
+											<p:inputMask mask="(99) 9999-9999" id="tel" value="#{vendedorBean.vendedor.numTelResidencial}" styleClass="form-control"/>
+										</div>
+										
+										<div class="form-group col-md-5">
+											<label>E-mail*</label>
+											<h:inputText id="email" value="#{vendedorBean.vendedor.endEmail}" styleClass="form-control" required="true"/>
+										</div>
+										
+									</div>
+									
+									<div class="form-group col-xs-12">
+										<div class="form-group col-md-12">
+											<p:separator title="Endereço" />
+										</div>
+										
+										<div class="form-group col-md-2">
+											<label>CEP*</label>
+											<p:inputMask mask="99999-999" id="cep" value="#{vendedorBean.endereco.numCep}" styleClass="form-control">
+												<f:ajax event="valueChange" render="logradouro bairro cidade uf" execute="@this" listener="#{vendedorBean.buscarEndereco}"/>
+											</p:inputMask>
+										</div>
+										
+										<div class="form-group col-md-6">
+											<label>Logradouro</label>
+											<h:inputText id="logradouro" value="#{vendedorBean.endereco.logradouro}" styleClass="form-control" disabled="true"/>
+										</div>
+										
+										<div class="form-group col-md-2">
+											<label>Número*</label>
+											<h:inputText id="num" value="#{vendedorBean.enderecoVendedor.numResidencia}" styleClass="form-control"/>
+										</div>
+										
+										<div class="form-group col-md-4">
+											<label>Bairro</label>
+											<h:inputText id="bairro" value="#{vendedorBean.endereco.bairro.nomeBairro}" styleClass="form-control" disabled="true"/>
+										</div>
+										
+										<div class="form-group col-md-4">
+											<label>Cidade</label>
+											<h:inputText id="cidade" value="#{vendedorBean.endereco.cidade.nomeCidade}" styleClass="form-control" disabled="true"/>
+										</div>
+										
+										<div class="form-group col-md-2">
+											<label>UF</label>
+											<h:inputText id="uf" value="#{vendedorBean.endereco.cidade.siglaUf}" styleClass="form-control" disabled="true" />
+										</div>
+										
+										<div class="form-group col-md-8">
+											<label>Complemento</label>
+											<h:inputText id="complemento" value="#{vendedorBean.enderecoVendedor.descComplemento}" styleClass="form-control"/>
+										</div>
+										
+										<div class="form-group col-md-8">
+												<button type="button" class="btn btn-info" style="width: 130px; font-weight: bold;" onclick="$('#cepModal').modal('show');">
+													<i class="fa fa-search"></i> Pesquisar CEP
+												</button>
+							              </div>
+									
+										
+									</div>
+									
+								</div>	
+							</div>
 						</div>
-                    </div>
-                 </div>   
-                </div><!-- /.box-body -->
-              </div>
+		            </div>
+		            
 
+            </div><!-- /.box-body -->
+           	<div class="box-footer">
+            			<p:commandButton value="Salvar Alterações" action="#{vendedorBean.registrarDados}"
+                    				onclick="$('#loadModal').modal('show');" styleClass="btn bg-maroon" icon="fa fa-save"/>
+                    				
+                    	<p:commandButton value="Cancelar" type="reset" styleClass="btn btn-default" icon="fa fa-undo"/>
+            
+            </div><!-- /.box-footer-->
+          </div><!-- /.box -->
           
           </h:form>
           
-          <div class="col-md-2 modal" id="loadModal" data-backdrop="static"
+           <div class="col-md-2 modal" id="loadModal" data-backdrop="static"
 				style="background: rgba(0, 0, 0, 0); margin-top: 20%; margin-left: 40%;">
 				<div class="box box-success box-solid">
 					<div class="box-header">
@@ -482,89 +499,84 @@
 					<!-- end loading -->
 				</div>
 				<!-- /.box -->
-		 </div>
-		 
-		 <div class="example-modal">
-            <div class="modal" id="transacaoModal" data-backdrop="static">
+			</div>
+          
+          <div class="example-modal">
+            <div class="modal" id="cepModal">
               <div class="modal-dialog">
-                <div class="modal-content" style="width: 700px;">
+                <div class="modal-content" >
                   <h:form id="formModal">
 
 					<div class="box box-info" style="margin-bottom: 0px;">
 		                <div class="box-header with-border">
-		                  <h3 class="box-title">Nova Transação</h3>
+		                  <h3 class="box-title">Painel Pesquisa de Endereço</h3>
 		                </div><!-- /.box-header -->
 		                <!-- form start -->
-		                
-		                	<p:messages id="modalMSG" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
 
 		                  <div class="box-body">
-		                  				
-		                  				<div class="form-group col-xs-12">
-			                  				<div class="col-md-4">
-												<label>Data da Transação</label>
-												<p:calendar id="dataTransacao" value="#{extratoBean.operacao.dataHora}" pattern="dd/MM/yyyy" maxdate="#{extratoBean.maxDate}"
-													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data!" size="15"/>
-											</div>
-											
-											<div class="col-md-4">
-												<label>Tipo</label>
-												<h:selectOneMenu value="#{extratoBean.operacao.tipoOperacao}" styleClass="form-control" id="tipo">
-													<f:selectItem itemLabel="Crédito" itemValue="C" />
-													<f:selectItem itemLabel="Débito" itemValue="D" />
-												</h:selectOneMenu>
-											</div>
-											
-											<div class="col-md-4">
-												<label>Valor</label>
-												<h:inputText id="valor" value="#{extratoBean.operacao.valorOperacao}" styleClass="form-control" onfocus="maskMoney(this)"> 
-													<f:convertNumber pattern="#,##0.00" currencySymbol="R$" />
-												</h:inputText>
-											</div>
-										</div>	
-										
-										<div class="form-group col-xs-12">
-											<div class="col-md-12">
-												<label>Descrição</label>
-												<h:inputText id="descricao" value="#{extratoBean.operacao.descricaoOperacao}" styleClass="form-control"/>
-											</div>
+										<div class="form-group">
+											<label>Logradouro (Nome da rua, avenida, etc.)</label>
+											<h:inputText id="filter" value="#{vendedorBean.endereco.logradouro}" styleClass="form-control">
+												<f:ajax event="keydown" render="tableCep" execute="@this" listener="#{vendedorBean.pesquisarCep}"/>
+											</h:inputText>
 										</div>
-										
-										<div class="form-group col-md-12">
-			                  				<div class="col-md-8">
-												<label>Conta</label>
-												<h:selectOneMenu value="#{extratoBean.contaSelecionada}" styleClass="form-control" id="conta" >
-													<f:selectItems value="#{extratoBean.listaContas}" var="conta" itemValue="#{conta}" 
-															itemLabel="#{conta.nomeConta} | #{conta.banco} | #{conta.tipoConta.descricao}"  />
-												</h:selectOneMenu>
-											</div>
-											
-										</div>	
-										
+
+										<div class="form-group">
+												<p:dataTable id="tableCep" var="log"
+													value="#{vendedorBean.listaEndereco}" 
+													selection="#{vendedorBean.endereco}"  scrollable="true" scrollHeight="100"
+													rowKey="#{log.idEndereco}" rows="20" paginator="true"
+													rowsPerPageTemplate="10, 20" selectionMode="single" >
+													
+													<p:ajax event="rowSelect" listener="#{vendedorBean.onRowSelect}" update=":form:cep :form:logradouro :form:bairro :form:cidade :form:uf" />
+        											<p:ajax event="rowUnselect" listener="#{vendedorBean.onRowUnselect}" update=":form:cep :form:logradouro :form:bairro :form:cidade :form:uf" />
+													
+													<p:column>
+														<f:facet name="header">CEP</f:facet>
+														<h:outputText value="#{log.numCep}" />
+													</p:column>
+	
+													<p:column>
+														<f:facet name="header">Logradouro</f:facet>
+														<h:outputText value="#{log.logradouro}" />
+													</p:column>
+	
+													<p:column>
+														<f:facet name="header">Bairro</f:facet>
+														<h:outputText value="#{log.bairro.nomeBairro}" />
+													</p:column>
+													
+													<p:column>
+														<f:facet name="header">Cidade/UF</f:facet>
+														<h:outputText value="#{log.cidade.nomeCidade} / #{log.cidade.siglaUf}" />
+													</p:column>
+					
+					
+												</p:dataTable>
+									</div>
+
 							</div><!-- /.box-body -->
 		
 		              </div>
 		              
 	              
                   <div class="modal-footer">
-                    <p:commandButton value="Salvar Transação" action="#{extratoBean.salvarTransacao}" process="formModal"
-                    				onclick="$('#loadModal').modal('show');" styleClass="btn bg-maroon pull-right" icon="fa fa-save"/>
-                    				
-                    <p:commandButton value="Cancelar" onclick="$('#transacaoModal').modal('hide');" styleClass="btn btn-default pull-right" icon="fa fa-undo"/>
+                    <h:commandButton value="Fechar" type="button" onclick="$('#cepModal').modal('hide');" styleClass="btn btn-default pull-left" />
+                    	
+                    <h:commandButton value="Selecionar Endereço" type="button" onclick="$('#cepModal').modal('hide');" styleClass="btn btn-success" />
+                    
+                    <h:commandButton value="Não Encontrei o Endereço" action="#{vendedorBean.navegarEndereco}"
+                    	onclick="$('#cepModal').modal('hide');this.form.target='_blank';"  styleClass="btn btn-info pull-right" />
                     
                   </div>
-
+                  
                   </h:form>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
           </div>
-          
-          
 
         </section><!-- /.content -->
-        
-        
       </div><!-- /.content-wrapper -->
 		
 		
@@ -582,7 +594,7 @@
           <strong>Versão: </strong>1.0.0
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2017 <a href="#">Clime Up</a>.</strong> Todos os direitos reservados.
+        <strong>Copyright &copy; 2018 <a href="#">Vaello Distribuidora</a>.</strong> Todos os direitos reservados.
       </footer>
 
       <!-- Control Sidebar -->

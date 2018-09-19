@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15273727795180" configfile="/Kebase/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="cliente.xhtml" id="pf153418799743410" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf153418802493313" path="/cliente.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="endereco.xhtml" id="pf153418802493316" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf153418802493313" path="/endereco.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="cliente.xhtml" x="228" y="48" id="pf153418799743410" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf153418802493313" path="/cliente.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="endereco.xhtml" x="156" y="204" id="pf153418802493316" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf153418802493313" path="/endereco.xhtml"/>
   <links id="pf153418802493313" target="pf153418802493316" source="pf153418799743410" outcome="endereco" redirect="true"/>
 </pageflow:Pageflow>

@@ -2,6 +2,7 @@ package br.com.kebase.comercial.vendedor.enderecoVendedor;
 
 import java.util.List;
 
+import br.com.kebase.comercial.vendedor.Vendedor;
 import br.com.kebase.dbUtil.DAOFactory;
 
 public class EnderecoVendedorRN {
@@ -30,6 +31,10 @@ public class EnderecoVendedorRN {
 	
 	public List<EnderecoVendedor> buscarTodos(){
 		return this.enderecoVendedorDao.buscarTodos();
+	}
+	
+	public EnderecoVendedor buscarPorVendedor(Vendedor vendedor){
+		return this.enderecoVendedorDao.buscarPorVendedor(vendedor);
 	}
 
 }

@@ -6,6 +6,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import br.com.kebase.comercial.vendedor.Vendedor;
+
 public class EnderecoVendedorDAOHibernate implements EnderecoVendedorDAO {
 	
 	private Session session;
@@ -37,7 +39,7 @@ public class EnderecoVendedorDAOHibernate implements EnderecoVendedorDAO {
 	public EnderecoVendedor buscarPorId(long id) {
 		Criteria criteria = this.session.createCriteria(EnderecoVendedor.class);
 		criteria.add(Restrictions.eq("idEnderecoVendedor", id));
-		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.add(Restrictions.eq("statusEndereco", "A"));
 		
 		return (EnderecoVendedor) criteria.uniqueResult();
 	}
@@ -45,11 +47,20 @@ public class EnderecoVendedorDAOHibernate implements EnderecoVendedorDAO {
 	@Override
 	public List<EnderecoVendedor> buscarTodos() {
 		Criteria criteria = this.session.createCriteria(EnderecoVendedor.class);
-		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.add(Restrictions.eq("statusEndereco", "A"));
 		
 		@SuppressWarnings("unchecked")
 		List<EnderecoVendedor> results = criteria.list();
 		return results;
+	}
+
+	@Override
+	public EnderecoVendedor buscarPorVendedor(Vendedor vendedor) {
+		Criteria criteria = this.session.createCriteria(EnderecoVendedor.class);
+		criteria.add(Restrictions.eq("vendedor.idVendedor", vendedor.getIdVendedor()));
+		criteria.add(Restrictions.eq("statusEndereco", "A"));
+		
+		return (EnderecoVendedor) criteria.uniqueResult();
 	}
 
 }

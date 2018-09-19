@@ -47,8 +47,8 @@ public class Vendedor implements Serializable{
 	@Column(name="dt_cadastro", nullable=false)
 	private Date dataCadastro;
 	
-	@Column(name="img_vendedor")
-	private Byte[] imgVendedor;
+	@Column(name="img_vendedor", columnDefinition="longblob")
+	private byte[] imgVendedor;
 	
 	@Column(name="num_tel_residencial")
 	private String numTelResidencial;
@@ -66,8 +66,23 @@ public class Vendedor implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	public Vendedor(Vendedor v) {
+		this.idVendedor = v.getIdVendedor();
+		this.beneficiario = v.getBeneficiario();
+		this.nomeVendedor = v.getNomeVendedor();
+		this.numCpf = v.getNumCpf();
+		this.numRg = v.getNumRg();
+		this.dataNascimento = v.getDataNascimento();
+		this.dataCadastro = v.getDataCadastro();
+		this.imgVendedor = v.getImgVendedor();
+		this.numTelResidencial = v.getNumTelResidencial();
+		this.numCel1 = v.getNumCel1();
+		this.endEmail = v.getEndEmail();
+		this.statusRegistro = v.getStatusRegistro();
+	}
+
 	public Vendedor(Long idVendedor, Beneficiario beneficiario, String nomeVendedor, String numCpf, String numRg,
-			Date dataNascimento, Date dataCadastro, Byte[] imgVendedor, String numTelResidencial, String numCel1,
+			Date dataNascimento, Date dataCadastro, byte[] imgVendedor, String numTelResidencial, String numCel1,
 			String endEmail, String statusRegistro) {
 		this.idVendedor = idVendedor;
 		this.beneficiario = beneficiario;
@@ -85,94 +100,6 @@ public class Vendedor implements Serializable{
 	
 	public Vendedor(Long idVendedor) {
 		this.idVendedor = idVendedor;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((beneficiario == null) ? 0 : beneficiario.hashCode());
-		result = prime * result + ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
-		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
-		result = prime * result + ((endEmail == null) ? 0 : endEmail.hashCode());
-		result = prime * result + ((idVendedor == null) ? 0 : idVendedor.hashCode());
-		result = prime * result + Arrays.hashCode(imgVendedor);
-		result = prime * result + ((nomeVendedor == null) ? 0 : nomeVendedor.hashCode());
-		result = prime * result + ((numCel1 == null) ? 0 : numCel1.hashCode());
-		result = prime * result + ((numCpf == null) ? 0 : numCpf.hashCode());
-		result = prime * result + ((numRg == null) ? 0 : numRg.hashCode());
-		result = prime * result + ((numTelResidencial == null) ? 0 : numTelResidencial.hashCode());
-		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Vendedor other = (Vendedor) obj;
-		if (beneficiario == null) {
-			if (other.beneficiario != null)
-				return false;
-		} else if (!beneficiario.equals(other.beneficiario))
-			return false;
-		if (dataCadastro == null) {
-			if (other.dataCadastro != null)
-				return false;
-		} else if (!dataCadastro.equals(other.dataCadastro))
-			return false;
-		if (dataNascimento == null) {
-			if (other.dataNascimento != null)
-				return false;
-		} else if (!dataNascimento.equals(other.dataNascimento))
-			return false;
-		if (endEmail == null) {
-			if (other.endEmail != null)
-				return false;
-		} else if (!endEmail.equals(other.endEmail))
-			return false;
-		if (idVendedor == null) {
-			if (other.idVendedor != null)
-				return false;
-		} else if (!idVendedor.equals(other.idVendedor))
-			return false;
-		if (!Arrays.equals(imgVendedor, other.imgVendedor))
-			return false;
-		if (nomeVendedor == null) {
-			if (other.nomeVendedor != null)
-				return false;
-		} else if (!nomeVendedor.equals(other.nomeVendedor))
-			return false;
-		if (numCel1 == null) {
-			if (other.numCel1 != null)
-				return false;
-		} else if (!numCel1.equals(other.numCel1))
-			return false;
-		if (numCpf == null) {
-			if (other.numCpf != null)
-				return false;
-		} else if (!numCpf.equals(other.numCpf))
-			return false;
-		if (numRg == null) {
-			if (other.numRg != null)
-				return false;
-		} else if (!numRg.equals(other.numRg))
-			return false;
-		if (numTelResidencial == null) {
-			if (other.numTelResidencial != null)
-				return false;
-		} else if (!numTelResidencial.equals(other.numTelResidencial))
-			return false;
-		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
-				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
-			return false;
-		return true;
 	}
 
 	public Long getIdVendedor() {
@@ -231,11 +158,11 @@ public class Vendedor implements Serializable{
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Byte[] getImgVendedor() {
+	public byte[] getImgVendedor() {
 		return imgVendedor;
 	}
 
-	public void setImgVendedor(Byte[] imgVendedor) {
+	public void setImgVendedor(byte[] imgVendedor) {
 		this.imgVendedor = imgVendedor;
 	}
 
@@ -283,6 +210,112 @@ public class Vendedor implements Serializable{
 				+ (numCel1 != null ? "numCel1=" + numCel1 + ", " : "")
 				+ (endEmail != null ? "endEmail=" + endEmail + ", " : "")
 				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
+		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
+		result = prime * result + ((endEmail == null) ? 0 : endEmail.hashCode());
+		result = prime * result + ((idVendedor == null) ? 0 : idVendedor.hashCode());
+		result = prime * result + Arrays.hashCode(imgVendedor);
+		result = prime * result + ((nomeVendedor == null) ? 0 : nomeVendedor.hashCode());
+		result = prime * result + ((numCel1 == null) ? 0 : numCel1.hashCode());
+		result = prime * result + ((numCpf == null) ? 0 : numCpf.hashCode());
+		result = prime * result + ((numRg == null) ? 0 : numRg.hashCode());
+		result = prime * result + ((numTelResidencial == null) ? 0 : numTelResidencial.hashCode());
+		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Vendedor)) {
+			return false;
+		}
+		Vendedor other = (Vendedor) obj;
+		if (dataCadastro == null) {
+			if (other.dataCadastro != null) {
+				return false;
+			}
+		} else if (!dataCadastro.equals(other.dataCadastro)) {
+			return false;
+		}
+		if (dataNascimento == null) {
+			if (other.dataNascimento != null) {
+				return false;
+			}
+		} else if (!dataNascimento.equals(other.dataNascimento)) {
+			return false;
+		}
+		if (endEmail == null) {
+			if (other.endEmail != null) {
+				return false;
+			}
+		} else if (!endEmail.equals(other.endEmail)) {
+			return false;
+		}
+		if (idVendedor == null) {
+			if (other.idVendedor != null) {
+				return false;
+			}
+		} else if (!idVendedor.equals(other.idVendedor)) {
+			return false;
+		}
+		if (!Arrays.equals(imgVendedor, other.imgVendedor)) {
+			return false;
+		}
+		if (nomeVendedor == null) {
+			if (other.nomeVendedor != null) {
+				return false;
+			}
+		} else if (!nomeVendedor.equals(other.nomeVendedor)) {
+			return false;
+		}
+		if (numCel1 == null) {
+			if (other.numCel1 != null) {
+				return false;
+			}
+		} else if (!numCel1.equals(other.numCel1)) {
+			return false;
+		}
+		if (numCpf == null) {
+			if (other.numCpf != null) {
+				return false;
+			}
+		} else if (!numCpf.equals(other.numCpf)) {
+			return false;
+		}
+		if (numRg == null) {
+			if (other.numRg != null) {
+				return false;
+			}
+		} else if (!numRg.equals(other.numRg)) {
+			return false;
+		}
+		if (numTelResidencial == null) {
+			if (other.numTelResidencial != null) {
+				return false;
+			}
+		} else if (!numTelResidencial.equals(other.numTelResidencial)) {
+			return false;
+		}
+		if (statusRegistro == null) {
+			if (other.statusRegistro != null) {
+				return false;
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
+			return false;
+		}
+		return true;
 	}
 	
 }

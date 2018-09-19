@@ -14,6 +14,12 @@ public class FacesUtil {
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 	}
 	
+	public static void adicionarMensagem(Severity tipo, String msg, boolean keep) {
+		FacesContext.getCurrentInstance().addMessage(null, 
+				new FacesMessage(tipo, msg, msg));
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(keep);
+	}
+	
 	public static Object getRequestAttribute(String name) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ExternalContext externalContext = facesContext.getExternalContext();

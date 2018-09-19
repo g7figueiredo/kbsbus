@@ -260,35 +260,28 @@
             <li><a href="../home.xhtml"><i class="fa fa-tachometer" /> <span>Home</span></a></li>
             
             <li class="treeview active">
-              <a href="#"><i class="glyphicon glyphicon-arrow-right" /> <span>Contas a Receber</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-briefcase" /> <span>Representantes</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              	<li><a href="../faturamento/faturamento.xhtml"><i class="fa fa-money" />Faturamento</a></li>
-              	<li class="active"><a href="listaReceita.xhtml" ><i class="fa fa-list" />Lista Receitas</a></li>
+              	<li><a href="vendedor.xhtml"><i class="fa fa-user" /> Novo Representante</a></li>
+              	<li class="active"><a href="listaVendedor.xhtml"><i class="fa fa-list-alt" /> Gerenciar Representantes</a></li>
               </ul>
             </li>
             
             <li class="treeview">
-              <a href="#"><i class="glyphicon glyphicon-arrow-left" /> <span>Contas a Pagar</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-usd" /> <span>Setor/CEPs</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              	<li><a href="../despesa/despesa.xhtml"><i class="glyphicon glyphicon-plus" />Novo Pagamento</a></li>
-              	<li><a href="../despesa/listaDespesa.xhtml"><i class="fa fa-list" />Lista Despesas</a></li>
-<!--                 <li><a href="relatorios/fluxoCaixa.xhtml"><i class="fa fa-exchange" />Fluxo de Caixa</a></li> -->
+              	<li><a href="../geo/setor.xhtml"><i class="fa fa-usd" /> Novo Setor</a></li>
+                <li><a href="../geo/listaSetor.xhtml"><i class="fa fa-indent" /> Gerenciar Setores</a></li>
+                <li><a href="../geo/baseCep.xhtml"><i class="fa fa-indent" /> Gerenciar Endereços</a></li>
               </ul>
             </li>
             
             <li class="treeview">
-              <a href="#"><i class="glyphicon glyphicon-piggy-bank" /> <span>Gestão de Contas</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-thumb-tack" /> <span>Acesso/Usuários</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              	<li><a href="../conta/conta.xhtml"><i class="glyphicon glyphicon-plus" />Abrir Nova Conta</a></li>
-              	<li><a href="../conta/listaConta.xhtml"><i class="fa fa-list" />Contas abertas</a></li>
-              	<li><a href="../conta/extrato.xhtml"><i class="fa fa-exchange" />Extrato de Conta</a></li>
-              </ul>
-            </li>
-            
-            <li class="treeview">
-              <a href="#"><i class="fa fa-sliders" /> <span>Gerencial</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-              	<li><a href="../relatorios/fluxoCaixa.xhtml"><i class="fa fa-exchange" />Fluxo de Caixa</a></li>
+              	<li><a href="../acesso/usuario.xhtml"><i class="fa fa-file-text-o" /> Novo Usuário</a></li>
+              	<li><a href="../acesso/listaUsuario.xhtml"><i class="fa fa-space-shuttle" /> Gerenciar Usuários</a></li>
+              	<li><a href="../acesso/perfis.xhtml"><i class="fa fa-space-shuttle" /> Perfis de Acesso</a></li>
               </ul>
             </li>
             
@@ -313,7 +306,7 @@
           <h1>
           
           	<!-- ====================== TITULO DA PÁGINA =================================== -->
-            Contas a Receber
+            Equipe de Representantes
             <small>Para filtrar a pesquisa utilize o painel de filtros</small>
           </h1>
           <ol class="breadcrumb">
@@ -363,114 +356,61 @@
 			          
 			          
 			<div class="box-body">
-		     		<p:commandButton icon="fa fa-dollar" styleClass="btn btn-success"  value="Receber" action="#{receitaBean.verificaSelecao}" 
-		     						onclick="$('#receitaModal').modal('show');" />
+		     		<p:commandButton icon="fa fa-plus" styleClass="btn bg-maroon"  value="Criar" action="#{vendedorBean.navegarVendedor}" />
 		     		
-		     		<p:commandButton icon="fa fa-undo" styleClass="btn bg-orange"  value="Devolver Pagamento" action="#{receitaBean.devolverPagamento}"
-		     						onclick="if (!confirm('Deseja realmente devolver o pagamento?')) return false;">
-					</p:commandButton>		     						
+		     		<p:commandButton id="editar" icon="fa fa-edit" styleClass="btn bg-navy"  value="Editar" actionListener="#{vendedorBean.verificaSelecao}" />
 		     		
-		     		<p:commandButton icon="fa fa-edit" styleClass="btn bg-navy"  value="Editar Receita" action="#{receitaBean.verificaSelecao}"
-		     						onclick="$('#editarReceitaModal').modal('show');" />
-		     		
-		     		<p:commandButton icon="fa fa-remove" styleClass="btn btn-danger"  value="Excluir Receita" action="#{receitaBean.excluirReceita}" 
-		     						onclick="if (!confirm('Deseja realmente excluír a receita?')) return false;" />
+		     		<p:commandButton id="deletar" icon="fa fa-remove" styleClass="btn btn-danger"  value="Excluir" actionListener="#{despesaBean.verificaSelecao}" >
+		     			<p:confirm header="Atenção" message="Deseja excluír a despesa 000#{despesaBean.contaSelecionada.idDespesa}?" icon="ui-icon-alert" />
+		     		</p:commandButton>
 		     		
 		     		<p:commandButton icon="fa fa-file-pdf-o" styleClass="btn bg-purple"  value="Exportar PDF" onclick="$('#receitaModal').modal('show');" />
+		     		
+		     		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				    </p:confirmDialog>
 		    </div>
 			          
         	<div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Lista de Receitas</h3>
+                  <h3 class="box-title">Lista de Representantes</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
                   <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                   	<div class="row">
                   		<div class="col-sm-12">
-							<p:dataTable id="table" var="receita"
-								value="#{receitaBean.listaReceita}"
-								selection="#{receitaBean.receita}"
-								rowKey="#{receita.idReceita}" rows="30" paginator="true"
+							<p:dataTable id="table" var="vendedor"
+								value="#{vendedorBean.listaVendedor}"
+								selection="#{vendedorBean.vendedor}"
+								rowKey="#{vendedor.idVendedor}" rows="30" paginator="true"
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
 								
-								<p:ajax event="rowSelect" listener="#{receitaBean.onReceitaSelect}" update=":formModal :formEditModal" process="table"/>
-        						<p:ajax event="rowUnselect" listener="#{receitaBean.onReceitaUnselect}" update=":formModal :formEditModal" process="table"/>
-        						
-        						<p:column style="width:40px;">
-						            <p:rowToggler />
-						        </p:column>
-								
-								<p:column headerText="#ID" style="width:70px;text-align:center">
-									<h:outputText value="000#{receita.idReceita}" />
+								<p:column headerText="#ID" style="width:70px;text-align:center" sortBy="#{vendedor.idVendedor}">
+									<h:outputText value="000#{vendedor.idVendedor}" />
 								</p:column>
 								
-								<p:column headerText="Status" style="width:80px;text-align:center">
-									<h:graphicImage library="imagens" name="#{receita.statusReceita}.png" />
+								<p:column headerText="Nome" width="40%" sortBy="#{vendedor.nomeVendedor}">
+									<h:outputText value="#{vendedor.nomeVendedor}" />
 								</p:column>
 								
-								<p:column headerText="Valor" style="text-align:center">
-									<h:outputText value="#{receita.valorReceita}">
-										<f:convertNumber currencySymbol="R$" pattern="#,##0.00" />
+								<p:column headerText="CPF" style="text-align:center">
+									<h:outputText value="#{vendedor.numCpf}">
+										<f:converter converterId="cpfConverter" />
 									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Vencimento" style="text-align:center">
-									<h:outputText value="#{receita.dataVencimento}">
+								<p:column headerText="Data Cadastro" style="text-align:center" sortBy="#{vendedor.dataCadastro}">
+									<h:outputText value="#{vendedor.dataCadastro}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Descrição" width="40%">
-									<h:outputText value="#{receita.descricaoReceita}" />
+								<p:column headerText="Email">
+									<h:outputText value="#{vendedor.endEmail}" />
 								</p:column>
-								
-								<p:column headerText="Categoria">
-									<h:outputText value="#{receita.subCategoria.descricaoSubCategoria}" />
-								</p:column>
-								
-								<p:column headerText="Centro de Custo">
-									<h:outputText value="#{receita.centroCusto.descricaoCentroCusto}" />
-								</p:column>
-								
-								<p:rowExpansion>
-									<p:panelGrid columns="4" style="max-width: 70%;">
-									    <f:facet name="header">
-									    	<h:outputText value="Detalhes >"  style="font-weight: bold;" />
-									    </f:facet>
-									    
-									    <h:outputText value="Competencia:" style="font-weight: bold;"/>
-									    <h:outputText value="#{receita.dataCompetencia}">
-									    	<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputText>
-									 
-									    <h:outputText value="ID Fatura:"  style="font-weight: bold;" />
-									    <h:outputText value="#0000#{receita.fatura.idFatura}" />
-									    
-									    <h:outputText value="Pago em:"  style="font-weight: bold;" />
-									    <h:outputText value="#{receita.reciboReceita.dataRecebimento}">
-									    	<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputText>
-										
-										<h:outputText value="Salão:" style="font-weight: bold;" />
-									    <h:outputText value="#{receita.fatura.venda.salao.nomeSalao}" />
-									    
-									    <h:outputText value="ID Venda:" style="font-weight: bold;" />
-									    <h:outputText value="#0000#{receita.fatura.venda.idVenda}" />
-									    
-									    <h:outputText value="Cliente:" style="font-weight: bold;" />
-									    <h:outputText value="#{receita.fatura.venda.salao.cliente.nomeCliente}" />
-									    
-									    <h:outputText value="Setor:" style="font-weight: bold;" />
-									    <h:outputText value="#{receita.fatura.venda.salao.setor.descSetor}" />
-									    
-									    <h:outputText value="Vendedor:" style="font-weight: bold;" />
-									    <h:outputText value="#{receita.fatura.venda.vendedor.nomeVendedor}" />
-									    
-									    
-									</p:panelGrid>
-						        </p:rowExpansion>
 								
 							</p:dataTable>
 
@@ -501,14 +441,14 @@
 		 </div>
 		 
 		 <div class="example-modal">
-            <div class="modal" id="receitaModal" data-backdrop="static">
+            <div class="modal" id="despesaModal" data-backdrop="static">
               <div class="modal-dialog">
                 <div class="modal-content" style="width: 700px;">
                   <h:form id="formModal">
 
 					<div class="box box-info" style="margin-bottom: 0px;">
 		                <div class="box-header with-border">
-		                  <h3 class="box-title">Recebimento Receita</h3>
+		                  <h3 class="box-title">Efetivar Pagamento de Despesa</h3>
 		                </div><!-- /.box-header -->
 		                <!-- form start -->
 		                
@@ -517,86 +457,95 @@
 		                  <div class="box-body">
 		                  				
 		                  				<div class="form-group col-xs-12">
-			                  				<div class="form-group col-md-4">
+			                  				<div class="form-group col-md-3">
 												<label>Nº Fatura</label>
-												<h:inputText id="receitaID" value="0000#{receitaBean.receita.idReceita}" styleClass="form-control" disabled="true" />
+												<h:inputText id="despesaID" value="0000#{despesaBean.despesa.idDespesa}" styleClass="form-control" disabled="true" />
 											</div>
 											
-											<div class="form-group col-md-4">
-												<label>Nº Venda</label>
-												<h:inputText id="vendaID" value="0000#{receitaBean.receita.fatura.venda.idVenda}" styleClass="form-control" disabled="true" />
+											<div class="form-group col-md-9">
+												<label>Beneficiario</label>
+												<h:inputText id="beneficiario"  styleClass="form-control" disabled="true"
+													value="#{despesaBean.despesa.beneficiario.salao.nomeSalao}#{despesaBean.despesa.beneficiario.vendedor.nomeVendedor}" />
 											</div>
 											
-											<div class="form-group col-md-4">
-												<label>Valor Devido</label>
-												<h:inputText id="saldo" value="#{receitaBean.receita.valorReceita}" styleClass="form-control" disabled="true" 
-														style="background-color: #00c0ef; font-size: 20px; font-weight: bolder;" >
-														
-													<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>	
-												</h:inputText>
+										</div>	
+										
+										<div class="form-group col-xs-12">
+											<div class="form-group col-md-3">
+												<label>Categoria</label>
+												<h:inputText id="categoria" value="#{despesaBean.despesa.subCategoria.descricaoSubCategoria}" styleClass="form-control" disabled="true" />
+											</div>
+											
+											<div class="form-group col-md-9">
+												<label>Descrição</label>
+												<h:inputText id="descricao" value="#{despesaBean.despesa.descricaoDespesa}" styleClass="form-control" disabled="true" />
 											</div>
 										</div>	
 										
 										<div class="form-group col-xs-12">
-											<div class="form-group col-md-8">
-												<label>Cliente</label>
-												<h:inputText id="cliente" value="#{receitaBean.receita.fatura.venda.salao.cliente.nomeCliente}" styleClass="form-control" disabled="true" />
+											<div class="form-group col-md-3">
+												<label>Competencia</label>
+												<h:inputText id="competencia" value="#{despesaBean.despesa.dataCompetencia}" styleClass="form-control" disabled="true">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:inputText>
 											</div>
 											
-											<div class="form-group col-md-4">
+											<div class="form-group col-md-3">
 												<label>Vencimento</label>
-												<h:inputText id="vencimento" value="#{receitaBean.receita.dataVencimento}" styleClass="form-control" disabled="true" 
+												<h:inputText id="vencimento" value="#{despesaBean.despesa.dataVencimento}" styleClass="form-control" disabled="true" 
 														style="background-color: #00c0ef; font-size: 20px; font-weight: bolder;" >
-														
 													<f:convertDateTime pattern="dd/MM/yyyy"/>	
 												</h:inputText>
 											</div>
 											
-										</div>
-										
-										<div class="form-group col-xs-12">
-			                  				<div class="form-group col-md-4">
-												<label>Categoria</label>
-												<h:inputText id="categoria" value="#{receitaBean.receita.subCategoria.descricaoSubCategoria}" styleClass="form-control" disabled="true" />
-											</div>
-											
 											<div class="form-group col-md-4">
-												<label>Centro de Custo</label>
-												<h:inputText id="centroCusto" value="#{receitaBean.receita.centroCusto.descricaoCentroCusto}" styleClass="form-control" disabled="true" />
-											</div>
-											
-											<div class="form-group col-md-4">
-												<label>Competencia</label>
-												<h:inputText id="competencia" value="#{receitaBean.receita.dataCompetencia}" styleClass="form-control" disabled="true">
-													<f:convertDateTime pattern="dd/MM/yyyy" />
+												<label>Valor</label>
+												<h:inputText id="saldo" value="#{despesaBean.despesa.valorDespesa}" styleClass="form-control" disabled="true" 
+														style="background-color: #00c0ef; font-size: 20px; font-weight: bolder;" >
+													<f:convertNumber pattern="#,##0.00" currencySymbol="R$"/>	
 												</h:inputText>
 											</div>
+											
 										</div>	
 										
 										<p:separator />
 										
 										<div class="form-group col-xs-12">
 			                  				<div class="form-group col-md-2">
-												<h:selectBooleanCheckbox styleClass="icheckbox_flat-green" value="#{receitaBean.recebido}" />
-												<label>Recebido</label>
+												<h:selectBooleanCheckbox styleClass="icheckbox_flat-green" value="#{despesaBean.recebido}" />
+												<label>Pago</label>
 											</div>
 											
 											<div class="form-group col-md-3">
-												<label>Valor Recebido</label>
-												<p:inputNumber id="desconto" value="#{receitaBean.reciboReceita.valorRecebido}" symbol="R$ " 
-																	decimalSeparator="," thousandSeparator="." size="10">
-													<f:ajax event="valueChange" execute="@this" listener="#{receitaBean.verificarValorRecebido}" render="formModal" />																
-												</p:inputNumber>
+												<label>Valor Pago</label>
+												<h:inputText id="desconto" styleClass="form-control" value="#{despesaBean.reciboDespesa.valorPago}" onfocus="maskMoney(this)" 
+													converter="moedaConverter">
+													<f:ajax event="blur" execute="@this" listener="#{despesaBean.verificarValorPago}" render="formModal" />
+												</h:inputText>
+												
 											</div>
 											
 											<div class="form-group col-md-4">
-												<label>Data de Recebimento</label>
-												<p:calendar id="datetime" value="#{receitaBean.reciboReceita.dataRecebimento}" pattern="dd/MM/yyyy"
+												<label>Data de Pagamento</label>
+												<p:calendar id="datetime" value="#{despesaBean.reciboDespesa.dataRecebimento}" pattern="dd/MM/yyyy"
 													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data!" size="15"/>
 											</div>
 										</div>	
 										
-										<h:outputLabel id="mensagem" value="*#{receitaBean.mensagem}" rendered="#{receitaBean.renderedMensagem}" />
+										<div class="form-group col-xs-12">
+			                  				<div class="col-md-12">
+			                  					<h:outputLabel id="mensagem" value="*#{despesaBean.mensagem}" rendered="#{despesaBean.renderedMensagem}" />
+											</div>
+											
+											<div class="col-md-12">
+												<h:panelGroup rendered="#{despesaBean.renderedMensagem}">
+											        <p:selectOneButton value="#{despesaBean.optionDesconto}" >
+											            <f:selectItem itemLabel="Gerar Nova Despesa" itemValue="1" />
+											            <f:selectItem itemLabel="Aplicar Desconto" itemValue="2" />
+											        </p:selectOneButton>
+										        </h:panelGroup>
+											</div>
+										</div>	
 										
 							</div><!-- /.box-body -->
 		
@@ -604,10 +553,10 @@
 		              
 	              
                   <div class="modal-footer">
-                    <p:commandButton value="Salvar Recebimento" action="#{receitaBean.salvarRecebimento}"
+                    <p:commandButton value="Salvar Pagamento" action="#{despesaBean.registrarPagamento}"
                     				onclick="$('#loadModal').modal('show');" styleClass="btn btn-success pull-right" icon="fa fa-save"/>
                     				
-                    <p:commandButton value="Cancelar" onclick="$('#receitaModal').modal('hide');" styleClass="btn btn-default pull-right" icon="fa fa-undo"/>
+                    <p:commandButton value="Cancelar" onclick="$('#despesaModal').modal('hide');" styleClass="btn btn-default pull-right" icon="fa fa-undo"/>
                     
                   </div>
 
@@ -618,101 +567,6 @@
           </div>
           
           
-          <div class="example-modal">
-            <div class="modal" id="editarReceitaModal" data-backdrop="static">
-              <div class="modal-dialog">
-                <div class="modal-content" style="width: 700px;">
-                  <h:form id="formEditModal">
-
-					<div class="box box-info" style="margin-bottom: 0px;">
-		                <div class="box-header with-border">
-		                  <h3 class="box-title">Editar Receita</h3>
-		                </div><!-- /.box-header -->
-		                <!-- form start -->
-		                
-		                	<p:messages id="modalMSG" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
-
-		                  <div class="box-body">
-		                  				
-		                  				<div class="form-group col-xs-12">
-			                  				<div class="form-group col-md-4">
-												<label>Nº Fatura</label>
-												<h:inputText id="receitaID" value="0000#{receitaBean.receita.idReceita}" styleClass="form-control" disabled="true" />
-											</div>
-											
-											<div class="form-group col-md-4">
-												<label>Nº Venda</label>
-												<h:inputText id="vendaID" value="0000#{receitaBean.receita.fatura.venda.idVenda}" styleClass="form-control" disabled="true" />
-											</div>
-											
-											<div class="form-group col-md-3">
-												<label>Valor</label>
-												<p:inputNumber id="valor" value="#{receitaBean.receita.valorReceita}" symbol="R$ " 
-																	decimalSeparator="," thousandSeparator="." size="15" disabled="#{receitaBean.permissaoEditar}" />
-											</div>
-										</div>	
-										
-										<div class="form-group col-xs-12">
-											<div class="form-group col-md-8">
-												<label>Cliente</label>
-												<h:inputText id="cliente" value="#{receitaBean.receita.fatura.venda.salao.cliente.nomeCliente}" styleClass="form-control" disabled="true" />
-											</div>
-											
-											<div class="form-group col-md-4">
-												<label>Data de Vencimento</label>
-												<p:calendar id="vencimento" value="#{receitaBean.receita.dataVencimento}" pattern="dd/MM/yyyy" mask="99/99/9999" locale="pt_BR" 
-													timeZone="GMT-3" required="true" requiredMessage="Informe a data!" size="15" disabled="#{receitaBean.permissaoEditar}" />
-											</div>
-										</div>
-										
-										<div class="form-group col-xs-12">
-			                  				<div class="form-group col-md-8">
-												<label>Descrição</label>
-												<h:inputText id="descr" value="#{receitaBean.receita.descricaoReceita}" styleClass="form-control"/>
-											</div>
-											
-											<div class="form-group col-md-4">
-												<label>Data de Competencia</label>
-												<p:calendar id="competencia" value="#{receitaBean.receita.dataCompetencia}" pattern="dd/MM/yyyy"
-													mask="99/99/9999" locale="pt_BR" timeZone="GMT-3" required="true" requiredMessage="Informe a data!" size="15" disabled="#{receitaBean.permissaoEditar}" />
-											</div>
-										</div>	
-										
-										<div class="form-group col-xs-12">
-			                  				<div class="form-group col-md-4">
-												<label>Sub-categoria > Categoria</label>
-												<h:selectOneMenu id="categoria" value="#{receitaBean.receita.subCategoria}" styleClass="form-control">
-													<f:selectItems value="#{receitaBean.listaCategoria}" var="categ" 
-																	itemLabel="#{categ.descricaoSubCategoria} > #{categ.categoria.descricaoCategoria}" itemValue="#{categ}"/>
-												</h:selectOneMenu>
-											</div>
-											
-											<div class="form-group col-md-4">
-												<label>Centro de Custo</label>
-												<h:selectOneMenu id="centroCusto" value="#{receitaBean.receita.centroCusto}" styleClass="form-control">
-													<f:selectItems value="#{receitaBean.listaCentroCusto}" var="custo" itemLabel="#{custo.descricaoCentroCusto}" itemValue="#{custo}"/>
-												</h:selectOneMenu>
-											</div>
-											
-										</div>
-							</div><!-- /.box-body -->
-		
-		              </div>
-		              
-	              
-                  <div class="modal-footer">
-                    <p:commandButton value="Salvar Alterações" action="#{receitaBean.editarReceita}"
-                    				onclick="$('#loadModal').modal('show');" styleClass="btn bg-maroon pull-right" icon="fa fa-save"/>
-                    				
-                    <p:commandButton value="Cancelar" onclick="$('#editarReceitaModal').modal('hide');" styleClass="btn btn-default pull-right" icon="fa fa-undo"/>
-                    
-                  </div>
-
-                  </h:form>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-          </div>
 
         </section><!-- /.content -->
         
@@ -794,6 +648,8 @@
     <script src="../../../../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="../../../../dist/js/app.min.js" type="text/javascript"></script>
+    
+    <script src="../../../../dist/js/maskMoney.js" type="text/javascript"></script>
 
 </h:body>
 </html>

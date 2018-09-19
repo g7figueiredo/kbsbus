@@ -3,6 +3,7 @@ package br.com.kebase.comercial.vendedor.enderecoVendedor;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,12 +23,12 @@ public class EnderecoVendedor implements Serializable{
 	private static final long serialVersionUID = -1308624072415092900L;
 
 	@Id
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name="id_vendedor")
 	private Vendedor vendedor;
 	
 	@Id
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name="id_endereco")
 	private Endereco endereco;
 	

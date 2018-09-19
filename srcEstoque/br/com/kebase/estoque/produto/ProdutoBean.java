@@ -40,6 +40,7 @@ public class ProdutoBean implements Serializable{
 		Produto p = (Produto) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("produto");
 		if(null != p) {
 			this.produto = p;
+			FacesContext.getCurrentInstance().getExternalContext().getFlash().remove("produto");
 		}
 	}
 	

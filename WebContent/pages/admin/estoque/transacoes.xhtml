@@ -7,7 +7,7 @@
       
 <h:head>
     <meta charset="UTF-8" />
-    <title>Kébase | Admin</title>
+    <title>Business Admin</title>
     
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
@@ -28,23 +28,23 @@
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
-    <link href="../../../dist/css/skins/skin-red-light.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../../dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
 
 </h:head>
 
 
-<h:body class="skin-red-light sidebar-mini">
+<h:body class="skin-red sidebar-mini">
     <div class="wrapper">
 
       <!-- Main Header -->
       <header class="main-header">
 
         <!-- Logo -->
-       <a href="index2.html" class="logo">
+        <a href="index2.html" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>K</b>P</span>
+          <span class="logo-mini"><b>b</b>AD</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>Kébase</b>ADM</span>
+          <span class="logo-lg"><b>business</b>Admin</span>
         </a>
 
         <!-- Header Navbar -->
@@ -167,16 +167,16 @@
                 <!-- Menu Toggle Button -->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
-                  <img src="../../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image" />
+                  <img src="../../../images/#{securityBean.usuario.cpf}" class="user-image" alt="User Image" />
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs">#{securityBean.usuario.nome}</span>
+                  <span class="hidden-xs">#{securityBean.usuario.nome}  #{securityBean.usuario.sobrenome}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
-                    <img src="../../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                    <img src="../../../images/#{securityBean.usuario.cpf}" class="img-circle" alt="User Image" />
                     <p>
-                      #{securityBean.usuario.nome} - #{securityBean.usuario.funcao}
+                      #{securityBean.usuario.nome}  #{securityBean.usuario.sobrenome}
                       <small>Cadastrado em 2017</small>
                     </p>
                   </li>
@@ -231,10 +231,10 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="../../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+              <img src="../../../images/#{securityBean.usuario.cpf}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-              <p>#{securityBean.usuario.nome}</p>
+              <p>#{securityBean.usuario.nome}  #{securityBean.usuario.sobrenome}</p>
               <!-- Status -->
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -257,18 +257,38 @@
             
             <!-- Optionally, you can add icons to the links -->
             
-            <li><a href="home.xhtml"><i class="fa fa-tachometer"></i> <span>Home</span></a></li>
+            <li><a href="home.xhtml"><i class="fa fa-tachometer" /> <span>Home</span></a></li>
             
-			<li class="treeview active">
+            <li class="treeview">
+              <a href="#"><i class="fa fa-briefcase" /> <span>Produto</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+              	<li><a href="produto.xhtml"><i class="fa fa-cube" />Cadastro de Produto</a></li>
+                <li><a href="listaProduto.xhtml"><i class="fa fa-cubes" />Lista de Produtos</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-file-text-o" /> <span>Pedido de Compra</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+              	<li><a href="pedidoCompra.xhtml"><i class="fa fa-file-text-o" />Pedido de Compra</a></li>
+                <li><a href="listaPedido.xhtml"><i class="fa fa-list-alt" />Lista de Pedidos</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview active">
               <a href="#"><i class="fa fa-list" /> <span>Estoque</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="estoque.xhtml"><i class="fa fa-list-ol" /> Estoque</a></li>
+                <li><a href="estoque.xhtml"><i class="fa fa-list-ol" />Gerenciar Estoque</a></li>
                 <li><a href="adicionarLote.xhtml"><i class="fa fa-arrow-right" />Adicionar Lote</a></li>
-                <li><a href="pedidoCompra.xhtml"><i class="fa fa-file-text-o" />Pedido de Compra</a></li>
-                <li><a href="listaPedido.xhtml"><i class="fa fa-list-alt" />Lista de Pedidos</a></li>
                 <li class="active"><a href="transacoes.xhtml"><i class="fa fa-exchange" />Histórico de Transações</a></li>
-                <li><a href="produto.xhtml"><i class="fa fa-cube" />Cadastro de Produto</a></li>
-                <li><a href="listaProduto.xhtml"><i class="fa fa-cubes" />Lista de Produtos</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-users" /> <span>Fornecedores</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="setor.xhtml"><i class="fa fa-sitemap" />Gerenciar Fornecedores</a></li>
+                <li><a href="listaSetor.xhtml"><i class="fa fa-flag" />Adicionar Fornecedor</a></li>
               </ul>
             </li>
             
@@ -367,24 +387,16 @@
 								value="#{estoqueBean.listaTransacoes}"
 								selection="#{estoqueBean.transacaoSelecionada}" rowKey="#{item.idTransacao}" rows="30" paginator="true"
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
+								rowsPerPageTemplate="30, 60, 100" selectionMode="single" sortBy="#{item.dataHoraTransacao}" sortOrder="descending">
 
-								<p:column headerText="#ID" style="width:70px;text-align:center">
+								<p:column headerText="#ID" style="width:70px;text-align:center" sortBy="#{item.idTransacao}">
 									<h:outputText value="000#{item.idTransacao}" />
 								</p:column>
 								
-								<p:column headerText="Data/Hora" width="15%">
+								<p:column headerText="Data/Hora" width="15%" sortBy="#{item.dataHoraTransacao}">
 									<h:outputText value="#{item.dataHoraTransacao}">
 										<f:convertDateTime pattern="dd/MM/yyyy/HH:mm:ss" />
 									</h:outputText>
-								</p:column>
-								
-								<p:column headerText="# ID Pedido" style="width:70px;text-align:center">
-									<h:outputText value="#{item.pedidoCompra.idPedido}" />
-								</p:column>
-								
-								<p:column headerText="#ID Venda" style="width:70px;text-align:center">
-									<h:outputText value="#{item.venda.idVenda}" />
 								</p:column>
 										
 								<p:column headerText="Produto" width="40%">
@@ -395,8 +407,8 @@
 									<h:outputText value="#{item.produto.linhaProduto.descLinha}" />
 								</p:column>
 								
-								<p:column headerText="Tipo Trans." style="width:70px;text-align:center">
-									<h:outputText value="#{item.tipoTransacao}" />
+								<p:column headerText="Tipo Trans." style="width:10%;text-align:center" sortBy="#{item.tipoTransacao}">
+									<h:graphicImage library="imagens" name="#{item.tipoTransacao}.png" />
 								</p:column>
 								
 								<p:column headerText="Qtd." style="width:70px;text-align:center">

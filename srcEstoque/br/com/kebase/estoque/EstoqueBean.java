@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
 
-import br.com.kebase.comercial.venda.Venda;
 import br.com.kebase.estoque.pedidoCompra.PedidoCompra;
 import br.com.kebase.estoque.pedidoCompra.itemCompra.ItemCompra;
 
@@ -47,6 +47,11 @@ public class EstoqueBean implements Serializable{
 	
 	public EstoqueBean() {
 		verificarPedidoSessao();
+	}
+	
+	@PostConstruct
+	public void init() {
+		carregarListaTransacoes();
 	}
 	
 	public String registrarLote() {
@@ -130,9 +135,6 @@ public class EstoqueBean implements Serializable{
 	}
 
 	public List<Estoque> getListaTransacoes() {
-		EstoqueRN estoqueRN = new EstoqueRN();
-		this.listaTransacoes = estoqueRN.buscarTodos();
-		
 		return this.listaTransacoes;
 	}
 
@@ -142,6 +144,11 @@ public class EstoqueBean implements Serializable{
 
 	public void setTransacaoSelecionada(Estoque transacaoSelecionada) {
 		this.transacaoSelecionada = transacaoSelecionada;
+	}
+	
+	private void carregarListaTransacoes() {
+		EstoqueRN estoqueRN = new EstoqueRN();
+		this.listaTransacoes = estoqueRN.buscarTodos();
 	}
 
 }
