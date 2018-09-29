@@ -351,8 +351,8 @@
 			</div><!-- /.box -->
 			
 			<div class="box-body">
-		     		<p:commandButton id="efetivar" icon="fa fa-dollar" styleClass="btn btn-success"  value="Efetivar" actionListener="#{despesaBean.verificaSelecao}" 
-		     						onclick="$('#despesaModal').modal('show');" />
+		     		<p:commandButton id="cupom" icon="fa fa-file-pdf-o" styleClass="btn btn-success"  value="Gerar Cupom" actionListener="#{vendaBean.verificaSelecao}"
+		     				onclick="$('#loadModal').modal('show'); this.form.target='_blank'" ajax="false"/>
 		     		
 		     		<p:commandButton id="devolver" icon="fa fa-undo" styleClass="btn bg-orange"  value="Devolver Pagamento" actionListener="#{despesaBean.verificaSelecao}" >
 		     			<p:confirm header="Atenção" message="Deseja devolver o pagamento 000#{despesaBean.contaSelecionada.idDespesa}?" icon="ui-icon-alert" />
@@ -383,17 +383,15 @@
                   <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                   	<div class="row">
                   		<div class="col-sm-12">
-							<p:contextMenu for="table">
-								<p:menuitem value="Alterar Venda" id="mitem1" icon="fa fa-edit" action="#{eVendaBean.abrirVenda}" />
-								<p:menuitem value="Excluir Venda" id="mitem2" icon="fa fa-close" />
-							</p:contextMenu>
-
 							<p:dataTable id="table" var="item"
 								value="#{vendaBean.listaVenda}"
 								selection="#{eVendaBean.vendaSelecionada}"
 								rowKey="#{item.idVenda}" rows="30" paginator="true"
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
+								
+								<p:ajax event="rowSelect" listener="#{vendaBean.onVendaSelect}" process="table"/>
+        						<p:ajax event="rowUnselect" listener="#{vendaBean.onVendaUnselect}" process="table"/>
 								
 								<p:column headerText="#ID" style="width:70px;text-align:center">
 									<h:outputText value="000#{item.idVenda}" />

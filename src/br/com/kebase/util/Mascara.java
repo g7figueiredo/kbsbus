@@ -1,5 +1,6 @@
 package br.com.kebase.util;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -90,6 +91,11 @@ public class Mascara {
 		MaskFormatter mk = new MaskFormatter("(##) ####-####");
 		mk.setValueContainsLiteralCharacters(false);
 		return mk.valueToString(telefone);
+	}
+	
+	public static String moedaDoubleToString(double value) {
+		DecimalFormat formato = new DecimalFormat("#,##0.00");
+		return formato.format(value);
 	}
 	
 	

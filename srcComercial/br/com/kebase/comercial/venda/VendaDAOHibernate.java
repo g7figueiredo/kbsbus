@@ -37,7 +37,7 @@ public class VendaDAOHibernate implements VendaDAO {
 	public Venda buscarPorId(long id) {
 		Criteria criteria = this.session.createCriteria(Venda.class);
 		criteria.add(Restrictions.eq("idVenda", id));
-//		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		
 		return (Venda) criteria.uniqueResult();
 	}
@@ -45,7 +45,7 @@ public class VendaDAOHibernate implements VendaDAO {
 	@Override
 	public List<Venda> buscarTodos() {
 		Criteria criteria = this.session.createCriteria(Venda.class);
-//		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		
 		@SuppressWarnings("unchecked")
 		List<Venda> results = criteria.list();

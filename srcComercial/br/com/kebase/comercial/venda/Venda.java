@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import br.com.kebase.comercial.cliente.salao.Salao;
 import br.com.kebase.comercial.venda.itemVenda.ItemVenda;
@@ -38,11 +42,13 @@ public class Venda implements Serializable{
 	@JoinColumn(name="id_salao")
 	private Salao salao;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@JoinColumn(name="id_venda")
 	private List<Faturamento> listaFatura;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@JoinColumn(name="id_venda")
 	private List<ItemVenda> carrinho;
 	

@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -21,8 +22,12 @@ import org.primefaces.event.UnselectEvent;
 
 import br.com.kebase.comercial.cliente.salao.Salao;
 import br.com.kebase.comercial.cliente.salao.SalaoRN;
+import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalao;
+import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalaoRN;
+import br.com.kebase.comercial.factory.RelatorioFactory;
 import br.com.kebase.comercial.venda.itemVenda.ItemVenda;
 import br.com.kebase.comercial.venda.itemVenda.ItemVendaRN;
+import br.com.kebase.comercial.venda.model.CupomVenda;
 import br.com.kebase.comercial.vendedor.Vendedor;
 import br.com.kebase.estoque.Estoque;
 import br.com.kebase.estoque.EstoqueRN;
@@ -32,6 +37,7 @@ import br.com.kebase.estoque.produto.ProdutoRN;
 import br.com.kebase.financeiro.receita.faturamento.Faturamento;
 import br.com.kebase.financeiro.receita.faturamento.FaturamentoRN;
 import br.com.kebase.util.CalcularData;
+import br.com.kebase.util.FacesUtil;
 
 @ManagedBean(name="vendaBean")
 @ViewScoped
@@ -85,6 +91,29 @@ public class VendaBean implements Serializable {
 		this.faturaSelecionada = (Faturamento) event.getObject();
 		this.faturamento = this.faturaSelecionada;
     }
+	
+	public void onVendaSelect(SelectEvent event) {
+		this.venda = (Venda) event.getObject();
+	}
+	
+	public void onVendaUnselect(SelectEvent event) {
+		this.venda = new Venda();
+	}
+	
+	public void verificaSelecao(ActionEvent event) {
+		String from = event.getComponent().getId();
+		try{
+			if(null == this.venda || this.venda.getIdVenda() == 0) {
+				FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Selecione uma venda!");
+			} else if(from.equals("cupom")){
+				gerarCupomVenda();
+			} 
+		}catch (Exception e) {
+			e.printStackTrace();
+			LOG.info(e);
+		}
+		
+	}
 	
 	private void limpar() {
 		
@@ -211,9 +240,10 @@ public class VendaBean implements Serializable {
 					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Faturas geradas e venda regitrada com sucesso!", "Ok!"));
 					context.getExternalContext().getFlash().setKeepMessages(true);
 					
-					this.vendaPrint = new VendaPrint(this.venda, this.carrinho, this.listaFaturas);
-					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-					session.setAttribute("PEDIDO_PRINT", this.vendaPrint);
+					gerarCupomVenda();
+					//this.vendaPrint = new VendaPrint(this.venda, this.carrinho, this.listaFaturas);
+					//HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+					//session.setAttribute("PEDIDO_PRINT", this.vendaPrint);
 					
 					limpar();
 				}else {
@@ -235,7 +265,19 @@ public class VendaBean implements Serializable {
 			PrimeFaces.current().executeScript("$('#faturaModal').modal('hide');");
 		}
 		
-		return "pedido-print";
+		return "";
+	}
+	
+	private void gerarCupomVenda() {
+		EnderecoSalao es = new EnderecoSalaoRN().buscarPorId(this.venda.getSalao().getIdSalao());
+		CupomVenda cupomVenda = new CupomVenda(this.venda, es);
+		List<br.com.kebase.comercial.venda.model.ItemVenda> listaItens = new ArrayList<>();
+		
+		for(ItemVenda item : this.venda.getCarrinho()) {
+			listaItens.add(new br.com.kebase.comercial.venda.model.ItemVenda(item));
+		}
+		
+		new RelatorioFactory().gerarRelatorioVenda(cupomVenda, listaItens);
 	}
 	
 	private List<Faturamento> gerarFaturamento(){
