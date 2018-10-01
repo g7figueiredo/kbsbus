@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.kebase.comercial.venda.model.CupomVenda;
@@ -24,19 +23,18 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 public class RelatorioFactory {
 	
-	private FacesContext context;
 	private InputStream stream;
 	private ByteArrayOutputStream outputStream;
 	private HttpServletResponse response;
 	
-	public RelatorioFactory() {
-		this.context = FacesContext.getCurrentInstance();
-		this.response = (HttpServletResponse) context.getExternalContext().getResponse();
+	public RelatorioFactory(HttpServletResponse resp) {
+		this.response = resp;
 	}
 
 	public void gerarRelatorioVenda(CupomVenda venda, List<ItemVenda> listItems) {
 		this.stream = this.getClass().getResourceAsStream("/br/com/kebase/comercial/venda/jasper/Invoice.jasper");
 		this.outputStream = new ByteArrayOutputStream();
+		
 		
 		try {
 	        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(listItems);
@@ -57,7 +55,7 @@ public class RelatorioFactory {
 	        this.response.getOutputStream().flush();
 	        this.response.getOutputStream().close();
 	        
-	        this.context.responseComplete();
+//	        this.context.responseComplete();
 
 	        System.out.println("File Generated");
 	        

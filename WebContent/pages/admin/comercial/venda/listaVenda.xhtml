@@ -352,7 +352,7 @@
 			
 			<div class="box-body">
 		     		<p:commandButton id="cupom" icon="fa fa-file-pdf-o" styleClass="btn btn-success"  value="Gerar Cupom" actionListener="#{vendaBean.verificaSelecao}"
-		     				onclick="$('#loadModal').modal('show'); this.form.target='_blank'" ajax="false"/>
+		     				onclick="this.form.target='_blank'" ajax="false" />
 		     		
 		     		<p:commandButton id="devolver" icon="fa fa-undo" styleClass="btn bg-orange"  value="Devolver Pagamento" actionListener="#{despesaBean.verificaSelecao}" >
 		     			<p:confirm header="Atenção" message="Deseja devolver o pagamento 000#{despesaBean.contaSelecionada.idDespesa}?" icon="ui-icon-alert" />

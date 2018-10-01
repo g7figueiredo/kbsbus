@@ -1,5 +1,6 @@
 package br.com.kebase.comercial.venda;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,6 +12,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
@@ -24,7 +26,6 @@ import br.com.kebase.comercial.cliente.salao.Salao;
 import br.com.kebase.comercial.cliente.salao.SalaoRN;
 import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalao;
 import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalaoRN;
-import br.com.kebase.comercial.factory.RelatorioFactory;
 import br.com.kebase.comercial.venda.itemVenda.ItemVenda;
 import br.com.kebase.comercial.venda.itemVenda.ItemVendaRN;
 import br.com.kebase.comercial.venda.model.CupomVenda;
@@ -72,6 +73,8 @@ public class VendaBean implements Serializable {
 	private Date maxDate = new Date();
 	private int tipoDesconto = 0;
 	
+	private HttpSession session;
+	
 	public VendaBean() {
 		this.venda.setDataVenda(new Date());
 		this.listaCliente = new SalaoRN().buscarTodos();
@@ -104,8 +107,10 @@ public class VendaBean implements Serializable {
 		String from = event.getComponent().getId();
 		try{
 			if(null == this.venda || this.venda.getIdVenda() == 0) {
+				PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
 				FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Selecione uma venda!");
 			} else if(from.equals("cupom")){
+				PrimeFaces.current().executeScript("this.form.target='_blank'");
 				gerarCupomVenda();
 			} 
 		}catch (Exception e) {
@@ -196,6 +201,8 @@ public class VendaBean implements Serializable {
 						registrarTransacaoEstoque(this.venda, iVenda);
 					}
 					
+					this.venda.setCarrinho(this.carrinho);
+					
 					this.listaFaturas = gerarFaturamento();
 					
 					PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
@@ -240,12 +247,10 @@ public class VendaBean implements Serializable {
 					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Faturas geradas e venda regitrada com sucesso!", "Ok!"));
 					context.getExternalContext().getFlash().setKeepMessages(true);
 					
-					gerarCupomVenda();
 					//this.vendaPrint = new VendaPrint(this.venda, this.carrinho, this.listaFaturas);
 					//HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 					//session.setAttribute("PEDIDO_PRINT", this.vendaPrint);
 					
-					limpar();
 				}else {
 					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhuma fatura a gerar!", "Ok!"));
 					context.getExternalContext().getFlash().setKeepMessages(true);
@@ -277,8 +282,24 @@ public class VendaBean implements Serializable {
 			listaItens.add(new br.com.kebase.comercial.venda.model.ItemVenda(item));
 		}
 		
-		new RelatorioFactory().gerarRelatorioVenda(cupomVenda, listaItens);
+		this.session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		this.session.setAttribute("cupomVenda", cupomVenda);
+		this.session.setAttribute("listItems", listaItens);
+		
+		redirect("/relatorio?filtro=cupom");
 	}
+	
+	protected void redirect(String page){
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext ec = ctx.getExternalContext();
+        
+        try {
+            ec.redirect(ec.getRequestContextPath() + page);
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage()));
+        }
+        
+    }
 	
 	private List<Faturamento> gerarFaturamento(){
 		List<Faturamento> listaFaturas = new ArrayList<Faturamento>();

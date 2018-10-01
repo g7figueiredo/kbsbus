@@ -65,6 +65,6 @@ public class CupomVendaFactory {
 	            		+ "\n O atraso de pagamento das parcelas implicam acréscimo de juros diário de 0,5% + multa de 7%.";
 	            venda.setObservacoes(observacoes);
 	            
-	            new RelatorioFactory().gerarRelatorioVenda(venda, listItems);
+//	            new RelatorioFactory().gerarRelatorioVenda(venda, listItems);
 	}
 }
