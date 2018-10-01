@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.factory;
+package br.com.kebase.relatorios.factory;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import br.com.kebase.comercial.venda.model.CupomVenda;
-import br.com.kebase.comercial.venda.model.ItemVenda;
+import br.com.kebase.relatorios.comercial.venda.model.CupomVenda;
+import br.com.kebase.relatorios.comercial.venda.model.ItemVenda;
 
 @WebServlet(name="RelatorioServlet", urlPatterns= {"/relatorio"})
 public class RelatorioServlet extends HttpServlet{

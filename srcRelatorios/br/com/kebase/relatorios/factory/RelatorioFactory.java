@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.factory;
+package br.com.kebase.relatorios.factory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -10,8 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.kebase.comercial.venda.model.CupomVenda;
-import br.com.kebase.comercial.venda.model.ItemVenda;
+import br.com.kebase.relatorios.comercial.venda.model.CupomVenda;
+import br.com.kebase.relatorios.comercial.venda.model.ItemVenda;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -32,7 +32,7 @@ public class RelatorioFactory {
 	}
 
 	public void gerarRelatorioVenda(CupomVenda venda, List<ItemVenda> listItems) {
-		this.stream = this.getClass().getResourceAsStream("/br/com/kebase/comercial/venda/jasper/Invoice.jasper");
+		this.stream = this.getClass().getResourceAsStream("/br/com/kebase/relatorios/comercial/venda/jasper/Invoice.jasper");
 		this.outputStream = new ByteArrayOutputStream();
 		
 		

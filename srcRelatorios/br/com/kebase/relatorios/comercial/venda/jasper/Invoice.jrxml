@@ -98,7 +98,7 @@
 		<field name="subTotal" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
-	<parameter name="venda" class="br.com.kebase.comercial.venda.model.CupomVenda"/>
+	<parameter name="venda" class="br.com.kebase.relatorios.comercial.venda.model.CupomVenda"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>

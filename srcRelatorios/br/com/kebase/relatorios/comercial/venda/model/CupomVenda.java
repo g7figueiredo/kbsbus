@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.venda.model;
+package br.com.kebase.relatorios.comercial.venda.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

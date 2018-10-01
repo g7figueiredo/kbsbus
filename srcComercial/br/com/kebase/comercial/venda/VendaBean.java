@@ -28,7 +28,6 @@ import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalao;
 import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalaoRN;
 import br.com.kebase.comercial.venda.itemVenda.ItemVenda;
 import br.com.kebase.comercial.venda.itemVenda.ItemVendaRN;
-import br.com.kebase.comercial.venda.model.CupomVenda;
 import br.com.kebase.comercial.vendedor.Vendedor;
 import br.com.kebase.estoque.Estoque;
 import br.com.kebase.estoque.EstoqueRN;
@@ -37,6 +36,7 @@ import br.com.kebase.estoque.produto.Produto;
 import br.com.kebase.estoque.produto.ProdutoRN;
 import br.com.kebase.financeiro.receita.faturamento.Faturamento;
 import br.com.kebase.financeiro.receita.faturamento.FaturamentoRN;
+import br.com.kebase.relatorios.comercial.venda.model.CupomVenda;
 import br.com.kebase.util.CalcularData;
 import br.com.kebase.util.FacesUtil;
 
@@ -276,10 +276,10 @@ public class VendaBean implements Serializable {
 	private void gerarCupomVenda() {
 		EnderecoSalao es = new EnderecoSalaoRN().buscarPorId(this.venda.getSalao().getIdSalao());
 		CupomVenda cupomVenda = new CupomVenda(this.venda, es);
-		List<br.com.kebase.comercial.venda.model.ItemVenda> listaItens = new ArrayList<>();
+		List<br.com.kebase.relatorios.comercial.venda.model.ItemVenda> listaItens = new ArrayList<>();
 		
 		for(ItemVenda item : this.venda.getCarrinho()) {
-			listaItens.add(new br.com.kebase.comercial.venda.model.ItemVenda(item));
+			listaItens.add(new br.com.kebase.relatorios.comercial.venda.model.ItemVenda(item));
 		}
 		
 		this.session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
