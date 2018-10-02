@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.setor;
+package br.com.kebase.comercial.regiao.setor;
 
 import java.util.List;
 

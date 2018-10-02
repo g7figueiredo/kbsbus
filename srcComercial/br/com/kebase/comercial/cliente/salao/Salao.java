@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.kebase.comercial.cliente.Cliente;
-import br.com.kebase.comercial.setor.Setor;
+import br.com.kebase.comercial.regiao.setor.Setor;
 import br.com.kebase.financeiro.despesa.beneficiario.Beneficiario;
 
 @Entity

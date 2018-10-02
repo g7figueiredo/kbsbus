@@ -25,7 +25,7 @@ public class VendedorDAOHibernate implements VendedorDAO {
 	
 	@Override
 	public void editar(Vendedor vendedor) {
-		this.session.update(vendedor);
+		this.session.merge(vendedor);
 	}
 	
 	@Override

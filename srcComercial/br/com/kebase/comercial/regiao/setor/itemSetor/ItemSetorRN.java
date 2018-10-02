@@ -1,7 +1,8 @@
-package br.com.kebase.comercial.setor.itemSetor;
+package br.com.kebase.comercial.regiao.setor.itemSetor;
 
 import java.util.List;
 
+import br.com.kebase.comercial.regiao.setor.Setor;
 import br.com.kebase.dbUtil.DAOFactory;
 
 public class ItemSetorRN {
@@ -30,6 +31,10 @@ public class ItemSetorRN {
 	
 	public List<ItemSetor> buscarTodos(){
 		return this.itemSetorDao.buscarTodos();
+	}
+	
+	public List<ItemSetor> buscarTodosPorSetor(Setor setor){
+		return this.itemSetorDao.buscarTodosPorSetor(setor);
 	}
 	
 	public ItemSetor buscarPorIdEndereco(long idEndereco){

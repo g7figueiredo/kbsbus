@@ -26,7 +26,7 @@ public class Vendedor implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id_vendedor", nullable=false)
-	private Long idVendedor;
+	private long idVendedor;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_beneficiario", nullable=false)
@@ -200,7 +200,7 @@ public class Vendedor implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Vendedor [" + (idVendedor != null ? "idVendedor=" + idVendedor + ", " : "")
+		return "Vendedor [idVendedor=" + idVendedor + ", "
 				+ (nomeVendedor != null ? "nomeVendedor=" + nomeVendedor + ", " : "")
 				+ (numCpf != null ? "numCpf=" + numCpf + ", " : "") + (numRg != null ? "numRg=" + numRg + ", " : "")
 				+ (dataNascimento != null ? "dataNascimento=" + dataNascimento + ", " : "")
@@ -216,10 +216,11 @@ public class Vendedor implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((beneficiario == null) ? 0 : beneficiario.hashCode());
 		result = prime * result + ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
 		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
 		result = prime * result + ((endEmail == null) ? 0 : endEmail.hashCode());
-		result = prime * result + ((idVendedor == null) ? 0 : idVendedor.hashCode());
+		result = prime * result + (int) (idVendedor ^ (idVendedor >>> 32));
 		result = prime * result + Arrays.hashCode(imgVendedor);
 		result = prime * result + ((nomeVendedor == null) ? 0 : nomeVendedor.hashCode());
 		result = prime * result + ((numCel1 == null) ? 0 : numCel1.hashCode());
@@ -242,6 +243,13 @@ public class Vendedor implements Serializable{
 			return false;
 		}
 		Vendedor other = (Vendedor) obj;
+		if (beneficiario == null) {
+			if (other.beneficiario != null) {
+				return false;
+			}
+		} else if (!beneficiario.equals(other.beneficiario)) {
+			return false;
+		}
 		if (dataCadastro == null) {
 			if (other.dataCadastro != null) {
 				return false;
@@ -263,11 +271,7 @@ public class Vendedor implements Serializable{
 		} else if (!endEmail.equals(other.endEmail)) {
 			return false;
 		}
-		if (idVendedor == null) {
-			if (other.idVendedor != null) {
-				return false;
-			}
-		} else if (!idVendedor.equals(other.idVendedor)) {
+		if (idVendedor != other.idVendedor) {
 			return false;
 		}
 		if (!Arrays.equals(imgVendedor, other.imgVendedor)) {
@@ -317,5 +321,7 @@ public class Vendedor implements Serializable{
 		}
 		return true;
 	}
+
+	
 	
 }

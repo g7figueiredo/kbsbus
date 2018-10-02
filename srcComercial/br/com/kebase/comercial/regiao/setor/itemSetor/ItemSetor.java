@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.setor.itemSetor;
+package br.com.kebase.comercial.regiao.setor.itemSetor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.kebase.comercial.setor.Setor;
+import br.com.kebase.comercial.regiao.setor.Setor;
 import br.com.kebase.endereco.Endereco;
 
 @Entity

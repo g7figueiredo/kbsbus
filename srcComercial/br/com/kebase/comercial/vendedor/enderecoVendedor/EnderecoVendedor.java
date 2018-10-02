@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,13 +23,16 @@ public class EnderecoVendedor implements Serializable{
 	
 
 	private static final long serialVersionUID = -1308624072415092900L;
-
+	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id_residencia", nullable=false)
+	private long idResidencia;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name="id_vendedor")
 	private Vendedor vendedor;
 	
-	@Id
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.DETACH)
 	@JoinColumn(name="id_endereco")
 	private Endereco endereco;
@@ -50,7 +55,7 @@ public class EnderecoVendedor implements Serializable{
 	public EnderecoVendedor() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public EnderecoVendedor(Vendedor vendedor, Endereco endereco, int numResidencia, String descComplemento,
 			Date dataInicio, Date dataFim, String statusEndereco) {
 		this.vendedor = vendedor;
@@ -70,6 +75,7 @@ public class EnderecoVendedor implements Serializable{
 		result = prime * result + ((dataInicio == null) ? 0 : dataInicio.hashCode());
 		result = prime * result + ((descComplemento == null) ? 0 : descComplemento.hashCode());
 		result = prime * result + ((endereco == null) ? 0 : endereco.hashCode());
+		result = prime * result + (int) (idResidencia ^ (idResidencia >>> 32));
 		result = prime * result + numResidencia;
 		result = prime * result + ((statusEndereco == null) ? 0 : statusEndereco.hashCode());
 		result = prime * result + ((vendedor == null) ? 0 : vendedor.hashCode());
@@ -78,53 +84,89 @@ public class EnderecoVendedor implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof EnderecoVendedor)) {
 			return false;
+		}
 		EnderecoVendedor other = (EnderecoVendedor) obj;
+		
+		if(numResidencia == other.numResidencia && descComplemento == other.descComplemento && endereco.getIdEndereco() == other.endereco.getIdEndereco()) {
+			return true;
+		}
+		
 		if (dataFim == null) {
-			if (other.dataFim != null)
+			if (other.dataFim != null) {
 				return false;
-		} else if (!dataFim.equals(other.dataFim))
+			}
+		} else if (!dataFim.equals(other.dataFim)) {
 			return false;
+		}
 		if (dataInicio == null) {
-			if (other.dataInicio != null)
+			if (other.dataInicio != null) {
 				return false;
-		} else if (!dataInicio.equals(other.dataInicio))
+			}
+		} else if (!dataInicio.equals(other.dataInicio)) {
 			return false;
+		}
 		if (descComplemento == null) {
-			if (other.descComplemento != null)
+			if (other.descComplemento != null) {
 				return false;
-		} else if (!descComplemento.equals(other.descComplemento))
+			}
+		} else if (!descComplemento.equals(other.descComplemento)) {
 			return false;
+		}
 		if (endereco == null) {
-			if (other.endereco != null)
+			if (other.endereco != null) {
 				return false;
-		} else if (!endereco.equals(other.endereco))
+			}
+		} else if (!endereco.equals(other.endereco)) {
 			return false;
-		if (numResidencia != other.numResidencia)
+		}
+		if (idResidencia != other.idResidencia) {
 			return false;
+		}
+		if (numResidencia != other.numResidencia) {
+			return false;
+		}
 		if (statusEndereco == null) {
-			if (other.statusEndereco != null)
+			if (other.statusEndereco != null) {
 				return false;
-		} else if (!statusEndereco.equals(other.statusEndereco))
+			}
+		} else if (!statusEndereco.equals(other.statusEndereco)) {
 			return false;
+		}
 		if (vendedor == null) {
-			if (other.vendedor != null)
+			if (other.vendedor != null) {
 				return false;
-		} else if (!vendedor.equals(other.vendedor))
+			}
+		} else if (!vendedor.equals(other.vendedor)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "EnderecoVendedor [vendedor=" + vendedor + ", endereco=" + endereco + ", numResidencia=" + numResidencia
-				+ ", descComplemento=" + descComplemento + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim
-				+ ", statusEndereco=" + statusEndereco + "]";
+		return "EnderecoVendedor [idResidencia=" + idResidencia + ", "
+				+ (vendedor != null ? "vendedor=" + vendedor + ", " : "")
+				+ (endereco != null ? "endereco=" + endereco + ", " : "") + "numResidencia=" + numResidencia + ", "
+				+ (descComplemento != null ? "descComplemento=" + descComplemento + ", " : "")
+				+ (dataInicio != null ? "dataInicio=" + dataInicio + ", " : "")
+				+ (dataFim != null ? "dataFim=" + dataFim + ", " : "")
+				+ (statusEndereco != null ? "statusEndereco=" + statusEndereco : "") + "]";
+	}
+
+	public long getIdResidencia() {
+		return idResidencia;
+	}
+
+	public void setIdResidencia(long idResidencia) {
+		this.idResidencia = idResidencia;
 	}
 
 	public Vendedor getVendedor() {

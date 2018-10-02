@@ -17,8 +17,9 @@
 		<property name="format_sql">true</property>
         
 <!--         Comercial -->
-        <mapping class="br.com.kebase.comercial.setor.Setor"/>
-        <mapping class="br.com.kebase.comercial.setor.itemSetor.ItemSetor"/>
+		<mapping class="br.com.kebase.comercial.regiao.Regiao"/>
+        <mapping class="br.com.kebase.comercial.regiao.setor.Setor"/>
+        <mapping class="br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetor"/>
         <mapping class="br.com.kebase.comercial.vendedor.Vendedor"/>
         <mapping class="br.com.kebase.comercial.vendedor.enderecoVendedor.EnderecoVendedor"/>
         <mapping class="br.com.kebase.comercial.cliente.Cliente"/>

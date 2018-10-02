@@ -1,4 +1,4 @@
-package br.com.kebase.comercial.setor;
+package br.com.kebase.comercial.regiao.setor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,7 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.kebase.comercial.setor.itemSetor.ItemSetor;
+import br.com.kebase.comercial.regiao.Regiao;
+import br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetor;
 import br.com.kebase.comercial.vendedor.Vendedor;
 
 @Entity
@@ -27,6 +28,10 @@ public class Setor implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id_setor", nullable=false)
 	private int idSetor;
+	
+	@ManyToOne
+	@JoinColumn(name="id_regiao")
+	private Regiao regiao;
 	
 	@ManyToOne
 	@JoinColumn(name="id_vendedor")
@@ -55,9 +60,10 @@ public class Setor implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Setor(int idSetor, Vendedor vendedor, String descSetor, String observacoes, Date dataDistribuicao,
+	public Setor(int idSetor, Regiao regiao, Vendedor vendedor, String descSetor, String observacoes, Date dataDistribuicao,
 			Date dataCancelamento, String statusRegistro) {
 		this.idSetor = idSetor;
+		this.regiao = regiao;
 		this.vendedor = vendedor;
 		this.descSetor = descSetor;
 		this.observacoes = observacoes;
@@ -71,6 +77,18 @@ public class Setor implements Serializable{
 	}
 
 	@Override
+	public String toString() {
+		return "Setor [idSetor=" + idSetor + ", " + (regiao != null ? "regiao=" + regiao + ", " : "")
+				+ (vendedor != null ? "vendedor=" + vendedor + ", " : "")
+				+ (setorItens != null ? "setorItens=" + setorItens + ", " : "")
+				+ (descSetor != null ? "descSetor=" + descSetor + ", " : "")
+				+ (observacoes != null ? "observacoes=" + observacoes + ", " : "")
+				+ (dataDistribuicao != null ? "dataDistribuicao=" + dataDistribuicao + ", " : "")
+				+ (dataCancelamento != null ? "dataCancelamento=" + dataCancelamento + ", " : "")
+				+ (statusRegistro != null ? "statusRegistro=" + statusRegistro : "") + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -79,6 +97,8 @@ public class Setor implements Serializable{
 		result = prime * result + ((descSetor == null) ? 0 : descSetor.hashCode());
 		result = prime * result + idSetor;
 		result = prime * result + ((observacoes == null) ? 0 : observacoes.hashCode());
+		result = prime * result + ((regiao == null) ? 0 : regiao.hashCode());
+		result = prime * result + ((setorItens == null) ? 0 : setorItens.hashCode());
 		result = prime * result + ((statusRegistro == null) ? 0 : statusRegistro.hashCode());
 		result = prime * result + ((vendedor == null) ? 0 : vendedor.hashCode());
 		return result;
@@ -86,53 +106,76 @@ public class Setor implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Setor)) {
 			return false;
+		}
 		Setor other = (Setor) obj;
 		if (dataCancelamento == null) {
-			if (other.dataCancelamento != null)
+			if (other.dataCancelamento != null) {
 				return false;
-		} else if (!dataCancelamento.equals(other.dataCancelamento))
+			}
+		} else if (!dataCancelamento.equals(other.dataCancelamento)) {
 			return false;
+		}
 		if (dataDistribuicao == null) {
-			if (other.dataDistribuicao != null)
+			if (other.dataDistribuicao != null) {
 				return false;
-		} else if (!dataDistribuicao.equals(other.dataDistribuicao))
+			}
+		} else if (!dataDistribuicao.equals(other.dataDistribuicao)) {
 			return false;
+		}
 		if (descSetor == null) {
-			if (other.descSetor != null)
+			if (other.descSetor != null) {
 				return false;
-		} else if (!descSetor.equals(other.descSetor))
+			}
+		} else if (!descSetor.equals(other.descSetor)) {
 			return false;
-		if (idSetor != other.idSetor)
+		}
+		if (idSetor != other.idSetor) {
 			return false;
+		}
 		if (observacoes == null) {
-			if (other.observacoes != null)
+			if (other.observacoes != null) {
 				return false;
-		} else if (!observacoes.equals(other.observacoes))
+			}
+		} else if (!observacoes.equals(other.observacoes)) {
 			return false;
+		}
+		if (regiao == null) {
+			if (other.regiao != null) {
+				return false;
+			}
+		} else if (!regiao.equals(other.regiao)) {
+			return false;
+		}
+		if (setorItens == null) {
+			if (other.setorItens != null) {
+				return false;
+			}
+		} else if (!setorItens.equals(other.setorItens)) {
+			return false;
+		}
 		if (statusRegistro == null) {
-			if (other.statusRegistro != null)
+			if (other.statusRegistro != null) {
 				return false;
-		} else if (!statusRegistro.equals(other.statusRegistro))
+			}
+		} else if (!statusRegistro.equals(other.statusRegistro)) {
 			return false;
+		}
 		if (vendedor == null) {
-			if (other.vendedor != null)
+			if (other.vendedor != null) {
 				return false;
-		} else if (!vendedor.equals(other.vendedor))
+			}
+		} else if (!vendedor.equals(other.vendedor)) {
 			return false;
+		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Setor [idSetor=" + idSetor + ", vendedor=" + vendedor + ", descSetor=" + descSetor + ", observacoes="
-				+ observacoes + ", dataDistribuicao=" + dataDistribuicao + ", dataCancelamento=" + dataCancelamento
-				+ ", statusRegistro=" + statusRegistro + "]";
 	}
 
 	public int getIdSetor() {
@@ -143,12 +186,28 @@ public class Setor implements Serializable{
 		this.idSetor = idSetor;
 	}
 
+	public Regiao getRegiao() {
+		return regiao;
+	}
+
+	public void setRegiao(Regiao regiao) {
+		this.regiao = regiao;
+	}
+
 	public Vendedor getVendedor() {
 		return vendedor;
 	}
 
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	public List<ItemSetor> getSetorItens() {
+		return setorItens;
+	}
+
+	public void setSetorItens(List<ItemSetor> setorItens) {
+		this.setorItens = setorItens;
 	}
 
 	public String getDescSetor() {
@@ -191,8 +250,4 @@ public class Setor implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
 }

@@ -1,10 +1,12 @@
-package br.com.kebase.comercial.setor.itemSetor;
+package br.com.kebase.comercial.regiao.setor.itemSetor;
 
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import br.com.kebase.comercial.regiao.setor.Setor;
 
 public class ItemSetorDAOHibernate implements ItemSetorDAO {
 	
@@ -45,6 +47,17 @@ public class ItemSetorDAOHibernate implements ItemSetorDAO {
 	@Override
 	public List<ItemSetor> buscarTodos() {
 		Criteria criteria = this.session.createCriteria(ItemSetor.class);
+		criteria.add(Restrictions.eq("statusRegistro", "A"));
+		
+		@SuppressWarnings("unchecked")
+		List<ItemSetor> results = criteria.list();
+		return results;
+	}
+	
+	@Override
+	public List<ItemSetor> buscarTodosPorSetor(Setor setor) {
+		Criteria criteria = this.session.createCriteria(ItemSetor.class);
+		criteria.add(Restrictions.eq("setor", setor));
 		criteria.add(Restrictions.eq("statusRegistro", "A"));
 		
 		@SuppressWarnings("unchecked")

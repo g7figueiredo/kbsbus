@@ -1,22 +1,29 @@
-package br.com.kebase.comercial.setor;
+package br.com.kebase.comercial.regiao.setor;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 
-import br.com.kebase.comercial.setor.itemSetor.ItemSetor;
-import br.com.kebase.comercial.setor.itemSetor.ItemSetorRN;
+import br.com.kebase.comercial.regiao.Regiao;
+import br.com.kebase.comercial.regiao.RegiaoRN;
+import br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetor;
+import br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetorRN;
 import br.com.kebase.comercial.vendedor.Vendedor;
 import br.com.kebase.comercial.vendedor.VendedorRN;
 import br.com.kebase.endereco.Endereco;
@@ -25,6 +32,7 @@ import br.com.kebase.endereco.bairro.Bairro;
 import br.com.kebase.endereco.bairro.BairroRN;
 import br.com.kebase.endereco.cidade.Cidade;
 import br.com.kebase.endereco.cidade.CidadeRN;
+import br.com.kebase.util.FacesUtil;
 
 @ManagedBean(name="setorBean")
 @ViewScoped
@@ -48,11 +56,85 @@ public class SetorBean implements Serializable{
 	protected List<Endereco> enderecosSource = new ArrayList<Endereco>();
 	protected List<Endereco> enderecosTarget = new ArrayList<Endereco>();
 	
+	private Regiao regiao = new Regiao();
+	private List<Regiao> listaRegiao = new ArrayList<Regiao>();
+	
 	public SetorBean() {
 	}
 	
+	@PostConstruct
+	private void init() {
+		carregarListaRegiao();
+		verificarFlash();
+	}
+	
+	public String redirecionarSetor() {
+		return "setor?faces-redirect=true";
+	}
+	
+	public void onSetorSelect(SelectEvent event) {
+		this.setorSelecionado = (Setor) event.getObject();
+		this.setor = this.setorSelecionado;
+    }
+	
+	public void onSetorUnselect(SelectEvent event) {
+		this.setor = new Setor();
+		this.setorSelecionado = null;
+    }
+	
+	private void verificarFlash() {
+		Setor s = (Setor) FacesUtil.getParameterFlash("setor");
+		if(null != s) {
+			this.setor = s;
+			this.vendedorSelecionado = s.getVendedor();
+			List<ItemSetor> lista = new ItemSetorRN().buscarTodosPorSetor(s);
+			for(ItemSetor is : lista) {
+				this.enderecosTarget.add(is.getEndereco());
+			}
+		}
+	}
+	
+	public void verificaSelecao(ActionEvent event) {
+		String from = event.getComponent().getId();
+		try{
+			if(null == this.setor || this.setor.getIdSetor() == 0) {
+				FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Selecione um setor!");
+			} else if(from.equals("editar")){
+				FacesUtil.putParameterFlash("setor", this.setor);
+				FacesUtil.redirect("setor.xhtml");
+			} 
+		}catch (IOException e) {
+			e.printStackTrace();
+			LOG.info(e);
+		}
+		
+	}
+	
+	public void salvarRegiao() {
+		if(null != this.regiao && this.regiao.getIdRegiao() == 0) {
+			try {
+				RegiaoRN regiaoRN = new RegiaoRN();
+				this.regiao.setDataCadastro(new Date());
+				this.regiao.setStatusRegistro("A");
+				
+				regiaoRN.salvar(this.regiao);
+				LOG.info("Região salva com sucesso!" + this.regiao);
+				FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Região salva com sucesso!");
+				carregarListaRegiao();
+				this.setor.setRegiao(this.regiao);
+				this.regiao = new Regiao();
+				
+				PrimeFaces.current().executeScript("$('#regiaoModal').modal('hide');");
+			}catch (Exception e) {
+				e.printStackTrace();
+				LOG.error("[ERRO: 008-02] Erro tentar registrar região.", e);
+				FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "[ERRO: 008-02] - Tente novamente ou entre em contato com o suporte!");
+			}
+		}
+		
+	}
+	
 	public String salvarSetor() {
-		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			if(this.setor != null) {
 				if(this.vendedorSelecionado != null) {
@@ -76,23 +158,27 @@ public class SetorBean implements Serializable{
 					
 					LOG.info("Setor regitrado com sucesso.");
 					LOG.info(this.setor);
-					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "Setor regitrado com sucesso!", "Ok!"));
-					context.getExternalContext().getFlash().setKeepMessages(true);
+					PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
+					FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Setor regitrado com sucesso!");
 				}else {
-					context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione um Vendedor!", "Atenção!"));
-					context.getExternalContext().getFlash().setKeepMessages(true);
+					FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_WARN, "Selecione um Vendedor!");
 				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			LOG.error("[ERRO: 008-01] Erro tentar registrar setor.", e);
-			context.addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "[ERRO: 008-01] - Tente novamente ou entre em contato com o suporte!", "ERRO!"));
-			context.getExternalContext().getFlash().setKeepMessages(true);
+			FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "[ERRO: 008-01] - Tente novamente ou entre em contato com o suporte!");
+			
 		}finally {
 			PrimeFaces.current().executeScript("$('#loadModal').modal('hide');");
 		}
 		
 		return "";
+	}
+	
+	public void carregarListaRegiao() {
+		RegiaoRN regiaoRN = new RegiaoRN();
+		this.listaRegiao = regiaoRN.buscarTodos();
 	}
 	
 	public List<Vendedor> buscarVendedores(String vendedor) {
@@ -165,8 +251,33 @@ public class SetorBean implements Serializable{
 		return enderecos;
 	}
 	
+	private Map<String, List<Endereco>> verificaDistribuicaoEndereco() {
+		Map<String, List<Endereco>> retorno = new HashMap<String, List<Endereco>>();
+		List<Endereco> aprovados = new ArrayList<Endereco>();
+		List<Endereco> reprovados = new ArrayList<Endereco>();
+		
+		ItemSetorRN itemSetorRN = new ItemSetorRN();
+		for(Endereco endereco : this.enderecos.getTarget()) {
+			if(null == itemSetorRN.buscarPorIdEndereco(endereco.getIdEndereco())) {
+				aprovados.add(endereco);
+			}else {
+				reprovados.add(endereco);
+			}
+		}
+		
+		retorno.put("aprovados", aprovados);
+		retorno.put("reprovados", reprovados);
+		
+		return retorno;
+	}
+	
 	public void onTransfer(TransferEvent event) {
-		this.enderecosTarget = enderecos.getTarget();
+		Map<String, List<Endereco>> retorno = verificaDistribuicaoEndereco();
+		this.enderecosTarget = retorno.get("aprovados");
+		if(!retorno.get("reprovados").isEmpty()) {
+			this.enderecosSource = retorno.get("reprovados");
+			FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_WARN, "Alguns endereços já foram distribuídos para este ou outro setor!");
+		}
     }
 
 	public void setEnderecos(DualListModel<Endereco> enderecos) {
@@ -186,6 +297,18 @@ public class SetorBean implements Serializable{
 
 	public void setSetorSelecionado(Setor setorSelecionado) {
 		this.setorSelecionado = setorSelecionado;
+	}
+
+	public Regiao getRegiao() {
+		return regiao;
+	}
+
+	public void setRegiao(Regiao regiao) {
+		this.regiao = regiao;
+	}
+
+	public List<Regiao> getListaRegiao() {
+		return listaRegiao;
 	}
 
 }

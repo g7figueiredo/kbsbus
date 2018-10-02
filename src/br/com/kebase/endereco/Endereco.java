@@ -24,7 +24,7 @@ public class Endereco implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id_endereco", nullable=false)
-	private Long idEndereco;
+	private long idEndereco;
 	
 	@ManyToOne
 	@JoinColumn(name="id_bairro")
@@ -57,7 +57,7 @@ public class Endereco implements Serializable{
 		this.statusRegistro = statusRegistro;
 	}
 
-	public Endereco(Long idEndereco) {
+	public Endereco(long idEndereco) {
 		this.idEndereco = idEndereco;
 	}
 

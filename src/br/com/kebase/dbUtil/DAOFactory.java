@@ -6,10 +6,12 @@ import br.com.kebase.comercial.cliente.salao.SalaoDAO;
 import br.com.kebase.comercial.cliente.salao.SalaoDAOHibernate;
 import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalaoDAO;
 import br.com.kebase.comercial.cliente.salao.enderecoSalao.EnderecoSalaoDAOHibernate;
-import br.com.kebase.comercial.setor.SetorDAO;
-import br.com.kebase.comercial.setor.SetorDAOHibernate;
-import br.com.kebase.comercial.setor.itemSetor.ItemSetorDAO;
-import br.com.kebase.comercial.setor.itemSetor.ItemSetorDAOHibernate;
+import br.com.kebase.comercial.regiao.RegiaoDAO;
+import br.com.kebase.comercial.regiao.RegiaoDAOHibernate;
+import br.com.kebase.comercial.regiao.setor.SetorDAO;
+import br.com.kebase.comercial.regiao.setor.SetorDAOHibernate;
+import br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetorDAO;
+import br.com.kebase.comercial.regiao.setor.itemSetor.ItemSetorDAOHibernate;
 import br.com.kebase.comercial.venda.VendaDAO;
 import br.com.kebase.comercial.venda.VendaDAOHibernate;
 import br.com.kebase.comercial.venda.itemVenda.ItemVendaDAO;
@@ -280,6 +282,13 @@ public class DAOFactory {
 		linhaProdutoDAOHibernate.setSession(HibernateUtil.getSession().getCurrentSession());
 		
 		return linhaProdutoDAOHibernate;
+	}
+
+	public static RegiaoDAO criarRegiaoDAO() {
+		RegiaoDAOHibernate regiaoDAOHibernate = new RegiaoDAOHibernate();
+		regiaoDAOHibernate.setSession(HibernateUtil.getSession().getCurrentSession());
+		
+		return regiaoDAOHibernate;
 	}
 	
 

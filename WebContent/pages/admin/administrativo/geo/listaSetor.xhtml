@@ -321,7 +321,7 @@
         
         <h:form id="form" method="post">
         
-        <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+        <p:messages id="messages" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
         
         		<!-- Default box -->
 			          <div class="box box-primary collapsed-box" id="box">
@@ -354,6 +354,23 @@
 			            </div><!-- /.box-footer-->
 			          </div><!-- /.box -->
 			          
+			<div class="box-body">
+		     		<p:commandButton icon="fa fa-plus" styleClass="btn bg-maroon"  value="Criar" action="#{setorBean.redirecionarSetor}" />
+		     		
+		     		<p:commandButton id="editar" icon="fa fa-edit" styleClass="btn bg-navy"  value="Editar" actionListener="#{setorBean.verificaSelecao}" />
+		     		
+		     		<p:commandButton id="deletar" icon="fa fa-remove" styleClass="btn btn-danger"  value="Excluir" >
+<!-- 		     			<p:confirm header="Atenção" message="Deseja excluír a despesa 000{despesaBean.contaSelecionada.idDespesa}?" icon="ui-icon-alert" /> -->
+		     		</p:commandButton>
+		     		
+		     		<p:commandButton icon="fa fa-file-pdf-o" styleClass="btn bg-purple"  value="Exportar PDF" onclick="$('#receitaModal').modal('show');" />
+		     		
+		     		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				    </p:confirmDialog>
+		    </div>
+			          
         	<div class="box">
                 <div class="box-header">
                   <h3 class="box-title">Relação de Setores</h3>
@@ -363,15 +380,6 @@
                   <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                   	<div class="row">
                   		<div class="col-sm-12">
-							<p:contextMenu for="table">
-								<p:menuitem value="Exportar PDF" icon="fa fa-file-pdf-o" />
-								<p:menuitem value="Adicionar Lote" id="mitem2" icon="fa fa-list-ol" action="#{pedidoBean.adicionarLote}" />
-								<p:separator />
-								<p:menuitem value="Emitir Contas à Pagar" id="mitem3" icon="fa fa-file-text-o" action="#{pedidoBean.emitirContasPagar}" >
-									<f:ajax event="click" render="faturaModal" />
-								</p:menuitem>
-							</p:contextMenu>
-
 							<p:dataTable id="table" var="item"
 								value="#{setorBean.listaSetor}"
 								selection="#{setorBean.setorSelecionado}"
@@ -379,21 +387,28 @@
 								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="30, 60, 100" selectionMode="single">
 								
+								<p:ajax event="rowSelect" listener="#{setorBean.onSetorSelect}" process="table"/>
+        						<p:ajax event="rowUnselect" listener="#{setorBean.onSetorUnselect}" process="table"/>
+								
 								<p:column headerText="#ID" style="width:70px;text-align:center">
 									<h:outputText value="000#{item.idSetor}" />
 								</p:column>
 								
-								<p:column headerText="Nome/Apelido" width="40%">
+								<p:column headerText="Regional" style="text-align:center">
+									<h:outputText value="#{item.regiao.nomeRegiao}" />
+								</p:column>
+								
+								<p:column headerText="Nome do Setor" width="30%" style="text-align:center">
 									<h:outputText value="#{item.descSetor}" />
 								</p:column>
 										
-								<p:column headerText="Data Cadastro">
+								<p:column headerText="Data Cadastro" style="text-align:center">
 									<h:outputText value="#{item.dataDistribuicao}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</h:outputText>
 								</p:column>
 								
-								<p:column headerText="Observações" width="40%">
+								<p:column headerText="Observações" width="30%" style="text-align:center">
 									<h:outputText value="#{item.observacoes}" />
 								</p:column>
 								
@@ -479,7 +494,7 @@
 		                </div><!-- /.box-header -->
 		                <!-- form start -->
 		                
-		                	<p:messages id="modalMSG" showDetail="false" autoUpdate="true" closable="true" />
+		                 <p:messages id="modalMSG" showDetail="false" closable="true"><p:autoUpdate /> </p:messages>
 
 		                  <div class="box-body">
 		                  				

@@ -1,6 +1,8 @@
-package br.com.kebase.comercial.setor.itemSetor;
+package br.com.kebase.comercial.regiao.setor.itemSetor;
 
 import java.util.List;
+
+import br.com.kebase.comercial.regiao.setor.Setor;
 
 public interface ItemSetorDAO {
 
@@ -15,5 +17,7 @@ public interface ItemSetorDAO {
 	public void excluir(ItemSetor itemSetor);
 	
 	public ItemSetor buscarPorIdEndereco(long idEndereco);
+	
+	public List<ItemSetor> buscarTodosPorSetor(Setor setor);
 	
 }

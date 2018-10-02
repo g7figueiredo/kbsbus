@@ -37,4 +37,8 @@ public class EnderecoVendedorRN {
 		return this.enderecoVendedorDao.buscarPorVendedor(vendedor);
 	}
 
+	public EnderecoVendedorDAO getEnderecoVendedorDao() {
+		return enderecoVendedorDao;
+	}
+
 }

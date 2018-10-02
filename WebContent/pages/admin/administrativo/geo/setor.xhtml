@@ -29,6 +29,12 @@
           apply the skin class to the body tag so the changes take effect.
     -->
     <link href="../../../../dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    
+    <style type="text/css">
+    	.ui-picklist .ui-picklist-list {
+			width: 400px;
+		}
+    </style>
 
 </h:head>
 
@@ -319,9 +325,7 @@
         
         <h:form id="form" method="post">
         
-        <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
-        <p:growl id="msg" showDetail="true" autoUpdate="true" life="4000" />
-        
+        <p:messages id="msg" showDetail="false" closable="true" ><p:autoUpdate /> </p:messages>
 
           <!-- Default box -->
           <div class="box">
@@ -332,8 +336,27 @@
               </div>
             </div>
             <div class="box-body">
-              		
+            
 	              	<div class="form-group col-xs-12">
+	              		<div class="form-group col-md-4">
+								<label>Região*</label>
+								<div class="input-group">
+					                <h:selectOneMenu id="regiao" value="#{setorBean.setor.regiao}" styleClass="form-control">
+										<f:selectItem itemLabel="-- SELECIONE --" itemValue="null" />
+										<f:selectItems value="#{setorBean.listaRegiao}" var="reg" itemLabel="#{reg.nomeRegiao}" />
+									</h:selectOneMenu>
+									
+									<div class="input-group-btn">
+					                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">+Novo
+					                    <span class="fa fa-caret-down"></span></button>
+					                  <ul class="dropdown-menu">
+					                    <li><a href="#" onclick="$('#regiaoModal').modal('show');">Incluir Região</a></li>
+					                  </ul>
+					                </div>
+					            </div>
+							</div>
+	              	
+	              	
 	              		<div class="form-group col-md-4">
 	              			<label>Nome/Descrição*</label>
 	              			<h:inputText type="text" maxlength="90" styleClass="form-control" value="#{setorBean.setor.descSetor}" required="true" 
@@ -343,7 +366,7 @@
 	              		<div class="form-group col-md-6">
 	              			<label>Vendedor</label>
 	              			<p:autoComplete id="vendedor" forceSelection="true" value="#{setorBean.vendedorSelecionado}" var="vendedor" itemLabel="#{vendedor.nomeVendedor}"
-									        			itemValue="#{vendedor}" completeMethod="#{setorBean.buscarVendedores}" effect="fade" size="50" >
+									        			itemValue="#{vendedor}" completeMethod="#{setorBean.buscarVendedores}" effect="fade" size="55" >
 									<p:ajax event="itemSelect" update="cpf" />
 								</p:autoComplete>
 	              		</div>
@@ -396,11 +419,19 @@
 									
 									<div class="form-group col-xs-12">
 										<h3 style="margin-top: 0">Endereços encontrados</h3>
-										<p:pickList id="list" value="#{setorBean.enderecos}" converter="EnderecoConverter"
-											var="ends" itemValue="#{ends}" itemLabel="#{ends.numCep}	| #{ends.logradouro}	| #{ends.bairro.nomeBairro}">
-											
-											<p:ajax event="transfer" listener="#{setorBean.onTransfer}" />
-										</p:pickList>
+										<p:pickList id="list" value="#{setorBean.enderecos}" var="ends" effect="bounce"
+									                itemValue="#{ends}" showCheckbox="true" responsive="true"
+									                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="EnderecoConverter">
+									 
+									        <f:facet name="sourceCaption">Disponíveis</f:facet>
+									        <f:facet name="targetCaption">Selecionados</f:facet>
+									        
+									        <p:column id="listColumn">
+									            <h:outputText value="#{ends.numCep}	| #{ends.logradouro}	| #{ends.bairro.nomeBairro}" />
+									        </p:column>
+									 
+									        <p:ajax event="transfer" listener="#{setorBean.onTransfer}" update="listColumn" />
+									    </p:pickList>
 									</div>
 									
 								</div>	
@@ -411,11 +442,12 @@
 
 					<div class="form-group col-xs-12">
               			<div class="form-group col-md-2">
-              				<h:commandButton styleClass="btn btn-lg btn-success" value="Registrar Setor" action="#{setorBean.salvarSetor}" />
+              				<p:commandButton onclick="$('#loadModal').modal('show');" styleClass="btn bg-maroon" icon="fa fa-save" 
+              						value="Registrar Setor" action="#{setorBean.salvarSetor}" />
 	              		</div>
 	              		
 	              		<div class="form-group col-md-2">
-              				<h:commandButton styleClass="btn btn-lg btn-warning" value="Cancelar" actionListener="#{veiculoBean.limpar}"/>
+              				<p:commandButton styleClass="btn btn-defaut" value="Cancelar" icon="fa fa-remove"/>
 	              		</div>
 	              		
 	              	</div>
@@ -426,6 +458,59 @@
           </div><!-- /.box -->
           
           </h:form>
+          
+        <div class="col-md-2 modal" id="loadModal" data-backdrop="static"
+				style="background: rgba(0, 0, 0, 0); margin-top: 20%; margin-left: 40%;">
+				<div class="box box-danger box-solid">
+					<div class="box-header">
+						<h3 class="box-title">Aguarde...</h3>
+					</div>
+					<div class="box-body">Carregando...</div>
+					<!-- /.box-body -->
+					<!-- Loading (remove the following to stop the loading)-->
+					<div class="overlay">
+						<i class="fa fa-refresh fa-spin"></i>
+					</div>
+					<!-- end loading -->
+				</div>
+				<!-- /.box -->
+		</div>
+          
+        <div class="example-modal">
+            <div class="modal" id="regiaoModal" data-backdrop="static">
+              <div class="modal-dialog">
+                <div class="modal-content" >
+                  <h:form id="formModal">
+
+					<div class="box box-info" style="margin-bottom: 0px;">
+		                <div class="box-header with-border">
+		                  <h3 class="box-title">Incluir Região</h3>
+		                </div><!-- /.box-header -->
+		                <!-- form start -->
+
+		                  	<div class="box-body">
+		                  		<div class="form-group col-xs-12">
+									<div class="form-group col-md-8">
+										<label>Nome da Região*</label>
+										<h:inputText id="regiao" value="#{setorBean.regiao.nomeRegiao}" styleClass="form-control" required="true" />
+									</div>
+		                  		</div>
+							</div><!-- /.box-body -->
+		
+		              </div>
+		              
+	              
+                  <div class="modal-footer">
+                    <p:commandButton value="Fechar" type="button" icon="fa fa-remove" onclick="$('#regiaoModal').modal('hide');" styleClass="btn btn-default pull-left" />
+                    	
+                    <p:commandButton value="Salvar Cadastro" icon="fa fa-save" actionListener="#{setorBean.salvarRegiao}" styleClass="btn bg-maroon" update=":form:regiao "/>
+                    
+                  </div>
+                  </h:form>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
           
 
         </section><!-- /.content -->
